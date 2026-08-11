@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' data: blob:; font-src 'self' fonts.gstatic.com; connect-src 'self' https://api.mymemory.translated.net https://translate.googleapis.com https://api.cognitive.microsofttranslator.com; frame-src 'self' https://player.bilibili.com https://www.youtube.com https://embed.nicovideo.jp; object-src 'none';" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <title>兽剧聚合平台</title>
+    <meta name="description" content="兽剧内容聚合平台 - 发现和追踪你喜爱的兽剧内容" />
+    <meta name="keywords" content="兽剧,聚合,追踪,追番,评分" />
+    <meta property="og:title" content="兽剧聚合平台" />
+    <meta property="og:description" content="发现和追踪你喜爱的兽剧内容" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="兽剧聚合平台" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="兽剧聚合平台" />
+    <meta name="twitter:description" content="发现和追踪你喜爱的兽剧内容" />
+    <meta name="theme-color" content="#6366f1" />
+    <!-- 三重语言声明：让浏览器翻译、拼写检查、无障碍服务可靠识别页面语言 -->
+    <meta http-equiv="content-language" content="zh-CN" />
+    <meta name="language" content="zh-CN" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="兽剧" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
+    <link rel="alternate" type="application/rss+xml" title="兽剧聚合平台 - 更新订阅" href="/api/rss" />
+    <script>
+      // 早期语言检测：在 React 挂载前就根据用户偏好设置 <html lang>，
+      // 让浏览器翻译功能在初始加载时就能正确识别页面语言，而非回退到"检测到的语言"。
+      (function() {
+        try {
+          var saved = localStorage.getItem('lang');
+          var lang = 'zh';
+          if (saved === 'en' || saved === 'zh') {
+            lang = saved;
+          } else if (navigator.language && navigator.language.toLowerCase().indexOf('en') === 0) {
+            lang = 'en';
+          }
+          var fullLocale = lang === 'en' ? 'en-US' : 'zh-CN';
+          document.documentElement.lang = fullLocale;
+          var m1 = document.querySelector('meta[http-equiv="content-language"]');
+          if (m1) m1.setAttribute('content', fullLocale);
+          var m2 = document.querySelector('meta[name="language"]');
+          if (m2) m2.setAttribute('content', fullLocale);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- noscript 中英双语：避免浏览器通过纯中文内容误判页面语言 -->
+    <noscript>兽剧聚合平台 / Furry Drama Hub — 请启用 JavaScript / Please enable JavaScript to view this site.</noscript>
+    <script>
+      // IE 和不兼容浏览器检测（在 ES Module 加载前运行，使用 ES5 语法保证兼容）
+      (function() {
+        // JSON polyfill（兼容 IE6/7）
+        if (typeof JSON === 'undefined') {
+          window.JSON = {
+            parse: function(s) {
+              return (new Function('return (' + s + ')'))();
+            },
+            stringify: function(o) {
+              if (o === null) return 'null';
+              if (typeof o === 'boolean' || typeof o === 'number') return String(o);
+              if (typeof o === 'string') return '"' + o.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t') + '"';
+              if (o instanceof Array) { var a = []; for (var i = 0; i < o.length; i++) a.push(JSON.stringify(o[i])); return '[' + a.join(',') + ']'; }
+              if (typeof o === 'object') { var p = []; for (var k in o) { if (o.hasOwnProperty(k)) p.push('"' + k + '":' + JSON.stringify(o[k])); } return '{' + p.join(',') + '}'; }
+              return String(o);
+            }
+          };
+        }
+
+        var ua = navigator.userAgent;
+        var isIE = /MSIE|Trident/i.test(ua);
+        var isOldEdge = /Edge\/\d+/i.test(ua) && !/Edg\/\d+/i.test(ua);
+        if (!isIE && !isOldEdge) return;
+
+        var I18N = {
+          zh: {
+            title: '抱歉，当前浏览器无法正常打开',
+            reasonLabel: '具体情况',
+            reasonIE: '当前使用的是 Internet Explorer（Trident 内核），该浏览器已停止更新，不支持现代网页标准。本站需要 Chromium 60+、Gecko 55+ 或 WebKit 12+ 内核的浏览器。',
+            reasonEdgeLegacy: '当前使用的是旧版 Microsoft Edge（EdgeHTML 内核），该版本已停止支持。新版 Edge 已改用 Chromium 内核，安装后即可正常访问。',
+            supportedVersions: '本站支持的浏览器版本：Chrome 60+（Blink 内核）、Firefox 55+（Gecko 内核）、Safari 12+（WebKit 内核）、Edge 79+（Chromium 内核）',
+            solutionTitle: '换一款浏览器试试？',
+            hint: '感谢你的理解，换一款浏览器就能正常访问啦。如果已经是最新版浏览器仍有问题，欢迎反馈给我们。',
+            langToggle: 'EN',
+            downloadCN: '国内下载',
+            downloadGlobal: '国际下载',
+            chrome: 'Google Chrome',
+            edge: 'Microsoft Edge（新版，基于 Chromium）',
+            firefox: 'Mozilla Firefox',
+            icpPrefix: ''
+          },
+          en: {
+            title: 'Sorry, this browser cannot display properly',
+            reasonLabel: 'Details',
+            reasonIE: 'You are using Internet Explorer (Trident engine), which has been discontinued and does not support modern web standards. This site requires a browser with Chromium 60+, Gecko 55+, or WebKit 12+ engine.',
+            reasonEdgeLegacy: 'You are using the legacy Microsoft Edge (EdgeHTML engine), which has been discontinued. The new Edge uses the Chromium engine — installing it should fix the issue.',
+            supportedVersions: 'Supported browsers: Chrome 60+ (Blink), Firefox 55+ (Gecko), Safari 12+ (WebKit), Edge 79+ (Chromium)',
+            solutionTitle: 'How about trying another browser?',
+            hint: 'Thanks for your understanding — switching to another browser should do the trick. If you are already using the latest version and still have issues, feel free to let us know.',
+            langToggle: '中文',
+            downloadCN: 'China',
+            downloadGlobal: 'Global',
+            chrome: 'Google Chrome',
+            edge: 'Microsoft Edge (Chromium-based)',
+            firefox: 'Mozilla Firefox',
+            icpPrefix: ''
+          }
+        };
+
+        var currentLang = 'zh';
+        try {
+          var saved = localStorage.getItem('lang');
+          if (saved && I18N[saved]) currentLang = saved;
+          else if (navigator.language && navigator.language.toLowerCase().indexOf('en') === 0) currentLang = 'en';
+        } catch (e) {}
+
+        var BROWSERS = [
+          { cn: 'https://www.google.cn/chrome/', global: 'https://www.google.com/chrome/' },
+          { cn: 'https://www.microsoft.com/zh-cn/edge', global: 'https://www.microsoft.com/en-us/edge' },
+          { cn: 'http://www.firefox.com.cn/', global: 'https://www.mozilla.org/en-US/firefox/' }
+        ];
+        var BROWSER_NAMES = ['chrome', 'edge', 'firefox'];
+
+        function render() {
+          var L = I18N[currentLang];
+          var reasonText = isIE ? L.reasonIE : L.reasonEdgeLegacy;
+
+          var browserCards = '';
+          for (var i = 0; i < BROWSERS.length; i++) {
+            var b = BROWSERS[i];
+            var name = L[BROWSER_NAMES[i]];
+            var cardMargin = i < BROWSERS.length - 1 ? 'margin-bottom:8px;' : '';
+            browserCards +=
+              '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;' + cardMargin + '">' +
+                '<div style="font-size:13px;font-weight:600;color:#334155;margin-bottom:8px;">' + name + '</div>' +
+                '<div style="display:flex;gap:8px;">' +
+                  '<a href="' + b.cn + '" style="flex:1;text-align:center;padding:7px 10px;border-radius:6px;background:#6366f1;color:#fff;text-decoration:none;font-size:12px;font-weight:600;">' + L.downloadCN + '</a>' +
+                  '<a href="' + b.global + '" style="flex:1;text-align:center;padding:7px 10px;border-radius:6px;background:#fff;border:1px solid #c7d2fe;color:#6366f1;text-decoration:none;font-size:12px;font-weight:600;">' + L.downloadGlobal + '</a>' +
+                '</div>' +
+              '</div>';
+          }
+
+          var icpHtml = '';
+          var icpVal = '';
+          try {
+            icpVal = localStorage.getItem('_icp') || '';
+          } catch (e) {}
+          if (icpVal) {
+            icpHtml = '<a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noopener noreferrer" style="position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:11px;color:#94a3b8;text-decoration:none;">' + icpVal + '</a>';
+          }
+
+          return (
+            '<div style="position:fixed;top:14px;right:16px;z-index:2147483648;">' +
+              '<button onclick="window.__switchCompatLang()" style="background:#fff;border:1px solid #c7d2fe;color:#6366f1;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(99,102,241,0.15);">' + L.langToggle + '</button>' +
+            '</div>' +
+            '<div style="display:table-cell;vertical-align:middle;text-align:center;padding:12px;">' +
+              '<div style="max-width:440px;width:100%;background:#fff;border-radius:12px;padding:24px 20px;box-shadow:0 25px 50px -12px rgba(99,102,241,0.18);border:1px solid #e2e8f0;text-align:center;display:inline-block;text-align:left;max-height:calc(100vh - 80px);overflow-y:auto;">' +
+                '<div style="font-size:40px;margin-bottom:8px;line-height:1;text-align:center;">\uD83D\uDE05</div>' +
+                '<h1 style="font-size:18px;font-weight:700;margin:0 0 10px 0;color:#1e293b;text-align:center;">' + L.title + '</h1>' +
+                '<div style="font-size:13px;line-height:1.6;color:#64748b;margin-bottom:10px;text-align:left;padding:10px 12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">' +
+                  '<strong style="color:#6366f1;display:block;margin-bottom:4px;">' + L.reasonLabel + '</strong>' + reasonText +
+                '</div>' +
+                '<div style="font-size:11px;line-height:1.5;color:#94a3b8;margin-bottom:14px;text-align:left;padding:8px 10px;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;">' + L.supportedVersions + '</div>' +
+                '<div style="font-size:14px;font-weight:600;color:#475569;margin-bottom:8px;text-align:center;">' + L.solutionTitle + '</div>' +
+                '<div>' + browserCards + '</div>' +
+                '<p style="margin:14px 0 0 0;font-size:11px;color:#94a3b8;line-height:1.5;text-align:center;">' + L.hint + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<div data-icp>' + icpHtml + '</div>'
+          );
+        }
+
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#eef2ff;color:#1e293b;font-family:"Segoe UI","Microsoft YaHei",sans-serif;z-index:2147483647;display:table;width:100%;height:100%;';
+
+        function paint() {
+          overlay.innerHTML = render();
+          try { document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en'; } catch (e) {}
+        }
+
+        window.__switchCompatLang = function() {
+          currentLang = currentLang === 'zh' ? 'en' : 'zh';
+          try { localStorage.setItem('lang', currentLang); } catch (e) {}
+          paint();
+        };
+
+        paint();
+        document.body.insertBefore(overlay, document.body.firstChild);
+
+        // 用 XMLHttpRequest（IE6+ 兼容）从 API 获取 ICP 备案号
+        try {
+          var xhr = null;
+          if (typeof XMLHttpRequest !== 'undefined') {
+            xhr = new XMLHttpRequest();
+          } else if (typeof ActiveXObject !== 'undefined') {
+            try { xhr = new ActiveXObject('Msxml2.XMLHTTP'); } catch (e) {
+              try { xhr = new ActiveXObject('Microsoft.XMLHTTP'); } catch (e2) {}
+            }
+          }
+          if (!xhr) return;
+          xhr.open('GET', '/api/site-content/about', true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              try {
+                var resp = JSON.parse(xhr.responseText);
+                var data = JSON.parse(resp.content);
+                if (data.icp) {
+                  try { localStorage.setItem('_icp', data.icp); } catch (e) {}
+                  // 更新 ICP 显示
+                  var icpContainer = overlay.querySelector('[data-icp]');
+                  if (icpContainer) {
+                    icpContainer.innerHTML = '<a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noopener noreferrer" style="position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:11px;color:#94a3b8;text-decoration:none;">' + data.icp + '</a>';
+                  }
+                }
+              } catch (e) {}
+            }
+          };
+          xhr.send();
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+
+  </body>
+</html>
