@@ -43,6 +43,7 @@ const AdminEpisodes = () => {
     hideCreator: false,
     customAuthors: [],
     qqGroupLink: '',
+    qqGroupNumber: '',
     changeSummary: ''
   });
   const [newSingleEpisode, setNewSingleEpisode] = useState({
@@ -149,7 +150,8 @@ const AdminEpisodes = () => {
           : null,
         hideCreator: !!newEpisode.hideCreator,
         customAuthors: newEpisode.customAuthors || [],
-        qqGroupLink: newEpisode.qqGroupLink || ''
+        qqGroupLink: newEpisode.qqGroupLink || '',
+        qqGroupNumber: newEpisode.qqGroupNumber || ''
       };
 
       const response = await adminApi.post('/api/episodes', episodeData);
@@ -177,6 +179,7 @@ const AdminEpisodes = () => {
           hideCreator: !!response.data.hideCreator,
           customAuthors: (response.data.customAuthors || []).map(a => a._id || a),
           qqGroupLink: response.data.qqGroupLink || '',
+          qqGroupNumber: response.data.qqGroupNumber || '',
           changeSummary: ''
         });
         setShowEditForm(true);
@@ -224,6 +227,7 @@ const AdminEpisodes = () => {
       hideCreator: pick('hideCreator', !!episode.hideCreator),
       customAuthors: (pick('customAuthors', episode.customAuthors || [])).map(a => a._id || a),
       qqGroupLink: pick('qqGroupLink', episode.qqGroupLink || ''),
+      qqGroupNumber: pick('qqGroupNumber', episode.qqGroupNumber || ''),
       changeSummary: episode.hasPendingChanges ? (episode.pendingChangeSummary || '') : ''
     });
     setShowEditForm(true);
@@ -255,6 +259,7 @@ const AdminEpisodes = () => {
         hideCreator: !!newEpisode.hideCreator,
         customAuthors: newEpisode.customAuthors || [],
         qqGroupLink: newEpisode.qqGroupLink || '',
+        qqGroupNumber: newEpisode.qqGroupNumber || '',
         changeSummary: newEpisode.changeSummary || ''
       };
 
@@ -394,6 +399,7 @@ const AdminEpisodes = () => {
       hideCreator: false,
       customAuthors: [],
       qqGroupLink: '',
+      qqGroupNumber: '',
       changeSummary: ''
     });
   };
@@ -664,12 +670,22 @@ const AdminEpisodes = () => {
       )}
       <div className="form-group">
         <label>{t('adminEpisodes.qqGroupLink')}</label>
-        <input
-          type="text"
-          value={newEpisode.qqGroupLink}
-          onChange={(e) => setNewEpisode({...newEpisode, qqGroupLink: e.target.value})}
-          placeholder={t('adminEpisodes.qqGroupLinkPlaceholder')}
-        />
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <input
+            type="text"
+            value={newEpisode.qqGroupNumber}
+            onChange={(e) => setNewEpisode({...newEpisode, qqGroupNumber: e.target.value})}
+            placeholder={t('adminEpisodes.qqGroupNumberPlaceholder')}
+            style={{ flex: '0 0 160px', minWidth: '120px' }}
+          />
+          <input
+            type="text"
+            value={newEpisode.qqGroupLink}
+            onChange={(e) => setNewEpisode({...newEpisode, qqGroupLink: e.target.value})}
+            placeholder={t('adminEpisodes.qqGroupLinkPlaceholder')}
+            style={{ flex: '1', minWidth: '200px' }}
+          />
+        </div>
         <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '4px' }}>{t('adminEpisodes.qqGroupLinkHint')}</p>
       </div>
       {isEdit && editingEpisode?.reviewStatus === 'approved' && (

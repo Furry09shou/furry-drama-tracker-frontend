@@ -125,6 +125,7 @@ const AdminReview = () => {
     { key: 'hideCreator', label: t('adminEpisodes.hideCreator') },
     { key: 'customAuthors', label: t('adminEpisodes.customAuthors') },
     { key: 'qqGroupLink', label: t('adminEpisodes.qqGroupLink') },
+    { key: 'qqGroupNumber', label: t('adminEpisodes.qqGroupNumberLabel') },
   ];
 
   const renderPendingValue = (field, value) => {

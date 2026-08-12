@@ -427,19 +427,7 @@ const EpisodeDetail = ({ user }) => {
               );
             })()}
             {episode.qqGroupLink && (() => {
-              const extractGroupNumber = (link) => {
-                if (!link) return null;
-                const trimmed = link.trim();
-                if (/^\d{5,12}$/.test(trimmed)) return trimmed;
-                let m = trimmed.match(/\/q\/([^/?#]+)/);
-                if (m) return m[1];
-                m = trimmed.match(/[?&]k=([^&#]+)/);
-                if (m) return m[1];
-                m = trimmed.match(/\/([^/?#]+)\/?$/);
-                if (m && m[1] && m[1] !== '.') return m[1];
-                return null;
-              };
-              const groupNumber = extractGroupNumber(episode.qqGroupLink);
+              const groupNumber = (episode.qqGroupNumber || '').trim();
               return (
                 <p>
                   <strong>{t('episode.contactQQGroup')}</strong>
