@@ -4355,3 +4355,18 @@ tbody tr:hover {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes notifPanelIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 768px) {
+  .notif-panel-floating {
+    top: 56px !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    max-height: calc(100vh - 72px) !important;
+  }
+}

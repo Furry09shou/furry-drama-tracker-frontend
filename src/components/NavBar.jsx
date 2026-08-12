@@ -338,95 +338,6 @@ const NavBar = ({ onFeedback }) => {
                     }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
                   )}
                 </button>
-                {showNotifPanel && (
-                <div
-                  role="menu"
-                  style={{
-                    position: 'absolute', top: '100%', right: 0,
-                    width: 'min(360px, calc(100vw - 40px))', maxHeight: '480px', overflow: 'auto',
-                    background: 'var(--card)', border: '1px solid var(--border)',
-                    borderRadius: '12px', boxShadow: '0 8px 32px var(--shadow-modal)',
-                    zIndex: 10000, backdropFilter: 'blur(20px)', padding: 0
-                  }}
-                >
-                    <div style={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      padding: '16px', borderBottom: '1px solid var(--border)'
-                    }}>
-                      <h3 style={{margin: 0, fontSize: '16px', color: 'var(--foreground)'}}>{t('nav.notifications')}</h3>
-                      <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
-                        {user && (
-                          <button onClick={() => navigate('/settings')} style={{
-                            background: 'none', border: 'none', cursor: 'pointer',
-                            fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px',
-                            color: 'var(--text-secondary)',
-                          }}>
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                            {t('notification.pushSettings')}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px', padding: '8px 12px', borderBottom: '1px solid var(--border)' }}>
-                      {unreadCount > 0 && (
-                        <button onClick={markAllRead} style={{ fontSize: '12px', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                          {t('notification.markAllRead')}
-                        </button>
-                      )}
-                      {notifications.some(n => n.isRead) && (
-                        <button onClick={deleteAllRead} style={{ fontSize: '12px', color: 'var(--destructive-text)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                          {t('notification.clearRead')}
-                        </button>
-                      )}
-                    </div>
-                    <div>
-                      {notifications.length === 0 ? (
-                        <div style={{padding: '30px', textAlign: 'center', color: 'var(--text-secondary)'}}>
-                          {t('notification.noNotifications')}
-                        </div>
-                      ) : (
-                        notifications.map(n => (
-                          <div
-                            key={n._id}
-                            role="menuitem"
-                            onClick={() => {
-                              setShowNotifPanel(false);
-                              setShowMobileMenu(false);
-                              // 优先使用通知自带链接（如审核结果跳后台），否则跳剧集详情
-                              if (n.link) {
-                                navigate(n.link);
-                              } else if (n.episodeId) {
-                                navigate(`/episode/${n.episodeId}`);
-                              }
-                            }}
-                            style={{
-                              display: 'block', padding: '14px 16px',
-                              borderBottom: '1px solid var(--border)',
-                              background: n.isRead ? 'transparent' : 'var(--primary-bg-subtle)',
-                              color: 'var(--foreground)',
-                              transition: 'background 0.2s',
-                              cursor: 'pointer'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = n.isRead ? 'transparent' : 'var(--primary-bg-subtle)'}
-                          >
-                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                              <span style={{fontSize: '14px', fontWeight: n.isRead ? 400 : 600}}>
-                                {renderNotificationMessage(n)}
-                              </span>
-                              {!n.isRead && (
-                                <span style={{width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', flexShrink: 0, marginLeft: '8px'}}></span>
-                              )}
-                            </div>
-                            <span style={{fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block'}}>
-                              {formatTime(n.createdAt)}
-                            </span>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                )}
               </li>
               <li className="desktop-only-theme">
                 <LanguageSwitcher style={{ fontSize: '13px' }} />
@@ -603,6 +514,102 @@ const NavBar = ({ onFeedback }) => {
           )}
         </ul>
       </nav>
+      {showNotifPanel && user && (
+        <div
+          role="menu"
+          className="notif-panel-floating"
+          style={{
+            position: 'fixed', top: '64px', right: '12px',
+            width: 'min(360px, calc(100vw - 24px))', maxHeight: 'calc(100vh - 80px)', overflow: 'auto',
+            background: 'var(--card)', border: '1px solid var(--border)',
+            borderRadius: '12px', boxShadow: '0 8px 32px var(--shadow-modal)',
+            zIndex: 10000, backdropFilter: 'blur(20px)', padding: 0,
+            animation: 'notifPanelIn 0.22s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '16px', borderBottom: '1px solid var(--border)'
+          }}>
+            <h3 style={{margin: 0, fontSize: '16px', color: 'var(--foreground)'}}>{t('nav.notifications')}</h3>
+            <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+              {user && (
+                <button onClick={() => { setShowNotifPanel(false); navigate('/settings'); }} style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px',
+                  color: 'var(--text-secondary)',
+                }}>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  {t('notification.pushSettings')}
+                </button>
+              )}
+              <button onClick={() => setShowNotifPanel(false)} aria-label={t('common.close')} style={{
+                background: 'none', border: 'none', color: 'var(--text-secondary)',
+                cursor: 'pointer', padding: '4px', lineHeight: 1, display: 'inline-flex', alignItems: 'center'
+              }}>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', padding: '8px 12px', borderBottom: '1px solid var(--border)' }}>
+            {unreadCount > 0 && (
+              <button onClick={markAllRead} style={{ fontSize: '12px', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                {t('notification.markAllRead')}
+              </button>
+            )}
+            {notifications.some(n => n.isRead) && (
+              <button onClick={deleteAllRead} style={{ fontSize: '12px', color: 'var(--destructive-text)', background: 'none', border: 'none', cursor: 'pointer' }}>
+                {t('notification.clearRead')}
+              </button>
+            )}
+          </div>
+          <div>
+            {notifications.length === 0 ? (
+              <div style={{padding: '30px', textAlign: 'center', color: 'var(--text-secondary)'}}>
+                {t('notification.noNotifications')}
+              </div>
+            ) : (
+              notifications.map(n => (
+                <div
+                  key={n._id}
+                  role="menuitem"
+                  onClick={() => {
+                    setShowNotifPanel(false);
+                    setShowMobileMenu(false);
+                    if (n.link) {
+                      navigate(n.link);
+                    } else if (n.episodeId) {
+                      navigate(`/episode/${n.episodeId}`);
+                    }
+                  }}
+                  style={{
+                    display: 'block', padding: '14px 16px',
+                    borderBottom: '1px solid var(--border)',
+                    background: n.isRead ? 'transparent' : 'var(--primary-bg-subtle)',
+                    color: 'var(--foreground)',
+                    transition: 'background 0.2s',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = n.isRead ? 'transparent' : 'var(--primary-bg-subtle)'}
+                >
+                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <span style={{fontSize: '14px', fontWeight: n.isRead ? 400 : 600}}>
+                      {renderNotificationMessage(n)}
+                    </span>
+                    {!n.isRead && (
+                      <span style={{width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', flexShrink: 0, marginLeft: '8px'}}></span>
+                    )}
+                  </div>
+                  <span style={{fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block'}}>
+                    {formatTime(n.createdAt)}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

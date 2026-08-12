@@ -290,7 +290,7 @@ const FooterBeian = () => {
               <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--foreground)' }}>{t('footer.frontendProject')}</div>
               <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', background: 'var(--card)', padding: '1px 8px', borderRadius: '4px', border: '1px solid var(--border)' }}>GPL v3.0</span>
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>furry-drama-tracker-frontend</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px', opacity: 0.85 }}>furry-drama-tracker-frontend</div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Link to="/license" onClick={() => setShowGithubModal(false)} style={{ fontSize: '12px', color: 'var(--primary)', textDecoration: 'none' }}
                 onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
@@ -321,7 +321,7 @@ const FooterBeian = () => {
               <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--foreground)' }}>{t('footer.backendProject')}</div>
               <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', background: 'var(--card)', padding: '1px 8px', borderRadius: '4px', border: '1px solid var(--border)' }}>AGPL v3.0</span>
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>furry-drama-be-neo</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '10px', opacity: 0.85 }}>furry-drama-be-neo</div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Link to="/license" onClick={() => setShowGithubModal(false)} style={{ fontSize: '12px', color: 'var(--primary)', textDecoration: 'none' }}
                 onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}

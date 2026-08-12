@@ -435,9 +435,8 @@ const EpisodeDetail = ({ user }) => {
                     {groupNumber ? (
                       <span style={{
                         color: 'var(--foreground)', fontWeight: 600,
-                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
                         letterSpacing: '0.5px', fontSize: '14px',
-                        padding: '2px 8px', borderRadius: '6px',
+                        padding: '2px 10px', borderRadius: '6px',
                         background: 'var(--glass-bg)', border: '1px solid var(--glass-border)'
                       }}>{groupNumber}</span>
                     ) : (
