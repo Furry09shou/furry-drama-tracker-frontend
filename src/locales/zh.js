@@ -481,7 +481,9 @@ export default {
     statusCompleted: '已完结',
     statusUpcoming: '即将上映',
     starRating: '{star} 星',
-    contactQQGroup: '💬 QQ交流群',
+    contactQQGroup: 'QQ交流群：',
+    qqGroupNumber: '群号',
+    jumpToGroup: '一键跳转',
   },
   devices: {
     manageDevices: '管理设备',

@@ -426,26 +426,57 @@ const EpisodeDetail = ({ user }) => {
                 </p>
               );
             })()}
-            {episode.qqGroupLink && (
-              <p style={{marginTop: '6px'}}>
-                <a
-                  href={episode.qqGroupLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    padding: '5px 14px', borderRadius: '8px', fontSize: '13px', fontWeight: 500,
-                    background: 'var(--primary)', color: 'var(--btn-text)',
-                    border: '1px solid var(--primary)', textDecoration: 'none',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px var(--shadow-modal)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
-                >
-                  {t('episode.contactQQGroup')}
-                </a>
-              </p>
-            )}
+            {episode.qqGroupLink && (() => {
+              const extractGroupNumber = (link) => {
+                if (!link) return null;
+                const trimmed = link.trim();
+                if (/^\d{5,12}$/.test(trimmed)) return trimmed;
+                let m = trimmed.match(/\/q\/([^/?#]+)/);
+                if (m) return m[1];
+                m = trimmed.match(/[?&]k=([^&#]+)/);
+                if (m) return m[1];
+                m = trimmed.match(/\/([^/?#]+)\/?$/);
+                if (m && m[1] && m[1] !== '.') return m[1];
+                return null;
+              };
+              const groupNumber = extractGroupNumber(episode.qqGroupLink);
+              return (
+                <p>
+                  <strong>{t('episode.contactQQGroup')}</strong>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', justifyContent: 'flex-end'}}>
+                    {groupNumber ? (
+                      <span style={{
+                        color: 'var(--foreground)', fontWeight: 600,
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                        letterSpacing: '0.5px', fontSize: '14px',
+                        padding: '2px 8px', borderRadius: '6px',
+                        background: 'var(--glass-bg)', border: '1px solid var(--glass-border)'
+                      }}>{groupNumber}</span>
+                    ) : (
+                      <span style={{color: 'var(--text-tertiary)', fontSize: '13px'}}>{t('episode.qqGroupNumber')}</span>
+                    )}
+                    <a
+                      href={episode.qqGroupLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '4px',
+                        padding: '4px 14px', borderRadius: '8px', fontSize: '13px', fontWeight: 500,
+                        background: 'var(--primary)', color: 'var(--btn-text)',
+                        border: '1px solid var(--primary)', textDecoration: 'none',
+                        transition: 'transform 0.2s, box-shadow 0.2s, filter 0.2s',
+                        whiteSpace: 'nowrap'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 12px var(--shadow-modal)'; e.currentTarget.style.filter = 'brightness(1.05)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.filter = 'brightness(1)'; }}
+                    >
+                      {t('episode.jumpToGroup')}
+                      <span aria-hidden="true" style={{display: 'inline-block', transition: 'transform 0.2s'}}>↗</span>
+                    </a>
+                  </span>
+                </p>
+              );
+            })()}
             {user && isFollowing && (
               <p><strong>{t('episode.watchProgress')}</strong>{t('episode.watchedLabel')} {watchedEpisodes.length}{episode.totalEpisodes ? `/${episode.totalEpisodes}` : ''} {t('episode.epSuffix')}</p>
             )}

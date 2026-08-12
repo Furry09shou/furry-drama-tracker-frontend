@@ -481,7 +481,9 @@ export default {
     statusCompleted: 'Completed',
     statusUpcoming: 'Upcoming',
     starRating: '{star} star',
-    contactQQGroup: '💬 QQ Chat Group',
+    contactQQGroup: 'QQ Chat Group: ',
+    qqGroupNumber: 'Group No.',
+    jumpToGroup: 'Jump to Group',
   },
   devices: {
     manageDevices: 'Manage Devices',
