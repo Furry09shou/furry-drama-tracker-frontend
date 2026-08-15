@@ -3,19 +3,48 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import adminApi from '../utils/adminApi';
 import { useI18n } from '../contexts/I18nContext';
 
+// 邮件服务配置自后端重构后改由服务器端 env/ini 提供（EMAIL_HOST / EMAIL_PORT /
+// EMAIL_USER / EMAIL_PASS / EMAIL_FROM_NAME），不再存于数据库。本页面因此：
+//   1. 只读展示当前生效配置（pass 脱敏，不回传）；
+//   2. 提供独立诊断表单发送测试邮件（需手动填写 SMTP 参数）。
+// 后端 PUT /api/site-content/email 已禁用，保存操作不再可用。
 const AdminEmailSettings = () => {
   const { admin } = useOutletContext();
-  const [emailData, setEmailData] = useState({
-    host: '', port: '465', user: '', pass: '', fromName: '', enabled: false
+  const [config, setConfig] = useState(null); // { host, port, user, fromName, enabled }
+  const [testForm, setTestForm] = useState({
+    host: '', port: '465', user: '', pass: '', fromName: '', to: ''
   });
   const [showPass, setShowPass] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
-  const [testEmail, setTestEmail] = useState('');
   const [testing, setTesting] = useState(false);
   const [testMsg, setTestMsg] = useState('');
   const navigate = useNavigate();
   const { t } = useI18n();
+
+  async function fetchEmailConfig() {
+    try {
+      const res = await adminApi.get('/api/site-content/email');
+      if (res.data && res.data.content) {
+        const data = JSON.parse(res.data.content);
+        setConfig({
+          host: data.host || '',
+          port: data.port || '465',
+          user: data.user || '',
+          fromName: data.fromName || '',
+          enabled: !!data.enabled
+        });
+        // 预填测试表单的公共字段（pass 需手动填写）
+        setTestForm(prev => ({
+          ...prev,
+          host: data.host || '',
+          port: data.port || '465',
+          user: data.user || '',
+          fromName: data.fromName || ''
+        }));
+      }
+    } catch (err) {
+      console.error('获取邮件配置失败', err);
+    }
+  }
 
   useEffect(() => {
     if (admin.role === 'superadmin') {
@@ -23,57 +52,28 @@ const AdminEmailSettings = () => {
     } else {
       navigate('/admin/dashboard', { replace: true });
     }
+    // fetchEmailConfig 使用函数声明提升，effect 内直接调用；依赖仅 admin 角色与导航
   }, [admin, navigate]);
 
-  const fetchEmailConfig = async () => {
-    try {
-      const res = await adminApi.get('/api/site-content/email');
-      if (res.data && res.data.content) {
-        const data = JSON.parse(res.data.content);
-        setEmailData({
-          host: data.host || '',
-          port: data.port || '465',
-          user: data.user || '',
-          pass: data.pass || '',
-          fromName: data.fromName || t('site.defaultName'),
-          enabled: data.enabled || false
-        });
-      }
-    } catch (err) {
-      console.error('获取邮件配置失败', err);
-    }
-  };
-
-  const handleSave = async () => {
-    setSaving(true);
-    setMessage('');
-    try {
-      await adminApi.put('/api/site-content/email', {
-        title: t('adminEmailSettings.emailService'),
-        content: JSON.stringify(emailData)
-      });
-      setMessage(t('adminEmailSettings.saveSuccess'));
-    } catch (err) {
-      setMessage(err.response?.data?.message || t('adminEmailSettings.saveFailed'));
-    }
-    setSaving(false);
-  };
-
   const handleTest = async () => {
-    if (!testEmail) {
+    if (!testForm.to) {
       setTestMsg(t('adminEmailSettings.testEmailRequired'));
+      return;
+    }
+    if (!testForm.host || !testForm.user || !testForm.pass) {
+      setTestMsg(t('adminEmailSettings.testConfigRequired'));
       return;
     }
     setTesting(true);
     setTestMsg('');
     try {
       const res = await adminApi.post('/api/site-content/test-email', {
-        host: emailData.host,
-        port: emailData.port,
-        user: emailData.user,
-        pass: emailData.pass,
-        fromName: emailData.fromName,
-        to: testEmail
+        host: testForm.host,
+        port: testForm.port,
+        user: testForm.user,
+        pass: testForm.pass,
+        fromName: testForm.fromName,
+        to: testForm.to
       });
       setTestMsg(res.data.message);
     } catch (err) {
@@ -93,148 +93,143 @@ const AdminEmailSettings = () => {
       </div>
 
       <div className="form-container" style={{ maxWidth: '700px', margin: '0 auto' }}>
+        {/* 配置来源说明 */}
         <div style={{
           padding: '14px 18px', marginBottom: '24px', borderRadius: '10px',
           background: 'var(--primary-bg-subtle)', border: '1px solid var(--primary-border-subtle)',
           fontSize: '13px', lineHeight: 1.7, color: 'var(--text-secondary)'
         }}>
-          <p style={{ margin: '0 0 6px 0', fontWeight: 600, color: 'var(--foreground)' }}>{t('adminEmailSettings.infoTitle')}</p>
-          <ul style={{ margin: 0, paddingLeft: '16px' }}>
-            <li>{t('adminEmailSettings.infoItem1')}</li>
-            <li>{t('adminEmailSettings.infoItem2')}</li>
-            <li>{t('adminEmailSettings.infoItem3')}</li>
-            <li>{t('adminEmailSettings.infoItem4')}</li>
-          </ul>
+          <p style={{ margin: '0 0 6px 0', fontWeight: 600, color: 'var(--foreground)' }}>{t('adminEmailSettings.configSourceTitle')}</p>
+          <p style={{ margin: '0 0 6px 0' }}>{t('adminEmailSettings.configSourceHint')}</p>
+          <p style={{ margin: 0 }}>{t('adminEmailSettings.configReadonlyNote')}</p>
         </div>
 
-        <div className="form-group">
-          <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <input
-              type="checkbox"
-              checked={emailData.enabled}
-              onChange={(e) => setEmailData(prev => ({ ...prev, enabled: e.target.checked }))}
-              style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-            />
-            <span>{t('adminEmailSettings.enableEmail')}</span>
-          </label>
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {t('adminEmailSettings.enableEmailHint')}
-          </p>
-        </div>
-
-        <div className="form-group">
-          <label>{t('adminEmailSettings.smtpHost')}</label>
-          <input
-            type="text"
-            value={emailData.host}
-            onChange={(e) => setEmailData(prev => ({ ...prev, host: e.target.value }))}
-            placeholder={t('adminEmailSettings.smtpHostPlaceholder')}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>{t('adminEmailSettings.smtpPort')}</label>
-          <input
-            type="text"
-            value={emailData.port}
-            onChange={(e) => setEmailData(prev => ({ ...prev, port: e.target.value }))}
-            placeholder={t('adminEmailSettings.smtpPortPlaceholder')}
-          />
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {t('adminEmailSettings.smtpPortHint')}
-          </p>
-        </div>
-
-        <div className="form-group">
-          <label>{t('adminEmailSettings.smtpUser')}</label>
-          <input
-            type="email"
-            value={emailData.user}
-            onChange={(e) => setEmailData(prev => ({ ...prev, user: e.target.value }))}
-            placeholder="your@email.com"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>{t('adminEmailSettings.smtpPass')}</label>
-          <div style={{ position: 'relative' }}>
-            <input
-              type={showPass ? 'text' : 'password'}
-              value={emailData.pass}
-              onChange={(e) => setEmailData(prev => ({ ...prev, pass: e.target.value }))}
-              placeholder={t('adminEmailSettings.smtpPassPlaceholder')}
-              style={{ width: '100%', paddingRight: '80px' }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPass(!showPass)}
-              style={{
-                position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)',
-                background: 'none', border: 'none', color: 'var(--primary)',
-                cursor: 'pointer', fontSize: '13px', padding: '4px 8px'
-              }}
-            >
-              {showPass ? t('adminEmailSettings.hide') : t('adminEmailSettings.show')}
-            </button>
-          </div>
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {t('adminEmailSettings.smtpPassHint')}
-          </p>
-        </div>
-
-        <div className="form-group">
-          <label>{t('adminEmailSettings.fromName')}</label>
-          <input
-            type="text"
-            value={emailData.fromName}
-            onChange={(e) => setEmailData(prev => ({ ...prev, fromName: e.target.value }))}
-            placeholder={t('adminEmailSettings.fromNamePlaceholder')}
-          />
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {t('adminEmailSettings.fromNameHint')}
-          </p>
-        </div>
-
-        {message && (
-          <div style={{
-            padding: '10px 16px', borderRadius: '8px', marginBottom: '16px',
-            background: message.includes(t('adminEmailSettings.successKeyword')) ? 'var(--success-bg)' : 'var(--destructive-bg)',
-            color: message.includes(t('adminEmailSettings.successKeyword')) ? 'var(--success-text)' : 'var(--destructive-text)',
-            border: `1px solid ${message.includes(t('adminEmailSettings.successKeyword')) ? 'var(--success-border)' : 'var(--destructive-border)'}`
-          }}>
-            {message}
-          </div>
-        )}
-
-        <button className="btn" onClick={handleSave} disabled={saving} style={{ marginBottom: '30px' }}>
-          {saving ? t('adminEmailSettings.saving') : t('adminEmailSettings.saveConfig')}
-        </button>
-
+        {/* 当前生效配置（只读） */}
         <div style={{
-          padding: '20px', borderRadius: '12px',
+          padding: '18px 20px', borderRadius: '12px', marginBottom: '24px',
+          background: 'var(--card)', border: '1px solid var(--border)'
+        }}>
+          <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: 'var(--foreground)' }}>{t('adminEmailSettings.currentConfig')}</h3>
+          {config ? (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', fontSize: '14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>{t('adminEmailSettings.smtpHost')}</span>
+                <span style={{ color: 'var(--foreground)', fontWeight: 500, wordBreak: 'break-all', textAlign: 'right' }}>{config.host || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>{t('adminEmailSettings.smtpPort')}</span>
+                <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>{config.port}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>{t('adminEmailSettings.smtpUser')}</span>
+                <span style={{ color: 'var(--foreground)', fontWeight: 500, wordBreak: 'break-all', textAlign: 'right' }}>{config.user || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>{t('adminEmailSettings.fromName')}</span>
+                <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>{config.fromName || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>{t('adminEmailSettings.status')}</span>
+                <span style={{ fontWeight: 600, color: config.enabled ? 'var(--success-text)' : 'var(--destructive-text)' }}>
+                  {config.enabled ? t('adminEmailSettings.enabled') : t('adminEmailSettings.disabled')}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)' }}>{t('adminEmailSettings.configNotSet')}</p>
+          )}
+        </div>
+
+        {/* 测试邮件（独立诊断表单） */}
+        <div style={{
+          padding: '20px', borderRadius: '12px', marginBottom: '24px',
           background: 'var(--card)', border: '1px solid var(--border)'
         }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: 'var(--foreground)' }}>{t('adminEmailSettings.testEmailTitle')}</h3>
           <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.6 }}>
             {t('adminEmailSettings.testEmailDesc')}
           </p>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.smtpHost')}</label>
+            <input
+              type="text"
+              value={testForm.host}
+              onChange={(e) => setTestForm(prev => ({ ...prev, host: e.target.value }))}
+              placeholder={t('adminEmailSettings.smtpHostPlaceholder')}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.smtpPort')}</label>
+            <input
+              type="text"
+              value={testForm.port}
+              onChange={(e) => setTestForm(prev => ({ ...prev, port: e.target.value }))}
+              placeholder={t('adminEmailSettings.smtpPortPlaceholder')}
+            />
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              {t('adminEmailSettings.smtpPortHint')}
+            </p>
+          </div>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.smtpUser')}</label>
             <input
               type="email"
-              value={testEmail}
-              onChange={(e) => setTestEmail(e.target.value)}
-              placeholder={t('adminEmailSettings.testEmailPlaceholder')}
-              style={{ flex: 1, minWidth: '200px', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--foreground)', fontSize: '14px' }}
+              value={testForm.user}
+              onChange={(e) => setTestForm(prev => ({ ...prev, user: e.target.value }))}
+              placeholder="your@email.com"
             />
-            <button
-              className="btn"
-              onClick={handleTest}
-              disabled={testing || !emailData.host || !emailData.user || !emailData.pass}
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              {testing ? t('adminEmailSettings.sending') : t('adminEmailSettings.testSend')}
-            </button>
           </div>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.smtpPass')}</label>
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showPass ? 'text' : 'password'}
+                value={testForm.pass}
+                onChange={(e) => setTestForm(prev => ({ ...prev, pass: e.target.value }))}
+                placeholder={t('adminEmailSettings.smtpPassPlaceholder')}
+                style={{ width: '100%', paddingRight: '80px' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                style={{
+                  position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', color: 'var(--primary)',
+                  cursor: 'pointer', fontSize: '13px', padding: '4px 8px'
+                }}
+              >
+                {showPass ? t('adminEmailSettings.hide') : t('adminEmailSettings.show')}
+              </button>
+            </div>
+            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              {t('adminEmailSettings.smtpPassHint')}
+            </p>
+          </div>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.fromName')}</label>
+            <input
+              type="text"
+              value={testForm.fromName}
+              onChange={(e) => setTestForm(prev => ({ ...prev, fromName: e.target.value }))}
+              placeholder={t('adminEmailSettings.fromNamePlaceholder')}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>{t('adminEmailSettings.testEmailRecipient')}</label>
+            <input
+              type="email"
+              value={testForm.to}
+              onChange={(e) => setTestForm(prev => ({ ...prev, to: e.target.value }))}
+              placeholder={t('adminEmailSettings.testEmailPlaceholder')}
+            />
+          </div>
+
           {testMsg && (
             <div style={{
               marginTop: '12px', padding: '10px 14px', borderRadius: '8px', fontSize: '13px',
@@ -245,6 +240,15 @@ const AdminEmailSettings = () => {
               {testMsg}
             </div>
           )}
+
+          <button
+            className="btn"
+            onClick={handleTest}
+            disabled={testing || !testForm.host || !testForm.user || !testForm.pass}
+            style={{ marginTop: '4px' }}
+          >
+            {testing ? t('adminEmailSettings.sending') : t('adminEmailSettings.testSend')}
+          </button>
         </div>
 
         <div style={{

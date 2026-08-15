@@ -6,9 +6,9 @@
 
 | 类别 | 技术 |
 |---|---|
-| 框架 | React 18 |
-| 构建工具 | Vite 5 |
-| 路由 | react-router-dom v6 |
+| 框架 | React 19 |
+| 构建工具 | Vite 8 |
+| 路由 | react-router-dom v7 |
 | HTTP 客户端 | axios |
 | 样式 | CSS Variables（全局主题系统） |
 | 实时推送 | SSE (Server-Sent Events) |
@@ -22,8 +22,11 @@ frontend/
 ├── vite.config.js              # Vite 配置（含开发代理）
 ├── package.json
 ├── public/
-│   ├── manifest.json           # PWA 描述文件
-│   └── sw.js                   # Service Worker
+│   ├── altcha.js               # Altcha 验证码（本地加载）
+│   ├── icon-*.svg/png          # 应用图标
+│   ├── apple-touch-icon.png    # iOS 图标
+│   ├── images/                 # 静态图片
+│   └── workers/                # Web Worker
 └── src/
     ├── main.jsx                # React 入口
     ├── App.jsx                 # 根组件（导航栏、路由、全局布局）
@@ -98,7 +101,7 @@ frontend/
 
 ### 环境要求
 
-- Node.js >= 18
+- Node.js >= 20
 - npm >= 9
 
 ### 安装与运行
@@ -229,11 +232,11 @@ Vite 使用 `.env` 文件管理环境变量。只有 `VITE_` 前缀的变量会�
 - **反馈管理** — 用户反馈处理
 - **会话管理** — 在线用户和设备管理
 - **API 用量** — 接口调用统计
-- **邮件设置** — 邮件模板配置
+- **邮件设置** — 查看 SMTP 邮件服务配置（配置由服务器端 env/ini 提供，仅可读）与发送测试邮件
 
 ## 相关项目
 
-- **后端**：[furry-drama-be](https://github.com/Furry09shou/furry-drama-be) — Node.js/Express 后端 API
+- **后端**：[furry-drama-be-neo](https://github.com/xiedada05/furry-drama-be-neo) — Go + Gin 后端 API（Express 后端的 Drop-In 重写）
 - **前端**：本项目 — React 前端 SPA
 
 ## 许可协议

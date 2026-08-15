@@ -344,17 +344,16 @@ export const LicensePage = () => {
             </ul>
             <h4 style={{ color: 'var(--text-secondary)', margin: '12px 0 4px 0', fontSize: '13px' }}>{t('sitePage.backendProject')}</h4>
             <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <li>Express — MIT License</li>
-              <li>Mongoose — MIT License</li>
-              <li>bcryptjs — MIT License</li>
-              <li>jsonwebtoken — MIT License</li>
-              <li>multer — MIT License</li>
-              <li>cors — MIT License</li>
-              <li>dotenv — BSD-2-Clause License</li>
-              <li>helmet — MIT License</li>
-              <li>express-rate-limit — MIT License</li>
-              <li>nodemailer — MIT License</li>
-              <li>xss — MIT License</li>
+              <li>Gin — MIT License</li>
+              <li>MongoDB Go Driver — Apache-2.0</li>
+              <li>golang-jwt — MIT License</li>
+              <li>go-mail — MIT License</li>
+              <li>bluemonday — BSD-3-Clause License</li>
+              <li>ulule/limiter — MIT License</li>
+              <li>pquerna/otp — MIT License</li>
+              <li>altcha-lib-go — MIT License</li>
+              <li>gopkg.in/ini.v1 — Apache-2.0</li>
+              <li>golang.org/x/crypto — BSD-3-Clause License</li>
             </ul>
           </div>
           <p style={{ fontSize: '14px', color: 'var(--text-tertiary)' }}>{t('sitePage.fullLicenseNote')}</p>

@@ -19,7 +19,7 @@ Vite proxies `/api` and `/uploads` to `http://localhost:5000` (the backend). If 
 ## Architecture
 
 - **Entry**: `src/main.jsx` → `App.jsx`
-- **Routing**: react-router-dom v6, defined in `App.jsx`. Admin routes (`/admin/*`) render under `AdminLayout`; public routes render with `NavBar`.
+- **Routing**: react-router-dom v7, defined in `App.jsx`. Admin routes (`/admin/*`) render under `AdminLayout`; public routes render with `NavBar`.
 - **State**: No external state library. All global state lives in React Contexts:
   - `AuthContext` — user auth, token in `localStorage`
   - `ThemeContext` — dark/light/system theme
@@ -27,7 +27,7 @@ Vite proxies `/api` and `/uploads` to `http://localhost:5000` (the backend). If 
   - `SiteSettingsContext` — runtime site config from API
 - **HTTP**: axios, globally configured in `src/utils/axiosConfig.js`. Handles CSRF token (`X-XSRF-TOKEN` header), 401 auto-redirect, and `withCredentials: true`.
 - **Styling**: Pure CSS variables defined in `src/index.css`. No CSS-in-JS or preprocessor. Theme switching changes CSS custom properties.
-- **PWA**: `public/sw.js` + `public/manifest.json`. Service worker registered in `main.jsx`.
+- **PWA**: vite-plugin-pwa (configured in `vite.config.js`); service worker registered in `main.jsx` via `virtual:pwa-register` (`autoUpdate`). Manifest + SW are generated at build time.
 
 ## Key Conventions
 

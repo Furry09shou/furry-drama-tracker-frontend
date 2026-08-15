@@ -65,7 +65,7 @@ const API = {
     SESSIONS: '/api/admin/sessions',
     BANNERS: '/api/admin/banners',
     CATEGORIES: '/api/admin/categories',
-    SITE_CONTENT: (key) => `/api/admin/site-content/${key}`,
+    SITE_CONTENT: (key) => `/api/site-content/${key}`,
     FRIEND_LINKS: '/api/admin/friend-links',
     FEEDBACK: '/api/admin/feedback',
     REPORTS: '/api/admin/reports',

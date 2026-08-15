@@ -139,7 +139,7 @@ const AdminAnnouncements = () => {
 
         <div className="form-container" style={{ maxWidth: '760px', margin: 0 }}>
           <div className="form-group">
-            <label>{t('adminAnnouncements.title')} <span style={{ color: 'var(--destructive-text)' }}>*</span></label>
+            <label>{t('adminAnnouncements.titleField')} <span style={{ color: 'var(--destructive-text)' }}>*</span></label>
             <input type="text" value={form.title} onChange={(e) => setField('title', e.target.value)} placeholder={t('adminAnnouncements.titlePlaceholder')} />
           </div>
           <div className="form-group">
