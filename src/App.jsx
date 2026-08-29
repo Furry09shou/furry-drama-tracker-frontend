@@ -20,6 +20,8 @@ import InstallPrompt from './components/InstallPrompt';
 import BrowserCompat from './components/BrowserCompat';
 import AnnouncementBanner from './components/AnnouncementBanner';
 import AnnouncementPopup from './components/AnnouncementPopup';
+import ServerThemeBridge from './components/ServerThemeBridge';
+import { IconProvider } from './contexts/IconContext';
 
 const Profile = lazy(() => import('./components/Profile'));
 const Admin = lazy(() => import('./components/Admin'));
@@ -64,6 +66,8 @@ const FriendLinks = lazy(() => import('./components/FriendLinks'));
 const FeedbackModal = lazy(() => import('./components/FeedbackModal'));
 const ThemeColorPicker = lazy(() => import('./components/ThemeColorPicker'));
 const AdminAnalytics = lazy(() => import('./components/AdminAnalytics'));
+const AdminThemes = lazy(() => import('./components/AdminThemes'));
+const AdminIcons = lazy(() => import('./components/AdminIcons'));
 const Timeline = lazy(() => import('./components/Timeline'));
 
 const getRoutePageTitleKey = (pathname) => {
@@ -89,6 +93,8 @@ const getRoutePageTitleKey = (pathname) => {
   if (pathname.startsWith('/admin/friend-links')) return 'pageTitle.adminFriendLinks';
   if (pathname.startsWith('/admin/sessions')) return 'pageTitle.adminSessions';
   if (pathname.startsWith('/admin/analytics')) return 'pageTitle.adminAnalytics';
+  if (pathname.startsWith('/admin/themes')) return 'pageTitle.adminThemes';
+  if (pathname.startsWith('/admin/icons')) return 'pageTitle.adminIcons';
 
   // 公共路由
   if (pathname === '/') return 'pageTitle.home';
@@ -510,6 +516,8 @@ function AppContent() {
               <Route path="friend-links" element={<AdminGuard><AdminFriendLinks /></AdminGuard>} />
               <Route path="sessions" element={<AdminGuard><AdminSessions /></AdminGuard>} />
               <Route path="analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
+              <Route path="themes" element={<AdminGuard><AdminThemes /></AdminGuard>} />
+              <Route path="icons" element={<AdminGuard><AdminIcons /></AdminGuard>} />
             </Route>
           </Routes>
         </Suspense>
