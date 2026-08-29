@@ -2,6 +2,20 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
+// 服务端主题的 localStorage 缓存键：首屏同步应用，避免主题闪烁。
+export const SERVER_THEME_CACHE_KEY = 'server_theme_cache';
+
+// 读取缓存的服务端主题（损坏/非法时返回 null）。
+export const readCachedServerTheme = () => {
+  try {
+    const raw = localStorage.getItem(SERVER_THEME_CACHE_KEY);
+    if (!raw) return null;
+    const t = JSON.parse(raw);
+    if (t && typeof t === 'object' && t.variables && typeof t.variables === 'object') return t;
+  } catch { /* 忽略损坏缓存 */ }
+  return null;
+};
+
 export const useTheme = () => useContext(ThemeContext);
 
 const hexToRgb = (hex) => {
@@ -37,7 +51,7 @@ export const PRESET_COLORS = [
   '#ca8a04', '#15803d', '#0e7490', '#1d4ed8'
 ];
 
-const themes = {
+export const themes = {
   dark: {
     '--primary': '#6366f1',
     '--primary-dark': '#4f46e5',
@@ -328,6 +342,9 @@ export const ThemeProvider = ({ children }) => {
     if (saved && /^#[0-9a-fA-F]{6}$/.test(saved)) return saved;
     return '#6366f1';
   });
+  // 服务端主题（系统默认或用户选择）：variables 覆盖在基础主题之上。
+  // 初始化时同步读缓存，避免首屏闪烁。
+  const [serverTheme, setServerThemeState] = useState(() => readCachedServerTheme());
 
   useEffect(() => {
     const root = document.documentElement;
@@ -336,11 +353,17 @@ export const ThemeProvider = ({ children }) => {
       root.style.setProperty(key, value);
     }
     root.setAttribute('data-theme', theme);
-  }, [theme]);
+    // 服务端主题变量覆盖（主题引擎：基础模式 → 服务端主题 → 强调色）。
+    if (serverTheme?.variables) {
+      for (const [key, value] of Object.entries(serverTheme.variables)) {
+        if (typeof value === 'string' && value) root.style.setProperty(key, value);
+      }
+    }
+  }, [theme, serverTheme]);
 
   useEffect(() => {
     applyAccentColor(accentColor, theme);
-  }, [accentColor, theme]);
+  }, [accentColor, theme, serverTheme]);
 
   useEffect(() => {
     if (themeMode !== 'system') return;
@@ -382,11 +405,23 @@ export const ThemeProvider = ({ children }) => {
     }
   };
 
+  // 设置服务端主题（null 表示清除，回退内置主题）。同步写缓存防闪烁。
+  const setServerTheme = (t) => {
+    setServerThemeState(t);
+    if (t) {
+      localStorage.setItem(SERVER_THEME_CACHE_KEY, JSON.stringify({
+        _id: t._id, name: t.name, mode: t.mode, variables: t.variables,
+      }));
+    } else {
+      localStorage.removeItem(SERVER_THEME_CACHE_KEY);
+    }
+  };
+
   const themeIcon = themeMode === 'dark' ? '☀️' : themeMode === 'light' ? '🌙' : '💻';
   const themeTitle = themeMode === 'dark' ? 'Switch to light' : themeMode === 'light' ? 'Follow system' : 'Switch to dark';
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, themeMode, setThemeModeTo, themeIcon, themeTitle, accentColor, setAccentColor, presetColors: PRESET_COLORS }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, themeMode, setThemeModeTo, themeIcon, themeTitle, accentColor, setAccentColor, presetColors: PRESET_COLORS, serverTheme, setServerTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -179,6 +179,22 @@ const AdminDashboard = () => {
           </Link>
         )}
 
+        {admin.role === 'superadmin' && (
+          <Link to="/admin/themes" className="dashboard-card">
+            <div className="card-icon">🎨</div>
+            <h3>{t('adminDashboard.themes')}</h3>
+            <p>{t('adminDashboard.themesDesc')}</p>
+          </Link>
+        )}
+
+        {admin.role === 'superadmin' && (
+          <Link to="/admin/icons" className="dashboard-card">
+            <div className="card-icon">🧩</div>
+            <h3>{t('adminDashboard.icons')}</h3>
+            <p>{t('adminDashboard.iconsDesc')}</p>
+          </Link>
+        )}
+
         {(admin.role === 'admin' || admin.role === 'superadmin') && (
           <Link to="/admin/feedback" className="dashboard-card" style={{ position: 'relative' }}>
             <div className="card-icon">💬</div>

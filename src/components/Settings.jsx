@@ -7,6 +7,7 @@ import usePushNotifications from '../hooks/usePushNotifications';
 import { useAuth } from '../contexts/AuthContext';
 import API from '../utils/apiEndpoints';
 import WallpaperPicker from './WallpaperPicker';
+import ThemeWorkshop from './ThemeWorkshop';
 
 const DISMISSED_KEY = 'pwa-install-dismissed';
 
@@ -333,6 +334,9 @@ const Settings = ({ user }) => {
           </div>
         </div>
       ))}
+
+      {/* ===== 主题工坊（系统主题选择 + 个人主题制作） ===== */}
+      <ThemeWorkshop />
 
       {/* ===== 个人背景图片设置 ===== */}
       <div style={{ marginBottom: '24px' }}>

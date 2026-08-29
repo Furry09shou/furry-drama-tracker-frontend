@@ -36,6 +36,27 @@ const API = {
     SYSTEM_ALL: '/api/wallpapers/system/all',
     PERSONAL: '/api/wallpapers/personal',
   },
+  // 主题管理（公共生效主题 / 用户个人主题 / 管理后台）
+  THEMES: {
+    ACTIVE: '/api/themes/active',
+    LIST: '/api/themes/list',
+    ALL: '/api/themes/all',
+    MY: '/api/themes/my',
+    MY_SELECTION: '/api/themes/my/selection',
+    SELECTION: '/api/themes/selection',
+    DETAIL: (id) => `/api/themes/${id}`,
+    SUBMIT: (id) => `/api/themes/${id}/submit`,
+    REVIEW: (id) => `/api/themes/${id}/review`,
+    SET_DEFAULT: (id) => `/api/themes/${id}/default`,
+    ADMIN_UPDATE: (id) => `/api/themes/${id}/admin`,
+  },
+  // 图标管理
+  ICONS: {
+    LIST: '/api/icons/list',
+    ALL: '/api/icons/all',
+    UPLOAD: '/api/icons/upload',
+    DETAIL: (id) => `/api/icons/${id}`,
+  },
   // 收藏/关注/历史
   FAVORITES: '/api/favorites',
   FOLLOWS: '/api/follows',
