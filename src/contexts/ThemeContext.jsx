@@ -350,21 +350,6 @@ export const ThemeProvider = ({ children }) => {
     return () => mql.removeEventListener('change', handler);
   }, [themeMode]);
 
-  const toggleTheme = () => {
-    setThemeMode(prev => {
-      const modes = ['dark', 'light', 'system'];
-      const idx = modes.indexOf(prev);
-      const next = modes[(idx + 1) % modes.length];
-      localStorage.setItem('theme', next);
-      if (next === 'system') {
-        setTheme(getSystemTheme());
-      } else {
-        setTheme(next);
-      }
-      return next;
-    });
-  };
-
   const setAccentColor = (color) => {
     if (!/^#[0-9a-fA-F]{6}$/.test(color)) return;
     setAccentColorState(color);
@@ -382,11 +367,8 @@ export const ThemeProvider = ({ children }) => {
     }
   };
 
-  const themeIcon = themeMode === 'dark' ? '☀️' : themeMode === 'light' ? '🌙' : '💻';
-  const themeTitle = themeMode === 'dark' ? 'Switch to light' : themeMode === 'light' ? 'Follow system' : 'Switch to dark';
-
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, themeMode, setThemeModeTo, themeIcon, themeTitle, accentColor, setAccentColor, presetColors: PRESET_COLORS }}>
+    <ThemeContext.Provider value={{ theme, themeMode, setThemeModeTo, accentColor, setAccentColor, presetColors: PRESET_COLORS }}>
       {children}
     </ThemeContext.Provider>
   );
