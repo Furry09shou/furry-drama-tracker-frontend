@@ -8,10 +8,16 @@ const IconContext = createContext();
 export const useIcons = () => useContext(IconContext);
 
 /**
- * 主题选择变化事件：ThemeWorkshop 应用/取消主题后广播，
+ * THEME_SELECTION_CHANGED_EVENT 主题选择变化事件：ThemeWorkshop 应用/取消主题后广播，
  * IconProvider 监听并重新拉取主题图标覆盖。
  */
 export const THEME_SELECTION_CHANGED_EVENT = 'theme-selection-changed';
+
+/**
+ * THEME_PROTECTED_ICON_KEYS 主题图标不允许覆盖的组件标识（站点身份类资产）。
+ * 主题是用户个人外观包，不应篡改站点 Logo 等品牌资产；后端同样校验拒绝。
+ */
+export const THEME_PROTECTED_ICON_KEYS = ['misc.logo'];
 
 /**
  * ICON_COMPONENT_KEYS 图标可绑定的组件标识注册表。
@@ -154,11 +160,16 @@ export const IconProvider = ({ children }) => {
     return () => window.removeEventListener(THEME_SELECTION_CHANGED_EVENT, onThemeChanged);
   }, [user, fetchThemeIcons]);
 
-  // 合成最终映射：全局映射 + 主题图标覆盖。
-  const mappings = useMemo(
-    () => (themeIcons ? { ...baseMappings, ...themeIcons } : baseMappings),
-    [baseMappings, themeIcons],
-  );
+  // 合成最终映射：全局映射 + 主题图标覆盖（保护名单内的站点身份图标除外）。
+  const mappings = useMemo(() => {
+    if (!themeIcons) return baseMappings;
+    const merged = { ...baseMappings };
+    for (const [k, v] of Object.entries(themeIcons)) {
+      if (THEME_PROTECTED_ICON_KEYS.includes(k)) continue;
+      merged[k] = v;
+    }
+    return merged;
+  }, [baseMappings, themeIcons]);
 
   // 供管理页手动刷新图标表（上传/删除后调用）。
   const refreshIcons = async () => {

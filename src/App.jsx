@@ -66,6 +66,7 @@ const FeedbackModal = lazy(() => import('./components/FeedbackModal'));
 const ThemeColorPicker = lazy(() => import('./components/ThemeColorPicker'));
 const AdminAnalytics = lazy(() => import('./components/AdminAnalytics'));
 const AdminThemes = lazy(() => import('./components/AdminThemes'));
+const AdminThemeReview = lazy(() => import('./components/AdminThemeReview'));
 const AdminIcons = lazy(() => import('./components/AdminIcons'));
 const Timeline = lazy(() => import('./components/Timeline'));
 
@@ -78,6 +79,7 @@ const getRoutePageTitleKey = (pathname) => {
   if (pathname.startsWith('/admin/categories')) return 'pageTitle.adminCategories';
   if (pathname.startsWith('/admin/banners')) return 'pageTitle.adminBanners';
   if (pathname.startsWith('/admin/review')) return 'pageTitle.adminReview';
+  if (pathname.startsWith('/admin/theme-review')) return 'pageTitle.adminThemeReview';
   if (pathname.startsWith('/admin/reports')) return 'pageTitle.adminReports';
   if (pathname.startsWith('/admin/stats')) return 'pageTitle.adminStats';
   if (pathname.startsWith('/admin/creator-profiles')) return 'pageTitle.adminCreatorProfiles';
@@ -514,6 +516,7 @@ function AppContent() {
               <Route path="sessions" element={<AdminGuard><AdminSessions /></AdminGuard>} />
               <Route path="analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
               <Route path="themes" element={<AdminGuard><AdminThemes /></AdminGuard>} />
+              <Route path="theme-review" element={<AdminGuard><AdminThemeReview /></AdminGuard>} />
               <Route path="icons" element={<AdminGuard><AdminIcons /></AdminGuard>} />
             </Route>
           </Routes>

@@ -5,6 +5,7 @@ import Modal from './Modal';
 import ThemeEditorModal, { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
 import { SvgIconPreview, THEME_SELECTION_CHANGED_EVENT } from '../contexts/IconContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { useI18n } from '../contexts/I18nContext';
 
 /**
@@ -21,6 +22,7 @@ import { useI18n } from '../contexts/I18nContext';
  */
 const ThemeWorkshop = () => {
   const { t } = useI18n();
+  const { setAccentColor } = useTheme();
   const { user, updateUser } = useAuth();
 
   const [systemThemes, setSystemThemes] = useState([]);
@@ -85,6 +87,10 @@ const ThemeWorkshop = () => {
     // 壁纸部分写入背景偏好时，同步前端 user 让背景立即生效。
     if (res.data?.backgroundPrefs) {
       updateUser(prev => ({ ...prev, backgroundPrefs: res.data.backgroundPrefs }));
+    }
+    // 主题色：有则应用（用户当前主题色被替换），无则保持不变。
+    if (res.data?.accentColor && /^#[0-9a-fA-F]{6}$/.test(res.data.accentColor)) {
+      setAccentColor(res.data.accentColor);
     }
     // 广播主题选择变化：IconContext 重新拉取主题图标覆盖。
     window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
@@ -224,6 +230,13 @@ const ThemeWorkshop = () => {
                 fontSize: '10px', padding: '1px 7px', borderRadius: '999px', fontWeight: 600,
                 background: typeBadge.bg, color: typeBadge.fg, whiteSpace: 'nowrap',
               }}>{typeBadge.icon} {typeBadge.text}</span>
+              {theme.accentColor && (
+                <span title={theme.accentColor} style={{
+                  width: '10px', height: '10px', borderRadius: '50%',
+                  background: theme.accentColor, border: '1px solid var(--border)',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                }} />
+              )}
             </div>
           </div>
           <span style={{
@@ -415,6 +428,7 @@ const ThemeWorkshop = () => {
           wallpaperUrl: editingTheme.wallpaperUrl || '',
           wallpaperThumb: editingTheme.wallpaperThumb || '',
           icons: editingTheme.icons || {},
+          accentColor: editingTheme.accentColor || '',
         } : null}
         onSave={handleSave}
         saving={saving}

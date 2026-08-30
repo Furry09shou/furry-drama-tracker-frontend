@@ -22,7 +22,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
   const [statusMsg, setStatusMsg] = useState('');
-  const [pendingCounts, setPendingCounts] = useState({ episodes: 0, reports: 0, feedbacks: 0, friendLinks: 0 });
+  const [pendingCounts, setPendingCounts] = useState({ episodes: 0, reports: 0, feedbacks: 0, friendLinks: 0, themes: 0 });
   const statusTimerRef = useRef(null);
 
   useEffect(() => {
@@ -184,6 +184,15 @@ const AdminDashboard = () => {
             <div className="card-icon">🎨</div>
             <h3>{t('adminDashboard.themes')}</h3>
             <p>{t('adminDashboard.themesDesc')}</p>
+          </Link>
+        )}
+
+        {admin.role === 'superadmin' && (
+          <Link to="/admin/theme-review" className="dashboard-card" style={{ position: 'relative' }}>
+            <div className="card-icon">🧵</div>
+            <h3>{t('adminDashboard.themeReview')}</h3>
+            <p>{t('adminDashboard.themeReviewDesc')}</p>
+            <Badge count={pendingCounts.themes} />
           </Link>
         )}
 

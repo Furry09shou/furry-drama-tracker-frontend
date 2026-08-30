@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import adminApi from '../utils/adminApi';
 import API from '../utils/apiEndpoints';
-import Modal from './Modal';
 import ThemeEditorModal, { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
 import { SvgIconPreview } from '../contexts/IconContext';
 import SystemWallpaperManager from './SystemWallpaperManager';
@@ -34,11 +33,6 @@ const AdminThemes = () => {
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingTheme, setEditingTheme] = useState(null); // null = 新建
   const [saving, setSaving] = useState(false);
-
-  // 审核弹窗状态。
-  const [reviewTarget, setReviewTarget] = useState(null); // theme
-  const [reviewAction, setReviewAction] = useState('approve');
-  const [reviewNote, setReviewNote] = useState('');
 
   const notify = useCallback((msg) => {
     setSuccess(msg);
@@ -130,23 +124,6 @@ const AdminThemes = () => {
       fetchThemes();
     } catch (err) {
       setError(err.response?.data?.message || t('adminThemes.opFailed'));
-    }
-  };
-
-  const openReview = (theme, action) => {
-    setReviewTarget(theme);
-    setReviewAction(action);
-    setReviewNote('');
-  };
-
-  const handleReview = async () => {
-    try {
-      await adminApi.post(API.THEMES.REVIEW(reviewTarget._id), { action: reviewAction, note: reviewNote });
-      notify(reviewAction === 'approve' ? t('adminThemes.approveSuccess') : t('adminThemes.rejectSuccess'));
-      setReviewTarget(null);
-      fetchThemes();
-    } catch (err) {
-      setError(err.response?.data?.message || t('adminThemes.reviewFailed'));
     }
   };
 
@@ -309,14 +286,9 @@ const AdminThemes = () => {
                         </button>
                       )}
                       {th.status === 'pending' && (
-                        <>
-                          <button className="btn" style={{ padding: '5px 10px', fontSize: '12px', background: 'var(--success-bg-strong)', borderColor: 'var(--success-border)', color: 'var(--success-text)' }} onClick={() => openReview(th, 'approve')}>
-                            {t('adminThemes.approve')}
-                          </button>
-                          <button className="btn btn-secondary" style={{ padding: '5px 10px', fontSize: '12px', color: 'var(--destructive-text)', borderColor: 'var(--destructive-border)' }} onClick={() => openReview(th, 'reject')}>
-                            {t('adminThemes.reject')}
-                          </button>
-                        </>
+                        <Link to="/admin/theme-review" className="btn" style={{ padding: '5px 10px', fontSize: '12px', background: 'var(--warning-bg-strong)', borderColor: 'var(--warning-border)', color: 'var(--warning-text)', textDecoration: 'none' }}>
+                          {t('adminThemes.goReview')}
+                        </Link>
                       )}
                       {isSuper && (
                         <button className="btn btn-secondary" style={{ padding: '5px 10px', fontSize: '12px' }} onClick={() => handleToggleSystem(th)}>
@@ -345,47 +317,12 @@ const AdminThemes = () => {
           wallpaperUrl: editingTheme.wallpaperUrl || '',
           wallpaperThumb: editingTheme.wallpaperThumb || '',
           icons: editingTheme.icons || {},
+          accentColor: editingTheme.accentColor || '',
         } : null}
         onSave={handleSave}
         saving={saving}
         title={editingTheme ? t('adminThemes.editTitle', { name: editingTheme.name }) : t('adminThemes.createTitle')}
       />
-
-      {/* 审核弹窗 */}
-      <Modal isOpen={!!reviewTarget} onClose={() => setReviewTarget(null)} maxWidth="460px">
-        <div className="modal-header">
-          <h3>{reviewAction === 'approve' ? t('adminThemes.reviewApproveTitle') : t('adminThemes.reviewRejectTitle')}</h3>
-          <button className="btn btn-secondary" onClick={() => setReviewTarget(null)}>{t('common.close')}</button>
-        </div>
-        <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-          {t('adminThemes.reviewTarget', { name: reviewTarget?.name })}
-        </p>
-        <div className="form-group">
-          <label>{t('adminThemes.reviewNote')}</label>
-          <textarea
-            value={reviewNote}
-            onChange={(e) => setReviewNote(e.target.value)}
-            rows={3}
-            maxLength={200}
-            placeholder={reviewAction === 'reject' ? t('adminThemes.rejectNotePlaceholder') : ''}
-            style={{
-              width: '100%', boxSizing: 'border-box', padding: '8px 12px', fontSize: '13px',
-              borderRadius: '8px', border: '1px solid var(--border)',
-              background: 'var(--input)', color: 'var(--foreground)', resize: 'vertical',
-            }}
-          />
-        </div>
-        <div className="form-group" style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-          <button className="btn btn-secondary" onClick={() => setReviewTarget(null)}>{t('common.cancel')}</button>
-          <button
-            className="btn"
-            onClick={handleReview}
-            style={reviewAction === 'reject' ? { background: 'var(--destructive)', borderColor: 'var(--destructive)' } : undefined}
-          >
-            {reviewAction === 'approve' ? t('adminThemes.approve') : t('adminThemes.reject')}
-          </button>
-        </div>
-      </Modal>
     </div>
   );
 };

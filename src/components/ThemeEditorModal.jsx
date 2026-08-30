@@ -77,6 +77,9 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
       setWallpaperUrl(initial?.wallpaperUrl || '');
       setWallpaperThumb(initial?.wallpaperThumb || '');
       setIcons({ ...(initial?.icons || {}) });
+      const initialAccent = initial?.accentColor || '';
+      setUseAccent(!!initialAccent);
+      setAccentColor(initialAccent || '#6366f1');
       setError('');
     }
   }, [isOpen, initial]);
@@ -154,7 +157,11 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
 
   // ---- 导入导出 ----
   const handleExport = () => {
-    const payload = { name: name.trim(), description: description.trim(), wallpaperUrl, wallpaperThumb, icons };
+    const payload = {
+      name: name.trim(), description: description.trim(),
+      wallpaperUrl, wallpaperThumb, icons,
+      accentColor: useAccent ? accentColor : '',
+    };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -206,6 +213,7 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
       wallpaperUrl,
       wallpaperThumb,
       icons,
+      accentColor: useAccent ? accentColor : '',
     });
   };
 
@@ -390,6 +398,47 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* 主题色（选填） */}
+        <div style={{
+          background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '14px',
+          display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
+        }}>
+          <div style={{ flex: 1, minWidth: '180px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 600 }}>🎨 {t('themeEditor.accentColorLabel')}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: 1.5 }}>
+              {t('themeEditor.accentColorDesc')}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <button
+              type="button"
+              onClick={() => setUseAccent((v) => !v)}
+              style={{
+                width: '40px', height: '22px', borderRadius: '11px', border: 'none', cursor: 'pointer',
+                background: useAccent ? 'var(--primary)' : 'var(--hover-bg)',
+                position: 'relative', transition: 'background 0.2s', padding: 0,
+              }}
+            >
+              <span style={{
+                position: 'absolute', top: '2px', left: useAccent ? '21px' : '2px',
+                width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+              }} />
+            </button>
+            {useAccent && (
+              <>
+                <input
+                  type="color"
+                  value={accentColor}
+                  onChange={(e) => setAccentColor(e.target.value)}
+                  style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', padding: 0, background: 'transparent' }}
+                />
+                <span style={{ fontSize: '11px', fontFamily: 'monospace', color: 'var(--text-tertiary)' }}>{accentColor}</span>
+              </>
+            )}
           </div>
         </div>
 
