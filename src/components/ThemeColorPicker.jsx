@@ -53,11 +53,12 @@ const ThemeColorPicker = () => {
       const [sysRes, myRes] = await Promise.all(reqs);
       const system = sysRes.data || [];
       const mine = user ? (myRes?.data || []) : [];
-      // 我的主题打「我的」标记（个人草稿/审核中均可应用）在前，系统主题在后。
+      // 我的主题打「我的」标记（个人草稿/审核中均可应用）在前，系统主题在后；
+      // 旧版配色主题无壁纸与图标内容、无法应用，不进面板列表。
       setThemes([
         ...mine.map((th) => ({ ...th, isMine: true })),
         ...system,
-      ]);
+      ].filter((th) => (th.themeType || computeThemeType(th)) !== 'legacy'));
     } catch { /* 忽略 */ }
     if (user) {
       try {
@@ -355,7 +356,7 @@ const ThemeColorPicker = () => {
                     onClick={() => setTypeFilter(key)}
                     style={{
                       flex: 1, padding: '4px 2px', borderRadius: '7px', cursor: 'pointer',
-                      fontSize: '10px', fontWeight: 600, border: 'none',
+                      fontSize: '10px', fontWeight: 600,
                       background: typeFilter === key ? 'var(--primary-bg)' : 'var(--hover-bg)',
                       color: typeFilter === key ? 'var(--primary)' : 'var(--text-secondary)',
                       border: `1px solid ${typeFilter === key ? 'var(--primary-border)' : 'transparent'}`,

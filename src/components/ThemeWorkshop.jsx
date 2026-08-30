@@ -103,6 +103,8 @@ const ThemeWorkshop = () => {
 
   const handleApply = async (theme) => {
     const type = theme.themeType || computeThemeType(theme);
+    // 旧版配色主题无壁纸与图标内容，无法应用到任何槽。
+    if (type === 'legacy') return;
     // 全套主题弹出组合选择；仅壁纸/仅图标直接应用到对应槽（另一槽不动）。
     if (type === 'full') {
       setApplyTarget(theme);
@@ -196,8 +198,27 @@ const ThemeWorkshop = () => {
     if (!window.confirm(t('themeWorkshop.deleteConfirm', { name: theme.name }))) return;
     try {
       await axios.delete(API.THEMES.DETAIL(theme._id));
-      // 若删除的是当前使用（背景/图标槽）主题，回退默认主题。
-      if (selection.wallpaperThemeId === theme._id || selection.iconsThemeId === theme._id) handleReset();
+      // 若删除的主题正被使用，仅清空对应槽——另一槽的组合不受影响
+      //（如主题A背景+主题B图标，删除B时背景槽保留A）。
+      const clearWp = selection.wallpaperThemeId === theme._id;
+      const clearIc = selection.iconsThemeId === theme._id;
+      if (clearWp || clearIc) {
+        const body = {};
+        if (clearWp) body.wallpaperThemeId = '';
+        if (clearIc) body.iconsThemeId = '';
+        const res = await axios.put(API.THEMES.SELECTION, body);
+        setSelection((prev) => ({
+          wallpaperThemeId: clearWp ? null : prev.wallpaperThemeId,
+          iconsThemeId: clearIc ? null : prev.iconsThemeId,
+          wallpaperIsDefault: clearWp ? false : prev.wallpaperIsDefault,
+          iconsIsDefault: clearIc ? false : prev.iconsIsDefault,
+        }));
+        // 背景槽被清空时同步被清除的壁纸偏好，背景立即回落站点默认。
+        if (res.data?.backgroundPrefs) {
+          updateUser((prev) => ({ ...prev, backgroundPrefs: res.data.backgroundPrefs }));
+        }
+        window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
+      }
       notify(t('themeWorkshop.deleteSuccess'));
       fetchData();
     } catch (err) {
@@ -331,7 +352,7 @@ const ThemeWorkshop = () => {
         )}
 
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: 'auto' }}>
-          {!active ? (
+          {type !== 'legacy' && !active ? (
             <button className="btn" style={{ padding: '5px 12px', fontSize: '12px' }} onClick={() => handleApply(theme)}>
               {t('themeWorkshop.apply')}
             </button>
