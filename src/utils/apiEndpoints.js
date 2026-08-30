@@ -23,13 +23,11 @@ const API = {
   EPISODES: '/api/episodes',
   // 系列
   SERIES: '/api/series',
-  // 用户
+  // 用户（背景设置已并入主题功能，原 background-upload/background-prefs 端点移除）
   USERS: {
     AVATAR: '/api/users/avatar',
     EXPORT: '/api/users/export-my-data',
     PROFILE: '/api/users/profile',
-    BACKGROUND_UPLOAD: '/api/users/background-upload',
-    BACKGROUND_PREFS: '/api/users/background-prefs',
   },
   WALLPAPERS: {
     SYSTEM: '/api/wallpapers/system',

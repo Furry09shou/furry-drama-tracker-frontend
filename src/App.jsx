@@ -392,44 +392,42 @@ function AppContent() {
     }
   }, [siteSettingsData, lang, location.pathname, t]);
 
-  // ===== 自定义网站背景图片：用户个人背景 > 站点默认背景 > 未登录 localStorage 背景 =====
-  useEffect(() => {
-    const applyBg = () => {
-      const root = document.documentElement;
-      // 优先级：用户个人背景 > 站点默认背景 > 未登录 localStorage 背景
-      const userBg = user?.backgroundPrefs;
-      const siteBg = siteSettingsData;
-      let bg = null;
-      if (userBg && userBg.enabled && userBg.image) {
-        bg = userBg;
-      } else if (siteBg && siteBg.backgroundEnabled && siteBg.backgroundImage) {
-        bg = { image: siteBg.backgroundImage, opacity: siteBg.backgroundOpacity, blur: siteBg.backgroundBlur };
-      } else if (!user) {
-        // 未登录用户：读取 localStorage
-        try {
-          const guest = JSON.parse(localStorage.getItem('guest_background_prefs') || '{}');
-          if (guest.enabled && guest.image) bg = guest;
-        } catch {}
-      }
+  // ===== 站点背景壁纸：由主题功能提供（背景设置功能已并入主题） =====
+  // 优先级：用户所选主题的壁纸（应用主题时写入 backgroundPrefs）> 站点默认主题壁纸（/api/themes/active）
+  const [defaultThemeWallpaper, setDefaultThemeWallpaper] = useState(null);
 
-      if (bg) {
-        root.style.setProperty('--bg-image', `url(${bg.image})`);
-        root.style.setProperty('--bg-opacity', ((bg.opacity !== undefined ? bg.opacity : 30) / 100).toString());
-        root.style.setProperty('--bg-blur', `${bg.blur || 0}px`);
-        root.setAttribute('data-custom-bg', 'true');
-      } else {
-        root.style.removeProperty('--bg-image');
-        root.style.removeProperty('--bg-opacity');
-        root.style.removeProperty('--bg-blur');
-        root.removeAttribute('data-custom-bg');
-      }
-    };
-    applyBg();
-    // 监听未登录用户背景更新事件
-    const onGuestBg = () => applyBg();
-    window.addEventListener('guest-bg-updated', onGuestBg);
-    return () => window.removeEventListener('guest-bg-updated', onGuestBg);
-  }, [siteSettingsData, user]);
+  useEffect(() => {
+    // 站点默认主题壁纸（未设置个人主题时全站兜底，含未登录访客）
+    let cancelled = false;
+    axios.get('/api/themes/active')
+      .then(res => {
+        if (!cancelled) setDefaultThemeWallpaper(res.data?.theme?.wallpaperUrl || null);
+      })
+      .catch(() => {
+        if (!cancelled) setDefaultThemeWallpaper(null);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const userBg = user?.backgroundPrefs;
+    const bg = (userBg && userBg.enabled && userBg.image)
+      ? userBg
+      : (defaultThemeWallpaper ? { image: defaultThemeWallpaper } : null);
+
+    if (bg) {
+      root.style.setProperty('--bg-image', `url(${bg.image})`);
+      root.style.setProperty('--bg-opacity', ((bg.opacity !== undefined ? bg.opacity : 30) / 100).toString());
+      root.style.setProperty('--bg-blur', `${bg.blur || 0}px`);
+      root.setAttribute('data-custom-bg', 'true');
+    } else {
+      root.style.removeProperty('--bg-image');
+      root.style.removeProperty('--bg-opacity');
+      root.style.removeProperty('--bg-blur');
+      root.removeAttribute('data-custom-bg');
+    }
+  }, [user, defaultThemeWallpaper]);
 
   // ===== PWA 运行时更新：指向后端动态 manifest 端点，并更新图标、主题色等 meta =====
   useEffect(() => {

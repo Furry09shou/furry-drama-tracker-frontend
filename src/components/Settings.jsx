@@ -4,9 +4,7 @@ import axios from 'axios';
 import { useI18n } from '../contexts/I18nContext';
 import { useTheme } from '../contexts/ThemeContext';
 import usePushNotifications from '../hooks/usePushNotifications';
-import { useAuth } from '../contexts/AuthContext';
 import API from '../utils/apiEndpoints';
-import WallpaperPicker from './WallpaperPicker';
 import ThemeWorkshop from './ThemeWorkshop';
 
 const DISMISSED_KEY = 'pwa-install-dismissed';
@@ -15,7 +13,6 @@ const Settings = ({ user }) => {
   const { t, lang, switchLang, supportedLanguages } = useI18n();
   const { themeMode, setThemeModeTo } = useTheme();
   const navigate = useNavigate();
-  const { getAuthHeaders, updateUser } = useAuth();
   const push = usePushNotifications();
 
   const [pwaInstallRemind, setPwaInstallRemind] = useState(
@@ -33,21 +30,10 @@ const Settings = ({ user }) => {
     friendLinkApply: true,
     reviewResult: true,
   });
-  const [bgPrefs, setBgPrefs] = useState({
-    image: '', enabled: false, opacity: 30, blur: 0,
-  });
 
   useEffect(() => {
     if (user?.emailNotificationPrefs) {
       setEmailPrefs(prev => ({ ...prev, ...user.emailNotificationPrefs }));
-    }
-    if (user?.backgroundPrefs) {
-      setBgPrefs({
-        image: user.backgroundPrefs.image || '',
-        enabled: !!user.backgroundPrefs.enabled,
-        opacity: user.backgroundPrefs.opacity !== undefined ? user.backgroundPrefs.opacity : 30,
-        blur: user.backgroundPrefs.blur !== undefined ? user.backgroundPrefs.blur : 0,
-      });
     }
   }, [user]);
 
@@ -93,20 +79,6 @@ const Settings = ({ user }) => {
   const showSaved = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  };
-
-  const updateBgPrefs = async (updates) => {
-    const newPrefs = { ...bgPrefs, ...updates };
-    setBgPrefs(newPrefs);
-    updateUser(prev => ({ ...prev, backgroundPrefs: newPrefs }));
-    try {
-      await axios.put(API.USERS.BACKGROUND_PREFS, updates);
-      showSaved();
-    } catch (e) {
-      // 回滚
-      setBgPrefs(bgPrefs);
-      updateUser(prev => ({ ...prev, backgroundPrefs: bgPrefs }));
-    }
   };
 
   const themeOptions = [
@@ -335,60 +307,8 @@ const Settings = ({ user }) => {
         </div>
       ))}
 
-      {/* ===== 主题工坊（系统主题选择 + 个人主题制作） ===== */}
+      {/* ===== 主题工坊（系统主题选择 + 个人主题制作，壁纸+图标组合包） ===== */}
       <ThemeWorkshop />
-
-      {/* ===== 个人背景图片设置 ===== */}
-      <div style={{ marginBottom: '24px' }}>
-        <h3 style={{
-          fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 600,
-          textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px',
-        }}>{t('settings.backgroundImage')}</h3>
-        <p style={{
-          fontSize: '12px', color: 'var(--text-secondary)',
-          margin: '0 0 8px 0', lineHeight: 1.5,
-        }}>{t('settings.backgroundImageDesc')}</p>
-        <div style={{
-          background: 'var(--card)', borderRadius: '12px',
-          border: '1px solid var(--border)', padding: '16px',
-        }}>
-          {/* 启用开关 */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '8px 0', borderBottom: bgPrefs.enabled ? '1px solid var(--border)' : 'none',
-          }}>
-            <div>
-              <div style={{ fontSize: '14px', fontWeight: 500, color: 'var(--foreground)' }}>
-                {t('settings.backgroundEnable')}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                {t('settings.backgroundEnableDesc')}
-              </div>
-            </div>
-            <button
-              onClick={() => updateBgPrefs({ enabled: !bgPrefs.enabled })}
-              style={{
-                width: '44px', height: '24px', borderRadius: '12px',
-                border: 'none', cursor: 'pointer',
-                background: bgPrefs.enabled ? 'var(--primary)' : 'var(--hover-bg)',
-                position: 'relative', transition: 'background 0.2s', flexShrink: 0,
-              }}
-            >
-              <div style={{
-                width: '18px', height: '18px', borderRadius: '50%',
-                background: '#fff', position: 'absolute', top: '3px',
-                left: bgPrefs.enabled ? '23px' : '3px',
-                transition: 'left 0.2s',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-              }} />
-            </button>
-          </div>
-
-          <div style={{ paddingTop: '12px', borderTop: bgPrefs.enabled ? 'none' : '1px solid var(--border)', marginTop: bgPrefs.enabled ? '0' : '8px' }}>
-            <WallpaperPicker bgPrefs={bgPrefs} updateBg={updateBgPrefs} />
-          </div>
-        </div>
-      </div>
 
       <style>{`
         @keyframes fadeIn {
