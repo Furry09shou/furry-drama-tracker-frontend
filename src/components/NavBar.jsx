@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../contexts/I18nContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
-import { useTheme } from '../contexts/ThemeContext';
 import useTranslation from '../hooks/useTranslation';
 import useNotifications from '../hooks/useNotifications';
 import usePushNotifications from '../hooks/usePushNotifications';
@@ -56,7 +55,7 @@ const NavBar = ({ onFeedback }) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  const { theme, toggleTheme, themeIcon, themeTitle } = useTheme();
+  // 深浅外观切换已收敛到左下角外观面板与设置页，导航栏不再提供。
 
   useEffect(() => {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -296,12 +295,6 @@ const NavBar = ({ onFeedback }) => {
               )}
             </button>
           )}
-          <button onClick={toggleTheme} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: 'var(--foreground)', fontSize: '18px', padding: '6px'
-          }} title={themeTitle} aria-label={themeTitle}>
-            {themeIcon}
-          </button>
           <LanguageSwitcher style={{ fontSize: '12px' }} />
           <button className="mobile-menu-btn" onClick={() => { setShowMobileMenu(!showMobileMenu); setShowMobileMore(false); }} aria-expanded={showMobileMenu} aria-haspopup="true" aria-label={t('nav.menu')} style={{
             background: 'none', border: 'none', cursor: 'pointer',
@@ -341,14 +334,6 @@ const NavBar = ({ onFeedback }) => {
               </li>
               <li className="desktop-only-theme">
                 <LanguageSwitcher style={{ fontSize: '13px' }} />
-              </li>
-              <li className="desktop-only-theme">
-                <button onClick={toggleTheme} style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'var(--foreground)', fontSize: '18px', padding: '4px 8px'
-                }} title={themeTitle} aria-label={themeTitle}>
-                  {themeIcon}
-                </button>
               </li>
               <li style={{position: 'relative'}}>
                 <button
@@ -440,14 +425,6 @@ const NavBar = ({ onFeedback }) => {
               <li><Link to="/register" onClick={() => setShowMobileMenu(false)}>{t('nav.register')}</Link></li>
               <li className="desktop-only-theme">
                 <LanguageSwitcher style={{ fontSize: '13px' }} />
-              </li>
-              <li className="desktop-only-theme">
-                <button onClick={toggleTheme} style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'var(--foreground)', fontSize: '18px', padding: '4px 8px'
-                }} title={themeTitle} aria-label={themeTitle}>
-                  {themeIcon}
-                </button>
               </li>
               <li style={{position: 'relative'}}>
                 <button
