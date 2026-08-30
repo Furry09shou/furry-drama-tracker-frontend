@@ -1946,6 +1946,8 @@ export default {
     applyWallpaperDesc: 'Replace the site background',
     applyIcons: 'Apply icons',
     applyIconsDesc: 'Replace site UI icons',
+    applyBoth: 'Apply both',
+    applyBothDesc: 'Replace wallpaper and icons together',
     applyConfirm: 'Apply',
     applyAtLeastOne: 'Select at least one part',
     applyAdjust: 'Adjust Parts',

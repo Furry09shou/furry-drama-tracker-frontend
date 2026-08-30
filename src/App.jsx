@@ -412,9 +412,20 @@ function AppContent() {
   useEffect(() => {
     const root = document.documentElement;
     const userBg = user?.backgroundPrefs;
-    const bg = (userBg && userBg.enabled && userBg.image)
-      ? userBg
-      : (defaultThemeWallpaper ? { image: defaultThemeWallpaper } : null);
+    // 背景开关语义：
+    //   - 用户选了壁纸且 enabled=true → 显示用户壁纸（含自调透明度/模糊）；
+    //   - 用户选了壁纸但 enabled=false → 用户主动关闭背景，不回落站点默认（图标不受影响）；
+    //   - 壁纸槽为空（重置/清槽）或未登录 → 回落站点默认主题壁纸。
+    let bg = null;
+    if (userBg) {
+      if (userBg.image && userBg.enabled) {
+        bg = userBg;
+      } else if (!userBg.image && defaultThemeWallpaper) {
+        bg = { image: defaultThemeWallpaper };
+      }
+    } else if (defaultThemeWallpaper) {
+      bg = { image: defaultThemeWallpaper };
+    }
 
     if (bg) {
       root.style.setProperty('--bg-image', `url(${bg.image})`);

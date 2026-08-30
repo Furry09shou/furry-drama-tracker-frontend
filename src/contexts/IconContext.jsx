@@ -123,15 +123,15 @@ export const IconProvider = ({ children }) => {
     }
   }, []);
 
-  // 拉取主题图标覆盖（登录：用户选择主题；未登录：站点默认主题）。
+  // 拉取主题图标覆盖（登录：用户图标槽主题；未登录：站点默认主题）。
   const fetchThemeIcons = useCallback(async (authed) => {
     try {
       const res = authed
         ? await axios.get(API.THEMES.MY_SELECTION)
         : await axios.get(API.THEMES.ACTIVE);
-      const theme = res.data?.theme;
-      const applyIcons = authed ? res.data?.applyIcons !== false : true;
-      if (theme?.icons && applyIcons && Object.keys(theme.icons).length > 0) {
+      // 登录走两槽模型取图标槽；未登录取默认主题整体。
+      const theme = authed ? res.data?.iconsTheme : res.data?.theme;
+      if (theme?.icons && Object.keys(theme.icons).length > 0) {
         setThemeIcons(theme.icons);
         preloadSvgs(Object.values(theme.icons));
       } else {

@@ -58,6 +58,10 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
   // 主题色（选填）：useAccent 开关 + 颜色值；关闭时保存为空串（不改变用户主题色）。
   const [useAccent, setUseAccent] = useState(false);
   const [accentColor, setAccentColor] = useState('#6366f1');
+  // 内容构成开关：包含壁纸 / 包含图标（决定主题为仅背景、仅图标还是全套；
+  // 关闭的部分不进保存内容，即便素材已选）。
+  const [includeWallpaper, setIncludeWallpaper] = useState(true);
+  const [includeIcons, setIncludeIcons] = useState(true);
   const [error, setError] = useState('');
   const [uploadingWallpaper, setUploadingWallpaper] = useState(false);
   const [uploadingIcon, setUploadingIcon] = useState(false);
@@ -83,6 +87,9 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
       const initialAccent = initial?.accentColor || '';
       setUseAccent(!!initialAccent);
       setAccentColor(initialAccent || '#6366f1');
+      // 内容构成由初始内容推导（有壁纸则含壁纸，有图标则含图标）。
+      setIncludeWallpaper(!!(initial?.wallpaperUrl));
+      setIncludeIcons(!!(initial?.icons && Object.keys(initial.icons).length > 0));
       setError('');
     }
   }, [isOpen, initial]);
@@ -105,7 +112,11 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     return () => { cancelled = true; };
   }, [isOpen, user]);
 
-  const type = useMemo(() => computeThemeType({ wallpaperUrl, icons }), [wallpaperUrl, icons]);
+  // 有效类型按「开关 + 实际内容」推导（关闭的部分不参与保存）。
+  const type = useMemo(
+    () => computeThemeType({ wallpaperUrl: includeWallpaper ? wallpaperUrl : '', icons: includeIcons ? icons : {} }),
+    [wallpaperUrl, icons, includeWallpaper, includeIcons],
+  );
   const badge = themeTypeBadge(type, t);
   const iconCount = Object.keys(icons).length;
 
@@ -213,9 +224,10 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     onSave({
       name: trimmedName,
       description: description.trim(),
-      wallpaperUrl,
-      wallpaperThumb,
-      icons,
+      // 关闭的部分输出为空（主题类型随之确定）。
+      wallpaperUrl: includeWallpaper ? wallpaperUrl : '',
+      wallpaperThumb: includeWallpaper ? wallpaperThumb : '',
+      icons: includeIcons ? icons : {},
       accentColor: useAccent ? accentColor : '',
     });
   };
@@ -298,7 +310,54 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
           </div>
         </div>
 
+        {/* 内容构成开关：包含壁纸 / 包含图标（决定主题类型） */}
+        <div style={{
+          background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '12px 14px',
+          display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
+        }}>
+          <div style={{ fontSize: '13px', fontWeight: 600, flexShrink: 0 }}>{t('themeEditor.composeTitle')}</div>
+          {[
+            { label: `🖼️ ${t('themeEditor.composeWallpaper')}`, value: includeWallpaper, toggle: () => {
+              const next = !includeWallpaper;
+              if (!next && !includeIcons) { setError(t('themeEditor.composeAtLeastOne')); return; }
+              setError('');
+              setIncludeWallpaper(next);
+            } },
+            { label: `🎯 ${t('themeEditor.composeIcons')}`, value: includeIcons, toggle: () => {
+              const next = !includeIcons;
+              if (!next && !includeWallpaper) { setError(t('themeEditor.composeAtLeastOne')); return; }
+              setError('');
+              setIncludeIcons(next);
+            } },
+          ].map(({ label, value, toggle }) => (
+            <button
+              key={label}
+              type="button"
+              onClick={toggle}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer',
+                background: 'none', border: 'none', padding: 0, fontSize: '12px', fontWeight: 600,
+                color: 'var(--foreground)',
+              }}
+            >
+              <span style={{
+                width: '36px', height: '20px', borderRadius: '10px', flexShrink: 0,
+                background: value ? 'var(--primary)' : 'var(--bg-tertiary)',
+                position: 'relative', transition: 'background 0.2s',
+              }}>
+                <span style={{
+                  position: 'absolute', top: '2px', left: value ? '19px' : '2px',
+                  width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
+                  transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                }} />
+              </span>
+              {label}
+            </button>
+          ))}
+        </div>
+
         {/* 壁纸区 */}
+        {includeWallpaper && (
         <div style={{
           background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '14px',
         }}>
@@ -351,8 +410,10 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             )}
           </div>
         </div>
+        )}
 
-        {/* 图标区 */}
+        {/* 图标区（关闭「包含图标」时整块隐藏） */}
+        {includeIcons && (
         <div style={{
           background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '14px',
         }}>
@@ -403,6 +464,7 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             })}
           </div>
         </div>
+        )}
 
         {/* 主题色（选填） */}
         <div style={{
