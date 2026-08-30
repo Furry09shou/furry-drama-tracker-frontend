@@ -9,12 +9,11 @@ import { THEME_SELECTION_CHANGED_EVENT } from '../contexts/IconContext';
 import { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
 
 /**
- * 左下角外观悬浮面板（无需登录即可使用调色与深浅外观；主题应用需登录）。
+ * 左下角外观悬浮面板（无需登录即可使用外观设置；主题应用需登录）。
  *
- * 三个分区：
- *   - 主题色：强调色选择（预设色 + 自定义，本地存储）；
- *   - 外观：深色 / 浅色 / 跟随系统；
- *   - 主题：主题市场（系统主题）快捷应用 + 前往制作个人主题的入口。
+ * 两个板块：
+ *   - 外观：深浅模式（跟随系统 / 浅色 / 深色）+ 主题色（预设 + 自定义）细分小节；
+ *   - 主题：系统主题 + 我的主题（登录）快捷应用 + 前往制作个人主题的入口。
  */
 const ThemeColorPicker = () => {
   const { t } = useI18n();
@@ -22,7 +21,7 @@ const ThemeColorPicker = () => {
   const { accentColor, setAccentColor, presetColors, themeMode, setThemeModeTo } = useTheme();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('color'); // color / appearance / theme
+  const [activeTab, setActiveTab] = useState('appearance'); // appearance / theme
   const pickerRef = useRef(null);
 
   // 主题市场（公开系统主题）与当前选择。
@@ -41,16 +40,22 @@ const ThemeColorPicker = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 打开主题 tab 时拉取系统主题列表与当前选择。
+  // 打开主题 tab 时拉取系统主题 + 我的主题（登录）与当前选择。
   const fetchThemes = useCallback(async () => {
     try {
-      const list = await axios.get(API.THEMES.LIST);
-      setThemes(list.data || []);
+      const reqs = [axios.get(API.THEMES.LIST)];
+      if (user) reqs.push(axios.get(API.THEMES.MY));
+      const [sysRes, myRes] = await Promise.all(reqs);
+      const system = sysRes.data || [];
+      const mine = user ? (myRes?.data || []) : [];
+      // 我的主题（个人草稿/审核中均可切换预览）在前，系统主题在后。
+      setThemes([...mine, ...system]);
     } catch { /* 忽略 */ }
     if (user) {
       try {
         const sel = await axios.get(API.THEMES.MY_SELECTION);
-        setSelectedId(sel.data?.theme?._id || null);
+        // isDefaultFallback：未选主题时回落站点默认主题，不算用户的选择（不高亮）。
+        setSelectedId(sel.data?.isDefaultFallback ? null : sel.data?.theme?._id || null);
       } catch { /* 忽略 */ }
     }
   }, [user]);
@@ -113,8 +118,7 @@ const ThemeColorPicker = () => {
   };
 
   const tabs = [
-    { key: 'color', icon: '🎨', label: t('colorPicker.tabColor') },
-    { key: 'appearance', icon: '🌗', label: t('colorPicker.tabAppearance') },
+    { key: 'appearance', icon: '🎨', label: t('colorPicker.tabAppearance') },
     { key: 'theme', icon: '🖼️', label: t('colorPicker.tabTheme') },
   ];
 
@@ -154,61 +158,61 @@ const ThemeColorPicker = () => {
             ))}
           </div>
 
-          {/* 主题色 tab */}
-          {activeTab === 'color' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '2px' }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {presetColors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setAccentColor(color)}
-                    style={{
-                      width: '28px', height: '28px', borderRadius: '50%',
-                      background: color,
-                      border: accentColor === color ? '2px solid var(--foreground)' : '2px solid transparent',
-                      cursor: 'pointer', transition: 'all 0.2s',
-                      outline: 'none', padding: 0, boxShadow: accentColor === color ? `0 0 0 2px var(--background), 0 0 0 4px ${color}` : 'none',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.15)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
-                  />
-                ))}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderTop: '1px solid var(--border)', paddingTop: '10px' }}>
-                <input
-                  type="color"
-                  value={accentColor}
-                  onChange={(e) => setAccentColor(e.target.value)}
-                  style={{ width: '28px', height: '28px', border: 'none', borderRadius: '6px', cursor: 'pointer', padding: 0, background: 'transparent' }}
-                />
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{t('settings.customColor')}</span>
-                <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontFamily: 'monospace', marginLeft: 'auto' }}>{accentColor}</span>
-              </div>
-            </div>
-          )}
-
-          {/* 外观（深浅）tab */}
+          {/* 外观 tab：深浅模式 + 主题色两节 */}
           {activeTab === 'appearance' && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', padding: '2px' }}>
-              {appearanceOptions.map(({ mode, icon, label }) => {
-                const active = themeMode === mode;
-                return (
-                  <button
-                    key={mode}
-                    onClick={() => setThemeModeTo(mode)}
-                    style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-                      padding: '10px 4px', borderRadius: '9px', cursor: 'pointer',
-                      background: active ? 'var(--primary-bg)' : 'var(--hover-bg)',
-                      border: `1px solid ${active ? 'var(--primary-border)' : 'var(--border)'}`,
-                      color: 'var(--foreground)', transition: 'all 0.2s',
-                    }}
-                  >
-                    <span style={{ fontSize: '16px', lineHeight: 1 }}>{icon}</span>
-                    <span style={{ fontSize: '10px', fontWeight: 600 }}>{label}</span>
-                  </button>
-                );
-              })}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '2px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+                {appearanceOptions.map(({ mode, icon, label }) => {
+                  const active = themeMode === mode;
+                  return (
+                    <button
+                      key={mode}
+                      onClick={() => setThemeModeTo(mode)}
+                      style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+                        padding: '10px 4px', borderRadius: '9px', cursor: 'pointer',
+                        background: active ? 'var(--primary-bg)' : 'var(--hover-bg)',
+                        border: `1px solid ${active ? 'var(--primary-border)' : 'var(--border)'}`,
+                        color: 'var(--foreground)', transition: 'all 0.2s',
+                      }}
+                    >
+                      <span style={{ fontSize: '16px', lineHeight: 1 }}>{icon}</span>
+                      <span style={{ fontSize: '10px', fontWeight: 600 }}>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {/* 主题色小节 */}
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>🎨 {t('colorPicker.tabColor')}</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {presetColors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setAccentColor(color)}
+                      style={{
+                        width: '28px', height: '28px', borderRadius: '50%',
+                        background: color,
+                        border: accentColor === color ? '2px solid var(--foreground)' : '2px solid transparent',
+                        cursor: 'pointer', transition: 'all 0.2s',
+                        outline: 'none', padding: 0, boxShadow: accentColor === color ? `0 0 0 2px var(--background), 0 0 0 4px ${color}` : 'none',
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.15)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+                    />
+                  ))}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input
+                    type="color"
+                    value={accentColor}
+                    onChange={(e) => setAccentColor(e.target.value)}
+                    style={{ width: '28px', height: '28px', border: 'none', borderRadius: '6px', cursor: 'pointer', padding: 0, background: 'transparent' }}
+                  />
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{t('settings.customColor')}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontFamily: 'monospace', marginLeft: 'auto' }}>{accentColor}</span>
+                </div>
+              </div>
             </div>
           )}
 
@@ -231,6 +235,7 @@ const ThemeColorPicker = () => {
               )}
               {themes.map((th) => {
                 const active = selectedId === th._id;
+                const isMine = !!th.isMine;
                 const type = computeThemeType(th);
                 const badge = themeTypeBadge(type, t);
                 return (
@@ -263,7 +268,7 @@ const ThemeColorPicker = () => {
                         </span>
                       )}
                       <span style={{ display: 'block', fontSize: '10px', color: badge.fg, fontWeight: 600, marginTop: '1px' }}>
-                        {badge.icon} {badge.text}
+                        {isMine ? `👤 ${t('themeWorkshop.myThemes')}` : `${badge.icon} ${badge.text}`}
                       </span>
                     </span>
                     {th.accentColor && (

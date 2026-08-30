@@ -183,22 +183,6 @@ const NavBar = ({ onFeedback }) => {
     return <TranslatableText text={n.message} />;
   };
 
-  const clearSiteCache = () => {
-    if ('caches' in window) {
-      caches.keys().then(names => {
-        names.forEach(name => caches.delete(name));
-      });
-    }
-    window.localStorage.removeItem('theme');
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        registrations.forEach(reg => reg.unregister());
-      });
-    }
-    setShowMoreMenu(false);
-    window.location.reload();
-  };
-
   const moreMenuItems = [
     ...(user && ['admin', 'superadmin', 'creator'].includes(user.role) ? [{ to: '/admin/dashboard', label: t('nav.admin') }] : []),
     { to: '/friend-links', label: t('nav.friendLinks') },
@@ -233,16 +217,6 @@ const NavBar = ({ onFeedback }) => {
         }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
         >{t('nav.userFeedback')}</button>
-      </li>
-      <li>
-        <button onClick={() => { clearSiteCache(); setShowMobileMore(false); }} style={{
-          display: 'block', width: '100%', textAlign: 'left', padding: '10px 12px',
-          color: 'var(--foreground)', background: 'none', border: 'none',
-          fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '8px',
-          transition: 'background 0.2s'
-        }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
-           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-        >{t('nav.clearCache')}</button>
       </li>
       {user && (
         <li>
@@ -364,44 +338,27 @@ const NavBar = ({ onFeedback }) => {
                     <Link key={item.to} to={item.to} onClick={() => { setShowMoreMenu(false); setShowMobileMenu(false); }} role="menuitem" style={{
                       display: 'block', padding: '12px 16px', color: 'var(--foreground)',
                       textDecoration: 'none', fontSize: '14px',
-                      borderBottom: '1px solid var(--border)',
                       transition: 'background 0.2s'
                     }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >{item.label}</Link>
                   ))}
-                  <div style={{borderTop: '1px solid var(--border)'}}>
-                    <button onClick={() => { setShowMoreMenu(false); onFeedback(); }} style={{
-                      display: 'block', width: '100%', padding: '12px 16px',
-                      color: 'var(--foreground)', background: 'none', border: 'none',
-                      fontSize: '14px', cursor: 'pointer', textAlign: 'left',
-                      transition: 'background 0.2s',
-                      borderBottom: '1px solid var(--border)'
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
-                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                    >{t('nav.userFeedback')}</button>
-                  </div>
-                  <div style={{borderTop: '1px solid var(--border)'}}>
-                    <button onClick={clearSiteCache} style={{
-                      display: 'block', width: '100%', padding: '12px 16px',
-                      color: 'var(--foreground)', background: 'none', border: 'none',
-                      fontSize: '14px', cursor: 'pointer', textAlign: 'left',
-                      transition: 'background 0.2s',
-                      borderBottom: '1px solid var(--border)'
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
-                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                    >{t('nav.clearCache')}</button>
-                  </div>
-                  <div>
-                    <button onClick={() => { setShowMoreMenu(false); logout(); }} style={{
-                      display: 'block', width: '100%', padding: '12px 16px',
-                      color: 'var(--destructive-text)', background: 'none', border: 'none',
-                      fontSize: '14px', cursor: 'pointer', textAlign: 'left',
-                      transition: 'background 0.2s'
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--destructive-bg-subtle)'}
-                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                    >{t('nav.logout')}</button>
-                  </div>
+                  <button onClick={() => { setShowMoreMenu(false); onFeedback(); }} style={{
+                    display: 'block', width: '100%', padding: '12px 16px',
+                    color: 'var(--foreground)', background: 'none', border: 'none',
+                    fontSize: '14px', cursor: 'pointer', textAlign: 'left',
+                    transition: 'background 0.2s'
+                  }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
+                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  >{t('nav.userFeedback')}</button>
+                  <button onClick={() => { setShowMoreMenu(false); logout(); }} style={{
+                    display: 'block', width: '100%', padding: '12px 16px',
+                    color: 'var(--destructive-text)', background: 'none', border: 'none',
+                    fontSize: '14px', cursor: 'pointer', textAlign: 'left',
+                    transition: 'background 0.2s'
+                  }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--destructive-bg-subtle)'}
+                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  >{t('nav.logout')}</button>
                 </div>
               </li>
               <li className="mobile-more-toggle">
@@ -455,22 +412,11 @@ const NavBar = ({ onFeedback }) => {
                     <Link key={item.to} to={item.to} onClick={() => { setShowMoreMenu(false); setShowMobileMenu(false); }} role="menuitem" style={{
                       display: 'block', padding: '12px 16px', color: 'var(--foreground)',
                       textDecoration: 'none', fontSize: '14px',
-                      borderBottom: '1px solid var(--border)',
                       transition: 'background 0.2s'
                     }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >{item.label}</Link>
                   ))}
-                  <div style={{borderTop: '1px solid var(--border)'}}>
-                    <button onClick={clearSiteCache} style={{
-                      display: 'block', width: '100%', padding: '12px 16px',
-                      color: 'var(--foreground)', background: 'none', border: 'none',
-                      fontSize: '14px', cursor: 'pointer', textAlign: 'left',
-                      transition: 'background 0.2s'
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
-                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                    >{t('nav.clearCache')}</button>
-                  </div>
                 </div>
               </li>
               <li className="mobile-more-toggle">
