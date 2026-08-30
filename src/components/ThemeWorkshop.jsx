@@ -60,8 +60,9 @@ const ThemeWorkshop = () => {
       setSystemThemes(sysRes.data || []);
       setMyThemes(myRes.data || []);
       if (selRes) {
+        // isDefaultFallback：未选主题时回落站点默认主题，不算用户的选择（不高亮）。
         setSelection({
-          themeId: selRes.data?.theme?._id || null,
+          themeId: selRes.data?.isDefaultFallback ? null : selRes.data?.theme?._id || null,
           applyIcons: selRes.data?.applyIcons !== false,
           applyWallpaper: selRes.data?.applyWallpaper !== false,
         });
@@ -132,8 +133,12 @@ const ThemeWorkshop = () => {
 
   const handleReset = async () => {
     try {
-      await axios.put(API.THEMES.SELECTION, { themeId: '' });
+      const res = await axios.put(API.THEMES.SELECTION, { themeId: '' });
       setSelection({ themeId: null, applyIcons: true, applyWallpaper: true });
+      // 同步被清除的壁纸偏好，前端壁纸立即回落站点默认主题。
+      if (res.data?.backgroundPrefs) {
+        updateUser(prev => ({ ...prev, backgroundPrefs: res.data.backgroundPrefs }));
+      }
       window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
       notify(t('themeWorkshop.resetSuccess'));
     } catch (err) {
@@ -230,6 +235,12 @@ const ThemeWorkshop = () => {
                 fontSize: '10px', padding: '1px 7px', borderRadius: '999px', fontWeight: 600,
                 background: typeBadge.bg, color: typeBadge.fg, whiteSpace: 'nowrap',
               }}>{typeBadge.icon} {typeBadge.text}</span>
+              {theme.isDefault && (
+                <span style={{
+                  fontSize: '10px', padding: '1px 7px', borderRadius: '999px', fontWeight: 600,
+                  background: 'var(--primary-bg)', color: 'var(--primary)', whiteSpace: 'nowrap',
+                }}>⭐ {t('colorPicker.badgeDefault')}</span>
+              )}
               {theme.accentColor && (
                 <span title={theme.accentColor} style={{
                   width: '10px', height: '10px', borderRadius: '50%',

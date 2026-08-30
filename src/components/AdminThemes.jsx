@@ -94,10 +94,12 @@ const AdminThemes = () => {
     }
   };
 
-  const handleSetDefault = async (theme) => {
+  // 默认主题开关：开启 = 设为站点默认（全站唯一，未选主题的用户自动套用）；
+  // 关闭 = 取消默认（站点可以没有任何默认主题）。
+  const handleSetDefault = async (theme, wantDefault) => {
     try {
-      await adminApi.post(API.THEMES.SET_DEFAULT(theme._id));
-      notify(t('adminThemes.defaultSuccess'));
+      await adminApi.post(API.THEMES.SET_DEFAULT(theme._id), { default: !!wantDefault });
+      notify(wantDefault ? t('adminThemes.defaultSuccess') : t('adminThemes.defaultCleared'));
       fetchThemes();
     } catch (err) {
       setError(err.response?.data?.message || t('adminThemes.defaultFailed'));
@@ -275,9 +277,24 @@ const AdminThemes = () => {
                       <button className="btn" style={{ padding: '5px 10px', fontSize: '12px' }} onClick={() => openEdit(th)}>
                         {t('common.edit')}
                       </button>
-                      {th.isSystem && !th.isDefault && (
-                        <button className="btn btn-secondary" style={{ padding: '5px 10px', fontSize: '12px' }} onClick={() => handleSetDefault(th)}>
-                          {t('adminThemes.setDefault')}
+                      {isSuper && th.isSystem && (
+                        <button
+                          type="button"
+                          title={t('adminThemes.defaultToggle')}
+                          disabled={!th.enabled && !th.isDefault}
+                          onClick={() => handleSetDefault(th, !th.isDefault)}
+                          style={{
+                            width: '40px', height: '22px', borderRadius: '11px', border: 'none', cursor: 'pointer',
+                            background: th.isDefault ? 'var(--primary)' : 'var(--hover-bg)',
+                            position: 'relative', transition: 'background 0.2s', padding: 0, flexShrink: 0,
+                            opacity: (!th.enabled && !th.isDefault) ? 0.5 : 1,
+                          }}
+                        >
+                          <span style={{
+                            position: 'absolute', top: '2px', left: th.isDefault ? '21px' : '2px',
+                            width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                            transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                          }} />
                         </button>
                       )}
                       {th.isSystem && (

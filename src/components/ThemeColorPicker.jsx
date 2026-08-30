@@ -96,8 +96,12 @@ const ThemeColorPicker = () => {
     setApplyingId('reset');
     setThemeMsg('');
     try {
-      await axios.put(API.THEMES.SELECTION, { themeId: '' });
+      const res = await axios.put(API.THEMES.SELECTION, { themeId: '' });
       setSelectedId(null);
+      // 同步被清除的壁纸偏好，前端壁纸立即回落站点默认主题。
+      if (res.data?.backgroundPrefs) {
+        updateUser((prev) => ({ ...prev, backgroundPrefs: res.data.backgroundPrefs }));
+      }
       window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
       setThemeMsg(t('themeWorkshop.resetSuccess'));
       setTimeout(() => setThemeMsg(''), 2500);
@@ -114,10 +118,11 @@ const ThemeColorPicker = () => {
     { key: 'theme', icon: '🖼️', label: t('colorPicker.tabTheme') },
   ];
 
+  // 顺序：跟随系统第一位（也是默认值），其次浅色 / 深色。
   const appearanceOptions = [
+    { mode: 'system', icon: '💻', label: t('settings.themeSystem') },
     { mode: 'light', icon: '☀️', label: t('settings.themeLight') },
     { mode: 'dark', icon: '🌙', label: t('settings.themeDark') },
-    { mode: 'system', icon: '💻', label: t('settings.themeSystem') },
   ];
 
   return (
@@ -252,6 +257,11 @@ const ThemeColorPicker = () => {
                       <span style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--foreground)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {th.name}{active ? ` · ${t('themeWorkshop.inUse')}` : ''}
                       </span>
+                      {th.isDefault && !active && (
+                        <span style={{ display: 'block', fontSize: '10px', color: 'var(--primary)', fontWeight: 600, marginTop: '1px' }}>
+                          ⭐ {t('colorPicker.badgeDefault')}
+                        </span>
+                      )}
                       <span style={{ display: 'block', fontSize: '10px', color: badge.fg, fontWeight: 600, marginTop: '1px' }}>
                         {badge.icon} {badge.text}
                       </span>

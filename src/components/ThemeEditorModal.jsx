@@ -55,6 +55,9 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
   const [wallpaperUrl, setWallpaperUrl] = useState('');
   const [wallpaperThumb, setWallpaperThumb] = useState('');
   const [icons, setIcons] = useState({});
+  // 主题色（选填）：useAccent 开关 + 颜色值；关闭时保存为空串（不改变用户主题色）。
+  const [useAccent, setUseAccent] = useState(false);
+  const [accentColor, setAccentColor] = useState('#6366f1');
   const [error, setError] = useState('');
   const [uploadingWallpaper, setUploadingWallpaper] = useState(false);
   const [uploadingIcon, setUploadingIcon] = useState(false);
