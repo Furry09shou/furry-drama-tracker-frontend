@@ -1,76 +1,160 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import axios from 'axios';
 import Modal from './Modal';
-import { themes } from '../contexts/ThemeContext';
+import API from '../utils/apiEndpoints';
+import { ICON_COMPONENT_KEYS, SvgIconPreview } from '../contexts/IconContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../contexts/I18nContext';
 
 /**
- * 可视化编辑的主题变量分组（覆盖高频样式变量；完整变量集可通过导入/导出 JSON 维护）。
+ * computeThemeType 由主题内容推导类型：full（壁纸+图标全套）/
+ * wallpaper（仅壁纸）/ icons（仅图标）/ legacy（旧版配色主题，无内容）。
  */
-export const THEME_VAR_GROUPS = [
-  { key: 'primary', labelKey: 'themeEditor.groupPrimary', vars: ['--primary', '--primary-light', '--primary-dark', '--primary-hover'] },
-  { key: 'surface', labelKey: 'themeEditor.groupSurface', vars: ['--background', '--bg-secondary', '--bg-tertiary', '--card', '--popover', '--glass-bg'] },
-  { key: 'text', labelKey: 'themeEditor.groupText', vars: ['--foreground', '--text-secondary', '--text-tertiary', '--text-light'] },
-  { key: 'border', labelKey: 'themeEditor.groupBorder', vars: ['--border', '--input'] },
-  { key: 'semantic', labelKey: 'themeEditor.groupSemantic', vars: ['--secondary', '--accent', '--destructive', '--success', '--warning', '--info', '--purple'] },
-];
+export const computeThemeType = (theme) => {
+  const hasWallpaper = !!theme?.wallpaperUrl;
+  const hasIcons = theme?.icons && Object.keys(theme.icons).length > 0;
+  if (hasWallpaper && hasIcons) return 'full';
+  if (hasWallpaper) return 'wallpaper';
+  if (hasIcons) return 'icons';
+  return 'legacy';
+};
 
-// 颜色输入可编辑的变量（纯 #hex）；其余（rgba/hsla 等）用文本输入。
-const isHexColor = (v) => /^#[0-9a-fA-F]{6}$/.test(v || '');
+/** 类型徽章样式（主题卡片/编辑器共用）。 */
+export const themeTypeBadge = (type, t) => {
+  switch (type) {
+    case 'full':
+      return { text: t('themeEditor.typeFull'), bg: 'var(--primary-bg)', fg: 'var(--primary)', icon: '✨' };
+    case 'wallpaper':
+      return { text: t('themeEditor.typeWallpaper'), bg: 'var(--info-bg)', fg: 'var(--info-text)', icon: '🖼️' };
+    case 'icons':
+      return { text: t('themeEditor.typeIcons'), bg: 'var(--success-bg)', fg: 'var(--success-text)', icon: '🎯' };
+    default:
+      return { text: t('themeEditor.typeLegacy'), bg: 'var(--hover-bg)', fg: 'var(--text-secondary)', icon: '🕘' };
+  }
+};
+
+const URL_RE = /^(\/uploads\/|https?:\/\/)/;
 
 /**
- * ThemeEditorModal 主题可视化编辑器（管理后台与用户主题工坊共用）。
+ * ThemeEditorModal 主题编辑器（壁纸 + 图标组合包，管理后台与用户主题工坊共用）。
+ *
+ * 主题类型：仅壁纸 / 仅图标 / 壁纸+图标全套，至少包含其一。
  *
  * props:
  *   - isOpen / onClose：弹窗开关
- *   - initial：{ name, description, mode, variables } 初始值
+ *   - initial：{ name, description, wallpaperUrl, wallpaperThumb, icons } 初始值
  *   - onSave(payload)：保存回调（payload 同 initial 结构）
  *   - saving：保存中状态（禁用按钮）
  *   - title：弹窗标题
  */
 const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, title }) => {
   const { t } = useI18n();
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [mode, setMode] = useState('dark');
-  const [variables, setVariables] = useState({});
+  const [wallpaperUrl, setWallpaperUrl] = useState('');
+  const [wallpaperThumb, setWallpaperThumb] = useState('');
+  const [icons, setIcons] = useState({});
   const [error, setError] = useState('');
-  const [rawJson, setRawJson] = useState('');
-  const [showRaw, setShowRaw] = useState(false);
+  const [uploadingWallpaper, setUploadingWallpaper] = useState(false);
+  const [uploadingIcon, setUploadingIcon] = useState(false);
+
+  // 素材库：系统壁纸 / 个人壁纸 / 图标库。
+  const [systemWallpapers, setSystemWallpapers] = useState([]);
+  const [personalWallpapers, setPersonalWallpapers] = useState([]);
+  const [iconLibrary, setIconLibrary] = useState([]);
+
+  // 图标选择器弹窗（pickingKey 为正在挑选的组件 key）。
+  const [pickingKey, setPickingKey] = useState(null);
+  const wallpaperInputRef = useRef(null);
+  const iconInputRef = useRef(null);
 
   // 打开时用 initial 重置表单。
   useEffect(() => {
     if (isOpen) {
       setName(initial?.name || '');
       setDescription(initial?.description || '');
-      setMode(initial?.mode === 'light' ? 'light' : 'dark');
-      setVariables({ ...(initial?.variables || {}) });
+      setWallpaperUrl(initial?.wallpaperUrl || '');
+      setWallpaperThumb(initial?.wallpaperThumb || '');
+      setIcons({ ...(initial?.icons || {}) });
       setError('');
-      setRawJson('');
-      setShowRaw(false);
     }
   }, [isOpen, initial]);
 
-  // 编辑中的变量解析结果：基础主题 + 编辑覆盖（预览与最终保存共用）。
-  const resolved = useMemo(() => ({
-    ...themes[mode],
-    ...Object.fromEntries(Object.entries(variables).filter(([, v]) => typeof v === 'string' && v !== '')),
-  }), [mode, variables]);
+  // 打开时拉取素材库。
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    axios.get(API.WALLPAPERS.SYSTEM).then((res) => {
+      if (!cancelled) setSystemWallpapers(res.data || []);
+    }).catch(() => {});
+    if (user) {
+      axios.get(API.WALLPAPERS.PERSONAL).then((res) => {
+        if (!cancelled) setPersonalWallpapers(res.data || []);
+      }).catch(() => {});
+    }
+    axios.get(API.ICONS.LIST).then((res) => {
+      if (!cancelled) setIconLibrary(res.data?.icons || []);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [isOpen, user]);
 
-  const setVar = (key, value) => setVariables((prev) => ({ ...prev, [key]: value }));
+  const type = useMemo(() => computeThemeType({ wallpaperUrl, icons }), [wallpaperUrl, icons]);
+  const badge = themeTypeBadge(type, t);
+  const iconCount = Object.keys(icons).length;
 
-  const handleSave = () => {
-    const trimmedName = name.trim();
-    if (!trimmedName) { setError(t('themeEditor.nameRequired')); return; }
-    if (trimmedName.length > 30) { setError(t('themeEditor.nameTooLong')); return; }
-    if (description.length > 200) { setError(t('themeEditor.descTooLong')); return; }
-    // 过滤空值变量。
-    const cleanVars = Object.fromEntries(Object.entries(variables).filter(([, v]) => typeof v === 'string' && v.trim() !== ''));
-    onSave({ name: trimmedName, description: description.trim(), mode, variables: cleanVars });
+  // ---- 壁纸选择 ----
+  const pickWallpaper = (url, thumb) => {
+    setWallpaperUrl(url);
+    setWallpaperThumb(thumb || url);
   };
 
-  // 导出主题配置 JSON（下载文件）。
+  const handleUploadWallpaper = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploadingWallpaper(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await axios.post(API.THEMES.UPLOAD_WALLPAPER, fd);
+      if (URL_RE.test(res.data?.url || '')) pickWallpaper(res.data.url, '');
+      else setError(t('themeEditor.uploadFailed'));
+    } catch (err) {
+      setError(err.response?.data?.message || t('themeEditor.uploadFailed'));
+    } finally {
+      setUploadingWallpaper(false);
+    }
+  };
+
+  // ---- 图标选择 ----
+  const setIcon = (key, url) => setIcons((prev) => {
+    const next = { ...prev };
+    if (url) next[key] = url; else delete next[key];
+    return next;
+  });
+
+  const handleUploadIcon = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !pickingKey) return;
+    setUploadingIcon(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await axios.post(API.THEMES.UPLOAD_ICON, fd);
+      if (URL_RE.test(res.data?.url || '')) setIcon(pickingKey, res.data.url);
+      else setError(t('themeEditor.uploadFailed'));
+    } catch (err) {
+      setError(err.response?.data?.message || t('themeEditor.uploadFailed'));
+    } finally {
+      setUploadingIcon(false);
+    }
+  };
+
+  // ---- 导入导出 ----
   const handleExport = () => {
-    const payload = { name: name.trim(), description: description.trim(), mode, variables };
+    const payload = { name: name.trim(), description: description.trim(), wallpaperUrl, wallpaperThumb, icons };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -80,7 +164,6 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     URL.revokeObjectURL(url);
   };
 
-  // 从文件导入主题配置。
   const handleImportFile = (e) => {
     const file = e.target.files?.[0];
     e.target.value = '';
@@ -90,15 +173,18 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
       try {
         const data = JSON.parse(reader.result);
         if (typeof data !== 'object' || !data) throw new Error('invalid');
-        if (typeof data.name === 'string' && data.name.trim()) setName(data.name.trim());
+        if (typeof data.name === 'string') setName(data.name.trim());
         if (typeof data.description === 'string') setDescription(data.description);
-        if (data.mode === 'light' || data.mode === 'dark') setMode(data.mode);
-        if (data.variables && typeof data.variables === 'object') {
+        if (typeof data.wallpaperUrl === 'string' && URL_RE.test(data.wallpaperUrl)) {
+          setWallpaperUrl(data.wallpaperUrl);
+          setWallpaperThumb(typeof data.wallpaperThumb === 'string' && URL_RE.test(data.wallpaperThumb) ? data.wallpaperThumb : data.wallpaperUrl);
+        }
+        if (data.icons && typeof data.icons === 'object') {
           const next = {};
-          for (const [k, v] of Object.entries(data.variables)) {
-            if (/^--[a-zA-Z][\w-]*$/.test(k) && typeof v === 'string' && v.length <= 500) next[k] = v;
+          for (const [k, v] of Object.entries(data.icons)) {
+            if (/^[a-zA-Z][\w.-]*$/.test(k) && typeof v === 'string' && URL_RE.test(v) && v.length <= 500) next[k] = v;
           }
-          setVariables(next);
+          setIcons(next);
         }
         setError('');
       } catch {
@@ -108,231 +194,217 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     reader.readAsText(file);
   };
 
-  // 原始 JSON 直接编辑（高级模式）。
-  const applyRawJson = () => {
-    try {
-      const data = JSON.parse(rawJson);
-      if (typeof data !== 'object' || !data) throw new Error('invalid');
-      const next = {};
-      for (const [k, v] of Object.entries(data)) {
-        if (/^--[a-zA-Z][\w-]*$/.test(k) && typeof v === 'string' && v.length <= 500) next[k] = v;
-      }
-      setVariables(next);
-      setShowRaw(false);
-      setError('');
-    } catch {
-      setError(t('themeEditor.jsonInvalid'));
-    }
+  const handleSave = () => {
+    const trimmedName = name.trim();
+    if (!trimmedName) { setError(t('themeEditor.nameRequired')); return; }
+    if (trimmedName.length > 30) { setError(t('themeEditor.nameTooLong')); return; }
+    if (description.length > 200) { setError(t('themeEditor.descTooLong')); return; }
+    if (type === 'legacy') { setError(t('themeEditor.contentRequired')); return; }
+    onSave({
+      name: trimmedName,
+      description: description.trim(),
+      wallpaperUrl,
+      wallpaperThumb,
+      icons,
+    });
   };
 
-  // ---- 预览面板（用解析后的变量直接渲染，实时反映编辑效果） ----
-  const previewPanel = (
-    <div
-      style={{
-        background: resolved['--background'],
-        borderRadius: '12px',
-        border: '1px solid var(--border)',
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-        position: 'sticky',
-        top: '0',
-      }}
-    >
-      <div style={{ fontWeight: 700, fontSize: '15px', color: resolved['--foreground'] }}>
-        {name || t('themeEditor.previewTitle')}
-      </div>
-      <div style={{ fontSize: '12px', color: resolved['--text-secondary'], lineHeight: 1.5 }}>
-        {description || t('themeEditor.previewDesc')}
-      </div>
-
-      {/* 卡片 */}
-      <div
-        style={{
-          background: resolved['--card'],
-          border: `1px solid ${resolved['--border']}`,
-          borderRadius: '10px',
-          padding: '12px',
-        }}
-      >
-        <div style={{ fontSize: '13px', fontWeight: 600, color: resolved['--card-foreground'] || resolved['--foreground'] }}>
-          {t('themeEditor.previewCard')}
-        </div>
-        <div style={{ fontSize: '12px', color: resolved['--text-secondary'], marginTop: '4px' }}>
-          {t('themeEditor.previewCardBody')}
-        </div>
-      </div>
-
-      {/* 按钮组 */}
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        <span style={{
-          background: resolved['--primary'], color: '#fff',
-          padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600,
-        }}>{t('themeEditor.previewPrimaryBtn')}</span>
-        <span style={{
-          background: resolved['--primary-bg'], color: resolved['--primary'],
-          padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600,
-          border: `1px solid ${resolved['--primary-border']}`,
-        }}>{t('themeEditor.previewSecondaryBtn')}</span>
-        <span style={{
-          background: resolved['--destructive-bg'], color: resolved['--destructive-text'],
-          padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600,
-        }}>{t('themeEditor.previewDangerBtn')}</span>
-      </div>
-
-      {/* 徽章 */}
-      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-        {[
-          { bg: resolved['--success-bg'], fg: resolved['--success-text'] },
-          { bg: resolved['--warning-bg'], fg: resolved['--warning-text'] },
-          { bg: resolved['--info-bg'], fg: resolved['--info-text'] },
-        ].map((b, i) => (
-          <span key={i} style={{ background: b.bg, color: b.fg, padding: '2px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 600 }}>
-            {t('themeEditor.previewBadge')}
-          </span>
-        ))}
-      </div>
-
-      {/* 输入框 */}
-      <div style={{
-        background: resolved['--input'], border: `1px solid ${resolved['--border']}`,
-        borderRadius: '8px', padding: '8px 12px', fontSize: '12px', color: resolved['--text-tertiary'],
-      }}>
-        {t('themeEditor.previewInput')}
-      </div>
+  // ---- 壁纸网格 ----
+  const wallpaperGrid = (list, kind) => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
+      {list.map((wp) => {
+        const url = kind === 'system' ? wp.url : wp.url;
+        const thumb = kind === 'system' ? (wp.thumbnailUrl || wp.url) : wp.url;
+        const selected = wallpaperUrl === url;
+        return (
+          <button
+            key={`${kind}-${wp._id || url}`}
+            type="button"
+            onClick={() => pickWallpaper(url, thumb)}
+            title={wp.name || url}
+            style={{
+              position: 'relative', aspectRatio: '16 / 9', borderRadius: '6px', overflow: 'hidden',
+              cursor: 'pointer', border: 'none', padding: 0, width: '100%', display: 'block',
+              outline: selected ? '2px solid var(--primary)' : '2px solid transparent',
+              outlineOffset: '-2px', transition: 'transform 0.15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+          >
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: `url(${url})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            }} />
+            {selected && (
+              <div style={{
+                position: 'absolute', top: '3px', right: '3px', width: '14px', height: '14px',
+                borderRadius: '50%', background: 'var(--primary)', color: '#fff', fontSize: '9px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>✓</div>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} maxWidth="960px">
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="860px">
       <div className="modal-header">
         <h3>{title || t('themeEditor.title')}</h3>
         <button className="btn btn-secondary" onClick={onClose}>{t('common.close')}</button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 280px', gap: '16px' }}>
-        {/* 左：表单 */}
-        <div>
-          <div className="form-group">
-            <label>{t('themeEditor.name')}</label>
-            <input
-              type="text" value={name} maxLength={30}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={t('themeEditor.namePlaceholder')}
-            />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        {/* 名称 / 描述 / 类型 */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: '12px', alignItems: 'start' }}>
+          <div>
+            <div className="form-group" style={{ marginBottom: '10px' }}>
+              <label>{t('themeEditor.name')}</label>
+              <input
+                type="text" value={name} maxLength={30}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={t('themeEditor.namePlaceholder')}
+              />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label>{t('themeEditor.description')}</label>
+              <input
+                type="text" value={description} maxLength={200}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder={t('themeEditor.descPlaceholder')}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>{t('themeEditor.description')}</label>
-            <input
-              type="text" value={description} maxLength={200}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder={t('themeEditor.descPlaceholder')}
-            />
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+            padding: '10px 14px', borderRadius: '10px', background: badge.bg,
+            border: '1px solid var(--border)', minWidth: '90px',
+          }}>
+            <span style={{ fontSize: '20px', lineHeight: 1 }}>{badge.icon}</span>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: badge.fg, whiteSpace: 'nowrap' }}>{badge.text}</span>
+            <span style={{ fontSize: '10px', color: 'var(--text-tertiary)' }}>{t('themeEditor.typeLabel')}</span>
           </div>
-          <div className="form-group">
-            <label>{t('themeEditor.mode')}</label>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {['dark', 'light'].map((m) => (
+        </div>
+
+        {/* 壁纸区 */}
+        <div style={{
+          background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '14px',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 600 }}>
+              🖼️ {t('themeEditor.wallpaperSection')}
+              <span style={{ fontWeight: 400, fontSize: '11px', color: 'var(--text-tertiary)', marginLeft: '6px' }}>
+                {wallpaperUrl ? '' : t('themeEditor.wallpaperNone')}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <input
+                ref={wallpaperInputRef} type="file" accept="image/*"
+                onChange={handleUploadWallpaper} style={{ display: 'none' }}
+              />
+              <button
+                type="button" className="btn btn-secondary"
+                style={{ fontSize: '11px', padding: '4px 10px' }}
+                disabled={uploadingWallpaper}
+                onClick={() => wallpaperInputRef.current?.click()}
+              >{uploadingWallpaper ? '⏳' : `⬆ ${t('themeEditor.wallpaperUpload')}`}</button>
+              {wallpaperUrl && (
                 <button
-                  key={m} type="button"
-                  onClick={() => setMode(m)}
-                  style={{
-                    padding: '6px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer',
-                    background: mode === m ? 'var(--primary-bg)' : 'var(--hover-bg)',
-                    color: mode === m ? 'var(--primary)' : 'var(--foreground)',
-                    border: mode === m ? '1px solid var(--primary-border)' : '1px solid var(--border)',
-                    fontWeight: mode === m ? 600 : 400,
-                  }}
-                >
-                  {m === 'dark' ? `🌙 ${t('themeEditor.modeDark')}` : `☀️ ${t('themeEditor.modeLight')}`}
-                </button>
-              ))}
+                  type="button" className="btn btn-secondary"
+                  style={{ fontSize: '11px', padding: '4px 10px', color: 'var(--destructive-text)', borderColor: 'var(--destructive-border)' }}
+                  onClick={() => { setWallpaperUrl(''); setWallpaperThumb(''); }}
+                >✕ {t('themeEditor.wallpaperClear')}</button>
+              )}
             </div>
           </div>
-
-          {/* 变量分组编辑 */}
-          {THEME_VAR_GROUPS.map((group) => (
-            <div key={group.key} style={{
-              marginBottom: '12px', background: 'var(--card)', borderRadius: '10px',
-              border: '1px solid var(--border)', padding: '12px',
-            }}>
-              <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '8px' }}>{t(group.labelKey)}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                {group.vars.map((key) => {
-                  const value = variables[key] ?? '';
-                  const base = themes[mode][key];
-                  return (
-                    <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input
-                        type="color"
-                        aria-label={key}
-                        value={isHexColor(value) ? value : (isHexColor(base) ? base : '#6366f1')}
-                        onChange={(e) => setVar(key, e.target.value)}
-                        style={{ width: '32px', height: '32px', padding: 0, border: '1px solid var(--border)', borderRadius: '6px', cursor: 'pointer', background: 'none', flexShrink: 0 }}
-                      />
-                      <input
-                        type="text" value={value}
-                        placeholder={base || key}
-                        onChange={(e) => setVar(key, e.target.value)}
-                        style={{
-                          flex: 1, minWidth: 0, padding: '6px 8px', fontSize: '12px',
-                          borderRadius: '6px', border: '1px solid var(--border)',
-                          background: 'var(--input)', color: 'var(--foreground)',
-                          fontFamily: 'monospace',
-                        }}
-                      />
-                    </div>
-                  );
-                })}
+          {wallpaperUrl && (
+            <div style={{
+              position: 'relative', aspectRatio: '21 / 9', borderRadius: '8px', overflow: 'hidden',
+              marginBottom: '10px', border: '1px solid var(--border)',
+              backgroundImage: `url(${wallpaperUrl})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            }} />
+          )}
+          <div style={{ maxHeight: '220px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {systemWallpapers.length > 0 && (
+              <div>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>🌍 {t('themeEditor.wallpaperSystem')}</div>
+                {wallpaperGrid(systemWallpapers, 'system')}
               </div>
-            </div>
-          ))}
-
-          {/* 高级：原始 JSON 编辑 */}
-          <div style={{ marginBottom: '12px' }}>
-            <button
-              type="button" className="btn btn-secondary"
-              style={{ fontSize: '12px', padding: '6px 12px' }}
-              onClick={() => { setShowRaw(!showRaw); setRawJson(JSON.stringify(variables, null, 2)); }}
-            >
-              {showRaw ? t('themeEditor.hideRaw') : t('themeEditor.showRaw')}
-            </button>
-            {showRaw && (
-              <div style={{ marginTop: '8px' }}>
-                <textarea
-                  value={rawJson}
-                  onChange={(e) => setRawJson(e.target.value)}
-                  rows={8}
-                  style={{
-                    width: '100%', boxSizing: 'border-box', fontFamily: 'monospace', fontSize: '12px',
-                    padding: '8px', borderRadius: '8px', border: '1px solid var(--border)',
-                    background: 'var(--input)', color: 'var(--foreground)', resize: 'vertical',
-                  }}
-                />
-                <button type="button" className="btn" style={{ fontSize: '12px', padding: '6px 12px', marginTop: '6px' }} onClick={applyRawJson}>
-                  {t('themeEditor.applyRaw')}
-                </button>
+            )}
+            {user && personalWallpapers.length > 0 && (
+              <div>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '4px' }}>👤 {t('themeEditor.wallpaperPersonal')}</div>
+                {wallpaperGrid(personalWallpapers, 'personal')}
               </div>
             )}
           </div>
-
-          {/* 导入导出 */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <button type="button" className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={handleExport}>
-              ⬇ {t('themeEditor.export')}
-            </button>
-            <label className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px', cursor: 'pointer' }}>
-              ⬆ {t('themeEditor.import')}
-              <input type="file" accept=".json,application/json" onChange={handleImportFile} style={{ display: 'none' }} />
-            </label>
-          </div>
-
-          {error && <div className="error-message" style={{ marginTop: '12px' }}>{error}</div>}
         </div>
 
-        {/* 右：实时预览 */}
-        <div>{previewPanel}</div>
+        {/* 图标区 */}
+        <div style={{
+          background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', padding: '14px',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 600 }}>
+              🎯 {t('themeEditor.iconsSection')}
+              <span style={{ fontWeight: 400, fontSize: '11px', color: 'var(--text-tertiary)', marginLeft: '6px' }}>
+                {iconCount > 0 ? t('themeEditor.iconsCount', { count: iconCount }) : t('themeEditor.iconsNone')}
+              </span>
+            </div>
+            {iconCount > 0 && (
+              <button
+                type="button" className="btn btn-secondary"
+                style={{ fontSize: '11px', padding: '4px 10px', color: 'var(--destructive-text)', borderColor: 'var(--destructive-border)' }}
+                onClick={() => setIcons({})}
+              >✕ {t('themeEditor.iconsClearAll')}</button>
+            )}
+          </div>
+          <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {ICON_COMPONENT_KEYS.map(({ key, label }) => {
+              const url = icons[key];
+              return (
+                <div key={key} style={{
+                  display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px',
+                  borderRadius: '8px', background: url ? 'var(--primary-bg-subtle)' : 'var(--hover-bg)',
+                  border: `1px solid ${url ? 'var(--primary-border-subtle)' : 'var(--border)'}`,
+                  transition: 'background 0.2s',
+                }}>
+                  <SvgIconPreview url={url} size={22} />
+                  <span style={{ fontSize: '12px', color: 'var(--foreground)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {label}
+                  </span>
+                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: 'var(--text-tertiary)', flexShrink: 0 }}>{key}</span>
+                  <button
+                    type="button" className="btn btn-secondary"
+                    style={{ fontSize: '11px', padding: '3px 10px', flexShrink: 0 }}
+                    onClick={() => setPickingKey(key)}
+                  >{url ? t('themeEditor.iconChange') : `+ ${t('themeEditor.iconPick')}`}</button>
+                  {url && (
+                    <button
+                      type="button" className="btn btn-secondary"
+                      style={{ fontSize: '11px', padding: '3px 8px', color: 'var(--destructive-text)', borderColor: 'var(--destructive-border)', flexShrink: 0 }}
+                      onClick={() => setIcon(key, null)}
+                    >✕</button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 导入导出 */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button type="button" className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={handleExport}>
+            ⬇ {t('themeEditor.export')}
+          </button>
+          <label className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px', cursor: 'pointer' }}>
+            ⬆ {t('themeEditor.import')}
+            <input type="file" accept=".json,application/json" onChange={handleImportFile} style={{ display: 'none' }} />
+          </label>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
       </div>
 
       <div className="form-group" style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
@@ -341,6 +413,58 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
           {saving ? t('common.saving') : t('common.save')}
         </button>
       </div>
+
+      {/* 图标选择器：图标库 + 上传 */}
+      <Modal isOpen={!!pickingKey} onClose={() => setPickingKey(null)} maxWidth="520px">
+        <div className="modal-header">
+          <h3>{t('themeEditor.iconPickTitle')}</h3>
+          <button className="btn btn-secondary" onClick={() => setPickingKey(null)}>{t('common.close')}</button>
+        </div>
+        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '0 0 10px 0' }}>
+          {ICON_COMPONENT_KEYS.find((k) => k.key === pickingKey)?.label}
+          <span style={{ fontFamily: 'monospace', marginLeft: '6px', color: 'var(--text-tertiary)' }}>{pickingKey}</span>
+        </p>
+        <input ref={iconInputRef} type="file" accept=".svg" onChange={handleUploadIcon} style={{ display: 'none' }} />
+        <div style={{ marginBottom: '10px' }}>
+          <button
+            type="button" className="btn"
+            style={{ fontSize: '12px', padding: '6px 12px' }}
+            disabled={uploadingIcon}
+            onClick={() => iconInputRef.current?.click()}
+          >{uploadingIcon ? '⏳' : `⬆ ${t('themeEditor.iconUpload')}`}</button>
+        </div>
+        <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
+          {iconLibrary.length === 0 ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '12px' }}>
+              {t('themeEditor.iconLibEmpty')}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: '8px' }}>
+              {iconLibrary.map((ic) => (
+                <button
+                  key={ic._id || ic.url}
+                  type="button"
+                  title={ic.name}
+                  onClick={() => { setIcon(pickingKey, ic.url); setPickingKey(null); }}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                    padding: '10px 6px', borderRadius: '8px', cursor: 'pointer',
+                    background: 'var(--hover-bg)', border: '1px solid var(--border)',
+                    color: 'var(--foreground)', transition: 'all 0.15s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary-border)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  <SvgIconPreview url={ic.url} size={26} />
+                  <span style={{ fontSize: '10px', color: 'var(--text-secondary)', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {ic.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </Modal>
     </Modal>
   );
 };

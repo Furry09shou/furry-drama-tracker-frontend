@@ -44,6 +44,8 @@ const API = {
     MY: '/api/themes/my',
     MY_SELECTION: '/api/themes/my/selection',
     SELECTION: '/api/themes/selection',
+    UPLOAD_WALLPAPER: '/api/themes/upload-wallpaper',
+    UPLOAD_ICON: '/api/themes/upload-icon',
     DETAIL: (id) => `/api/themes/${id}`,
     SUBMIT: (id) => `/api/themes/${id}/submit`,
     REVIEW: (id) => `/api/themes/${id}/review`,

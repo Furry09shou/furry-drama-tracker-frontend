@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import API from '../utils/apiEndpoints';
-import ThemeEditorModal from './ThemeEditorModal';
-import { useTheme } from '../contexts/ThemeContext';
+import Modal from './Modal';
+import ThemeEditorModal, { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
+import { SvgIconPreview, THEME_SELECTION_CHANGED_EVENT } from '../contexts/IconContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../contexts/I18nContext';
 
 /**
  * ThemeWorkshop 用户主题工坊（Settings 页内嵌）。
  *
+ * 主题 = 壁纸 + UI 图标组合包（仅壁纸 / 仅图标 / 全套）。
+ *
  * 功能：
- *   - 浏览系统主题与我的个人主题，一键应用（多端同步）；
- *   - 可视化创建/编辑个人主题（实时预览、导入导出）；
- *   - 提交个人主题审核：审核通过后从个人主题升级为系统主题；
+ *   - 浏览系统主题与我的个人主题，卡片上展示类型徽章（全套/仅壁纸/仅图标）；
+ *   - 应用主题时可自由组合应用部分（壁纸 / 图标 / 两者）；
+ *   - 可视化创建/编辑个人主题（壁纸选取 + 图标映射，导入导出）；
+ *   - 提交个人主题审核：审核通过后升级为系统主题；
  *   - 删除个人主题。
  */
 const ThemeWorkshop = () => {
   const { t } = useI18n();
-  const { serverTheme, setServerTheme } = useTheme();
+  const { user, updateUser } = useAuth();
 
   const [systemThemes, setSystemThemes] = useState([]);
   const [myThemes, setMyThemes] = useState([]);
@@ -24,10 +29,20 @@ const ThemeWorkshop = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // 当前生效的主题选择（themeId + applyIcons/applyWallpaper）。
+  const [selection, setSelection] = useState({ themeId: null, applyIcons: true, applyWallpaper: true });
+
   // 编辑器状态。
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingTheme, setEditingTheme] = useState(null); // null = 新建
   const [saving, setSaving] = useState(false);
+
+  // 应用组合选择弹窗（applyTarget 为待应用的主题）。
+  const [applyTarget, setApplyTarget] = useState(null);
+  const [optWallpaper, setOptWallpaper] = useState(true);
+  const [optIcons, setOptIcons] = useState(true);
+  const [applyError, setApplyError] = useState('');
+  const [applying, setApplying] = useState(false);
 
   const notify = useCallback((msg) => {
     setSuccess(msg);
@@ -37,42 +52,83 @@ const ThemeWorkshop = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [sysRes, myRes] = await Promise.all([
-        axios.get(API.THEMES.LIST),
-        axios.get(API.THEMES.MY),
-      ]);
+      const reqs = [axios.get(API.THEMES.LIST), axios.get(API.THEMES.MY)];
+      if (user) reqs.push(axios.get(API.THEMES.MY_SELECTION));
+      const [sysRes, myRes, selRes] = await Promise.all(reqs);
       setSystemThemes(sysRes.data || []);
       setMyThemes(myRes.data || []);
+      if (selRes) {
+        setSelection({
+          themeId: selRes.data?.theme?._id || null,
+          applyIcons: selRes.data?.applyIcons !== false,
+          applyWallpaper: selRes.data?.applyWallpaper !== false,
+        });
+      }
       setError('');
     } catch (err) {
       setError(err.response?.data?.message || t('themeWorkshop.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, user]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const currentId = serverTheme?._id || null;
-
   // ---- 应用 / 取消主题 ----
+  const doApply = async (theme, applyWallpaper, applyIcons) => {
+    const res = await axios.put(API.THEMES.SELECTION, {
+      themeId: theme._id,
+      applyWallpaper,
+      applyIcons,
+    });
+    setSelection({ themeId: theme._id, applyWallpaper, applyIcons });
+    // 壁纸部分写入背景偏好时，同步前端 user 让背景立即生效。
+    if (res.data?.backgroundPrefs) {
+      updateUser(prev => ({ ...prev, backgroundPrefs: res.data.backgroundPrefs }));
+    }
+    // 广播主题选择变化：IconContext 重新拉取主题图标覆盖。
+    window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
+    notify(t('themeWorkshop.applied', { name: theme.name }));
+  };
+
   const handleApply = async (theme) => {
+    const type = computeThemeType(theme);
+    // 全套主题弹出组合选择；仅壁纸/仅图标直接应用。
+    if (type === 'full') {
+      setApplyTarget(theme);
+      setOptWallpaper(true);
+      setOptIcons(true);
+      setApplyError('');
+      return;
+    }
     try {
-      const res = await axios.put(API.THEMES.SELECTION, { themeId: theme._id });
-      // 立即生效：更新前端主题引擎（无需刷新页面）。
-      setServerTheme(res.data?.theme || theme);
-      notify(t('themeWorkshop.applied', { name: theme.name }));
+      await doApply(theme, type === 'wallpaper', type === 'icons');
     } catch (err) {
       setError(err.response?.data?.message || t('themeWorkshop.applyFailed'));
+    }
+  };
+
+  const handleApplyConfirm = async () => {
+    if (!optWallpaper && !optIcons) {
+      setApplyError(t('themeWorkshop.applyAtLeastOne'));
+      return;
+    }
+    setApplying(true);
+    try {
+      await doApply(applyTarget, optWallpaper, optIcons);
+      setApplyTarget(null);
+    } catch (err) {
+      setApplyError(err.response?.data?.message || t('themeWorkshop.applyFailed'));
+    } finally {
+      setApplying(false);
     }
   };
 
   const handleReset = async () => {
     try {
       await axios.put(API.THEMES.SELECTION, { themeId: '' });
-      // 回退站点默认主题。
-      const res = await axios.get(API.THEMES.ACTIVE);
-      setServerTheme(res.data?.theme || null);
+      setSelection({ themeId: null, applyIcons: true, applyWallpaper: true });
+      window.dispatchEvent(new Event(THEME_SELECTION_CHANGED_EVENT));
       notify(t('themeWorkshop.resetSuccess'));
     } catch (err) {
       setError(err.response?.data?.message || t('themeWorkshop.applyFailed'));
@@ -96,8 +152,8 @@ const ThemeWorkshop = () => {
         const created = res.data;
         if (created?._id) {
           try {
-            const sel = await axios.put(API.THEMES.SELECTION, { themeId: created._id });
-            setServerTheme(sel.data?.theme || created);
+            const type = computeThemeType(created);
+            await doApply(created, type === 'full' || type === 'wallpaper', type === 'full' || type === 'icons');
           } catch { /* 应用失败不影响创建结果 */ }
         }
       }
@@ -115,7 +171,7 @@ const ThemeWorkshop = () => {
     try {
       await axios.delete(API.THEMES.DETAIL(theme._id));
       // 若删除的是当前使用主题，回退默认主题。
-      if (currentId === theme._id) handleReset();
+      if (selection.themeId === theme._id) handleReset();
       notify(t('themeWorkshop.deleteSuccess'));
       fetchData();
     } catch (err) {
@@ -144,8 +200,11 @@ const ThemeWorkshop = () => {
   };
 
   const renderCard = (theme, isMine) => {
-    const active = currentId === theme._id;
+    const active = selection.themeId === theme._id;
     const badge = statusBadge(theme);
+    const type = computeThemeType(theme);
+    const typeBadge = themeTypeBadge(type, t);
+    const iconEntries = Object.entries(theme.icons || {});
     return (
       <div key={theme._id} style={{
         background: 'var(--card)', borderRadius: '12px', border: active ? '1px solid var(--primary-border)' : '1px solid var(--border)',
@@ -160,8 +219,11 @@ const ThemeWorkshop = () => {
             }}>
               {theme.name}{active ? ` · ${t('themeWorkshop.inUse')}` : ''}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              {theme.mode === 'light' ? '☀️' : '🌙'} {theme.description || t('themeWorkshop.noDesc')}
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
+              <span style={{
+                fontSize: '10px', padding: '1px 7px', borderRadius: '999px', fontWeight: 600,
+                background: typeBadge.bg, color: typeBadge.fg, whiteSpace: 'nowrap',
+              }}>{typeBadge.icon} {typeBadge.text}</span>
             </div>
           </div>
           <span style={{
@@ -170,18 +232,44 @@ const ThemeWorkshop = () => {
           }}>{badge.text}</span>
         </div>
 
-        {/* 主题色预览条 */}
-        <div style={{ display: 'flex', gap: '4px' }}>
-          {['--primary', '--secondary', '--accent', '--background', '--foreground']
-            .map((k) => theme.variables?.[k])
-            .filter(Boolean)
-            .map((c, i) => (
-              <span key={i} title={c} style={{
-                width: '20px', height: '20px', borderRadius: '6px',
-                background: c, border: '1px solid var(--border)',
-              }} />
+        {/* 壁纸缩略预览 */}
+        {(theme.wallpaperThumb || theme.wallpaperUrl) && (
+          <div style={{
+            aspectRatio: '21 / 9', borderRadius: '8px', border: '1px solid var(--border)',
+            backgroundImage: `url(${theme.wallpaperThumb || theme.wallpaperUrl})`,
+            backgroundSize: 'cover', backgroundPosition: 'center',
+          }} />
+        )}
+
+        {/* 图标预览（最多 6 个） */}
+        {iconEntries.length > 0 && (
+          <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+            {iconEntries.slice(0, 6).map(([key, url]) => (
+              <span key={key} title={key} style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: '26px', height: '26px', borderRadius: '6px',
+                background: 'var(--hover-bg)', border: '1px solid var(--border)',
+                color: 'var(--foreground)',
+              }}>
+                <SvgIconPreview url={url} size={16} />
+              </span>
             ))}
-        </div>
+            {iconEntries.length > 6 && (
+              <span style={{ fontSize: '10px', color: 'var(--text-tertiary)' }}>+{iconEntries.length - 6}</span>
+            )}
+          </div>
+        )}
+
+        {/* 当前选择的部分（仅全套主题应用时提示） */}
+        {active && type !== 'legacy' && (selection.applyIcons !== true || selection.applyWallpaper !== true) && (
+          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+            {t('themeWorkshop.applyWallpaper')}: {selection.applyWallpaper ? '✅' : '—'} · {t('themeWorkshop.applyIcons')}: {selection.applyIcons ? '✅' : '—'}
+          </div>
+        )}
+
+        {type === 'legacy' && (
+          <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{t('themeEditor.typeLegacy')}</div>
+        )}
 
         {/* 审核备注 */}
         {isMine && theme.status === 'rejected' && theme.reviewNote && (
@@ -197,9 +285,16 @@ const ThemeWorkshop = () => {
               {t('themeWorkshop.apply')}
             </button>
           ) : (
-            <button className="btn btn-secondary" style={{ padding: '5px 12px', fontSize: '12px' }} onClick={handleReset}>
-              {t('themeWorkshop.reset')}
-            </button>
+            <>
+              {type === 'full' && (
+                <button className="btn btn-secondary" style={{ padding: '5px 12px', fontSize: '12px' }} onClick={() => handleApply(theme)}>
+                  {t('themeWorkshop.applyAdjust')}
+                </button>
+              )}
+              <button className="btn btn-secondary" style={{ padding: '5px 12px', fontSize: '12px' }} onClick={handleReset}>
+                {t('themeWorkshop.reset')}
+              </button>
+            </>
           )}
           {isMine && !theme.isSystem && (
             <>
@@ -220,6 +315,32 @@ const ThemeWorkshop = () => {
       </div>
     );
   };
+
+  // 应用组合选择弹窗内容。
+  const applyOptionRow = (checked, onToggle, label, desc) => (
+    <button
+      type="button"
+      onClick={onToggle}
+      style={{
+        display: 'flex', alignItems: 'center', gap: '10px', width: '100%',
+        padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', textAlign: 'left',
+        background: checked ? 'var(--primary-bg)' : 'var(--hover-bg)',
+        border: `1px solid ${checked ? 'var(--primary-border)' : 'var(--border)'}`,
+        transition: 'all 0.2s',
+      }}
+    >
+      <span style={{
+        width: '18px', height: '18px', borderRadius: '5px', flexShrink: 0,
+        background: checked ? 'var(--primary)' : 'var(--input)', position: 'relative',
+        border: '1px solid var(--border)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        color: '#fff', fontSize: '12px', fontWeight: 700,
+      }}>{checked ? '✓' : ''}</span>
+      <span style={{ minWidth: 0 }}>
+        <span style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--foreground)' }}>{label}</span>
+        <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-secondary)' }}>{desc}</span>
+      </span>
+    </button>
+  );
 
   return (
     <div style={{ marginBottom: '24px' }}>
@@ -266,36 +387,61 @@ const ThemeWorkshop = () => {
           </div>
 
           {/* 我的主题 */}
-          <div>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-              ✨ {t('themeWorkshop.myThemes')}（{myThemes.length}）
+          {user && (
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                ✨ {t('themeWorkshop.myThemes')}（{myThemes.length}）
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '10px' }}>
+                {myThemes.map((th) => renderCard(th, true))}
+                {myThemes.length === 0 && (
+                  <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', gridColumn: '1 / -1' }}>
+                    {t('themeWorkshop.emptyMy')}
+                  </div>
+                )}
+              </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '10px' }}>
-              {myThemes.map((th) => renderCard(th, true))}
-              {myThemes.length === 0 && (
-                <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', gridColumn: '1 / -1' }}>
-                  {t('themeWorkshop.emptyMy')}
-                </div>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       )}
 
-      {/* 主题编辑器（复用可视化编辑组件） */}
+      {/* 主题编辑器（壁纸 + 图标组合） */}
       <ThemeEditorModal
         isOpen={editorOpen}
         onClose={() => setEditorOpen(false)}
         initial={editingTheme ? {
           name: editingTheme.name,
           description: editingTheme.description,
-          mode: editingTheme.mode,
-          variables: editingTheme.variables || {},
+          wallpaperUrl: editingTheme.wallpaperUrl || '',
+          wallpaperThumb: editingTheme.wallpaperThumb || '',
+          icons: editingTheme.icons || {},
         } : null}
         onSave={handleSave}
         saving={saving}
         title={editingTheme ? t('themeWorkshop.editTitle', { name: editingTheme.name }) : t('themeWorkshop.createTitle')}
       />
+
+      {/* 应用组合选择弹窗（全套主题） */}
+      <Modal isOpen={!!applyTarget} onClose={() => setApplyTarget(null)} maxWidth="420px">
+        <div className="modal-header">
+          <h3>{t('themeWorkshop.applyOptionsTitle', { name: applyTarget?.name || '' })}</h3>
+          <button className="btn btn-secondary" onClick={() => setApplyTarget(null)}>{t('common.close')}</button>
+        </div>
+        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '0 0 12px 0' }}>
+          {t('themeWorkshop.applyOptionsDesc')}
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {applyOptionRow(optWallpaper, () => setOptWallpaper(v => !v), t('themeWorkshop.applyWallpaper'), t('themeWorkshop.applyWallpaperDesc'))}
+          {applyOptionRow(optIcons, () => setOptIcons(v => !v), t('themeWorkshop.applyIcons'), t('themeWorkshop.applyIconsDesc'))}
+        </div>
+        {applyError && <div className="error-message" style={{ marginTop: '10px' }}>{applyError}</div>}
+        <div className="form-group" style={{ marginTop: '14px', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+          <button className="btn btn-secondary" onClick={() => setApplyTarget(null)}>{t('common.cancel')}</button>
+          <button className="btn" onClick={handleApplyConfirm} disabled={applying}>
+            {applying ? t('common.saving') : t('themeWorkshop.applyConfirm')}
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

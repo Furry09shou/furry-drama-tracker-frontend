@@ -1,14 +1,22 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import API from '../utils/apiEndpoints';
+import { useAuth } from './AuthContext';
 
 const IconContext = createContext();
 
 export const useIcons = () => useContext(IconContext);
 
 /**
+ * 主题选择变化事件：ThemeWorkshop 应用/取消主题后广播，
+ * IconProvider 监听并重新拉取主题图标覆盖。
+ */
+export const THEME_SELECTION_CHANGED_EVENT = 'theme-selection-changed';
+
+/**
  * ICON_COMPONENT_KEYS 图标可绑定的组件标识注册表。
- * 管理后台「图标映射」下拉从此列表选择，前端组件通过 <Icon name="nav.home" /> 消费。
+ * 管理后台「图标映射」下拉与主题编辑器图标选择均从此列表选择，
+ * 前端组件通过 <Icon name="nav.home" /> 消费。
  */
 export const ICON_COMPONENT_KEYS = [
   { key: 'nav.home', label: '导航 · 首页' },
@@ -67,54 +75,115 @@ const sanitizeSvg = (text) => {
 /**
  * IconProvider 图标引擎。
  *
- * 页面加载时拉取 /api/icons/list 获取图标与组件映射表，并预加载映射图标的
+ * 页面加载时拉取 /api/icons/list 获取全局图标与组件映射表，并预加载映射图标的
  * SVG 内容（inline 渲染，fill/stroke 转为 currentColor，颜色自动跟随主题）。
+ *
+ * 主题图标覆盖：登录用户拉取 /api/themes/my/selection（未登录回退站点默认主题
+ * /api/themes/active），若主题含图标且用户勾选应用图标部分，则主题图标覆盖
+ * 全局映射（主题 = 壁纸 + 图标组合包）。应用/取消主题通过
+ * THEME_SELECTION_CHANGED_EVENT 事件广播刷新。
  */
 export const IconProvider = ({ children }) => {
-  const [mappings, setMappings] = useState({});
+  const { user } = useAuth();
   const [icons, setIcons] = useState([]);
+  // baseMappings 是全局图标映射；themeIcons 是主题图标覆盖（null = 无覆盖）。
+  const [baseMappings, setBaseMappings] = useState({});
+  const [themeIcons, setThemeIcons] = useState(null);
   // url -> 已清洗的 SVG 内容（inline 渲染用）。
   const [svgMap, setSvgMap] = useState({});
 
-  useEffect(() => {
-    let cancelled = false;
-    axios.get(API.ICONS.LIST).then((res) => {
-      if (cancelled) return;
-      const list = res.data?.icons || [];
-      const map = res.data?.mappings || {};
-      setIcons(list);
-      setMappings(map);
-      // 预加载被映射引用的图标内容。
-      const urls = [...new Set(Object.values(map))];
-      urls.forEach((url) => {
-        axios.get(url, { responseType: 'text' }).then((r2) => {
-          const clean = sanitizeSvg(r2.data);
-          if (!cancelled && clean) setSvgMap((prev) => ({ ...prev, [url]: clean }));
-        }).catch(() => { /* 单个图标失败忽略 */ });
-      });
-    }).catch(() => { /* 图标服务不可用时静默回退 emoji */ });
-    return () => { cancelled = true; };
+  // 预加载一组 URL 的 SVG 内容。
+  const preloadSvgs = useCallback((urls) => {
+    urls.forEach((url) => {
+      if (!url) return;
+      axios.get(url, { responseType: 'text' }).then((r2) => {
+        const clean = sanitizeSvg(r2.data);
+        if (clean) setSvgMap((prev) => (prev[url] ? prev : { ...prev, [url]: clean }));
+      }).catch(() => { /* 单个图标失败忽略 */ });
+    });
   }, []);
 
-  // 供管理页手动刷新图标表（上传/删除后调用）。
-  const refreshIcons = async () => {
+  // 拉取全局图标列表与映射。
+  const fetchGlobalIcons = useCallback(async () => {
     try {
       const res = await axios.get(API.ICONS.LIST);
       const list = res.data?.icons || [];
       const map = res.data?.mappings || {};
       setIcons(list);
-      setMappings(map);
-      const urls = [...new Set(Object.values(map))];
-      const next = {};
-      await Promise.all(urls.map(async (url) => {
+      setBaseMappings(map);
+      return { list, map };
+    } catch {
+      return { list: [], map: {} };
+    }
+  }, []);
+
+  // 拉取主题图标覆盖（登录：用户选择主题；未登录：站点默认主题）。
+  const fetchThemeIcons = useCallback(async (authed) => {
+    try {
+      const res = authed
+        ? await axios.get(API.THEMES.MY_SELECTION)
+        : await axios.get(API.THEMES.ACTIVE);
+      const theme = res.data?.theme;
+      const applyIcons = authed ? res.data?.applyIcons !== false : true;
+      if (theme?.icons && applyIcons && Object.keys(theme.icons).length > 0) {
+        setThemeIcons(theme.icons);
+        preloadSvgs(Object.values(theme.icons));
+      } else {
+        setThemeIcons(null);
+      }
+    } catch {
+      setThemeIcons(null);
+    }
+  }, [preloadSvgs]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { map } = await fetchGlobalIcons();
+      if (cancelled) return;
+      preloadSvgs([...new Set(Object.values(map))]);
+    })();
+    return () => { cancelled = true; };
+  }, [fetchGlobalIcons, preloadSvgs]);
+
+  // 登录态变化或主题选择变化时重新拉取主题图标覆盖。
+  useEffect(() => {
+    fetchThemeIcons(!!user);
+    const onThemeChanged = () => fetchThemeIcons(!!user);
+    window.addEventListener(THEME_SELECTION_CHANGED_EVENT, onThemeChanged);
+    return () => window.removeEventListener(THEME_SELECTION_CHANGED_EVENT, onThemeChanged);
+  }, [user, fetchThemeIcons]);
+
+  // 合成最终映射：全局映射 + 主题图标覆盖。
+  const mappings = useMemo(
+    () => (themeIcons ? { ...baseMappings, ...themeIcons } : baseMappings),
+    [baseMappings, themeIcons],
+  );
+
+  // 供管理页手动刷新图标表（上传/删除后调用）。
+  const refreshIcons = async () => {
+    const { list, map } = await fetchGlobalIcons();
+    const next = {};
+    await Promise.all([...new Set(Object.values(map))].map(async (url) => {
+      try {
+        const r2 = await axios.get(url, { responseType: 'text' });
+        const clean = sanitizeSvg(r2.data);
+        if (clean) next[url] = clean;
+      } catch { /* 忽略 */ }
+    }));
+    // 主题覆盖的图标也一并刷新缓存。
+    if (themeIcons) {
+      await Promise.all([...new Set(Object.values(themeIcons))].map(async (url) => {
         try {
           const r2 = await axios.get(url, { responseType: 'text' });
           const clean = sanitizeSvg(r2.data);
           if (clean) next[url] = clean;
         } catch { /* 忽略 */ }
       }));
-      setSvgMap(next);
-    } catch { /* 忽略 */ }
+    }
+    setIcons(list);
+    setBaseMappings(map);
+    setSvgMap(next);
   };
 
   // 加载单个未映射图标的内容（预览用）。
@@ -123,7 +192,7 @@ export const IconProvider = ({ children }) => {
     try {
       const r = await axios.get(url, { responseType: 'text' });
       const clean = sanitizeSvg(r.data);
-      if (clean) setSvgMap((prev) => ({ ...prev, [url]: clean }));
+      if (clean) setSvgMap((prev) => (prev[url] ? prev : { ...prev, [url]: clean }));
       return clean;
     } catch {
       return null;
@@ -131,8 +200,8 @@ export const IconProvider = ({ children }) => {
   };
 
   const value = useMemo(() => ({
-    icons, mappings, svgMap, refreshIcons, loadSvgContent,
-  }), [icons, mappings, svgMap]);
+    icons, mappings, svgMap, refreshIcons, loadSvgContent, themeIcons,
+  }), [icons, mappings, svgMap, refreshIcons, loadSvgContent, themeIcons]);
 
   return (
     <IconContext.Provider value={value}>
@@ -179,6 +248,46 @@ export const Icon = ({ name, size = 18, fallback = null, style }) => {
     );
   }
   return null;
+};
+
+/**
+ * SvgIconPreview 任意 SVG 地址的预览组件（主题卡片/编辑器展示主题图标用）：
+ * 按需加载并 inline 渲染（currentColor 适配主题），加载中/失败显示占位。
+ */
+export const SvgIconPreview = ({ url, size = 20, style }) => {
+  const { svgMap, loadSvgContent } = useIcons();
+  const svg = svgMap[url];
+
+  useEffect(() => {
+    if (url && !svgMap[url]) {
+      loadSvgContent(url);
+    }
+  }, [url, svgMap, loadSvgContent]);
+
+  if (svg) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: size, height: size, flexShrink: 0, color: 'inherit', ...style,
+        }}
+        dangerouslySetInnerHTML={{
+          __html: svg.replace('<svg', `<svg width="${size}" height="${size}" style="display:block"`),
+        }}
+      />
+    );
+  }
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: size, height: size, flexShrink: 0, color: 'var(--text-tertiary)',
+        fontSize: size * 0.7, ...style,
+      }}
+    >◈</span>
+  );
 };
 
 export default IconContext;

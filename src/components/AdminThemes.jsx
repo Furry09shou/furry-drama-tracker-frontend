@@ -3,17 +3,21 @@ import { useOutletContext } from 'react-router-dom';
 import adminApi from '../utils/adminApi';
 import API from '../utils/apiEndpoints';
 import Modal from './Modal';
-import ThemeEditorModal from './ThemeEditorModal';
+import ThemeEditorModal, { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
+import { SvgIconPreview } from '../contexts/IconContext';
 import SystemWallpaperManager from './SystemWallpaperManager';
 import { useI18n } from '../contexts/I18nContext';
 
 /**
  * AdminThemes 主题管理页（/admin/themes）。
  *
+ * 主题 = 壁纸 + UI 图标组合包（仅壁纸 / 仅图标 / 全套）。
+ *
  * 功能：
  *   - 主题列表（全部 / 系统 / 个人 / 待审核 筛选），含审核、设默认、
  *     系统⇄个人切换、启用停用、删除；
- *   - 可视化创建/编辑主题（实时预览、导入导出 JSON）；
+ *   - 卡片展示类型徽章、壁纸缩略图与图标预览；
+ *   - 可视化创建/编辑主题（壁纸 + 图标组合，导入导出 JSON）；
  *   - 融入原系统壁纸管理（第二个标签页）。
  */
 const AdminThemes = () => {
@@ -229,6 +233,9 @@ const AdminThemes = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
               {filtered.map((th) => {
                 const badge = statusBadge(th);
+                const type = computeThemeType(th);
+                const typeBadge = themeTypeBadge(type, t);
+                const iconEntries = Object.entries(th.icons || {});
                 return (
                   <div key={th._id} style={{
                     background: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)',
@@ -240,8 +247,11 @@ const AdminThemes = () => {
                         <div style={{ fontWeight: 700, fontSize: '15px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {th.name}
                         </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                          {th.mode === 'light' ? '☀️' : '🌙'} {th.description || t('adminThemes.noDesc')}
+                        <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
+                          <span style={{
+                            fontSize: '10px', padding: '1px 7px', borderRadius: '999px', fontWeight: 600,
+                            background: typeBadge.bg, color: typeBadge.fg, whiteSpace: 'nowrap',
+                          }}>{typeBadge.icon} {typeBadge.text}</span>
                         </div>
                       </div>
                       <span style={{
@@ -250,20 +260,38 @@ const AdminThemes = () => {
                       }}>{badge.text}</span>
                     </div>
 
-                    {/* 主题色预览条 */}
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                      {['--primary', '--secondary', '--accent', '--background', '--foreground']
-                        .map((k) => th.variables?.[k])
-                        .filter(Boolean)
-                        .map((c, i) => (
-                          <span key={i} style={{
-                            width: '24px', height: '24px', borderRadius: '6px',
-                            background: c, border: '1px solid var(--border)',
-                          }} title={c} />
+                    {/* 壁纸缩略预览 */}
+                    {(th.wallpaperThumb || th.wallpaperUrl) && (
+                      <div style={{
+                        aspectRatio: '21 / 9', borderRadius: '8px', border: '1px solid var(--border)',
+                        backgroundImage: `url(${th.wallpaperThumb || th.wallpaperUrl})`,
+                        backgroundSize: 'cover', backgroundPosition: 'center',
+                      }} />
+                    )}
+
+                    {/* 图标预览（最多 8 个） */}
+                    {iconEntries.length > 0 ? (
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {iconEntries.slice(0, 8).map(([key, url]) => (
+                          <span key={key} title={key} style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                            width: '28px', height: '28px', borderRadius: '6px',
+                            background: 'var(--hover-bg)', border: '1px solid var(--border)',
+                            color: 'var(--foreground)',
+                          }}>
+                            <SvgIconPreview url={url} size={17} />
+                          </span>
                         ))}
-                      {Object.keys(th.variables || {}).length === 0 && (
-                        <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{t('adminThemes.noVars')}</span>
-                      )}
+                        {iconEntries.length > 8 && (
+                          <span style={{ fontSize: '10px', color: 'var(--text-tertiary)' }}>+{iconEntries.length - 8}</span>
+                        )}
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{t('adminThemes.noContent')}</div>
+                    )}
+
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                      {th.description || t('adminThemes.noDesc')}
                     </div>
 
                     <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: 'auto' }}>
@@ -314,8 +342,9 @@ const AdminThemes = () => {
         initial={editingTheme ? {
           name: editingTheme.name,
           description: editingTheme.description,
-          mode: editingTheme.mode,
-          variables: editingTheme.variables || {},
+          wallpaperUrl: editingTheme.wallpaperUrl || '',
+          wallpaperThumb: editingTheme.wallpaperThumb || '',
+          icons: editingTheme.icons || {},
         } : null}
         onSave={handleSave}
         saving={saving}

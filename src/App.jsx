@@ -20,7 +20,6 @@ import InstallPrompt from './components/InstallPrompt';
 import BrowserCompat from './components/BrowserCompat';
 import AnnouncementBanner from './components/AnnouncementBanner';
 import AnnouncementPopup from './components/AnnouncementPopup';
-import ServerThemeBridge from './components/ServerThemeBridge';
 import { IconProvider } from './contexts/IconContext';
 
 const Profile = lazy(() => import('./components/Profile'));
@@ -595,9 +594,7 @@ function App() {
         <I18nProvider>
           <SiteSettingsProvider>
             <AuthProvider>
-              {/* 主题同步桥：登录态变化时拉取服务端生效主题（多端一致、防闪烁） */}
-              <ServerThemeBridge />
-              {/* 图标引擎：拉取图标映射表，全站 Icon 组件消费 */}
+              {/* 图标引擎：拉取全局图标映射表 + 主题图标覆盖（壁纸+图标主题包），全站 Icon 组件消费 */}
               <IconProvider>
               <ErrorBoundary>
                 <BrowserCompat>
