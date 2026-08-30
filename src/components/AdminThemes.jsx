@@ -4,7 +4,6 @@ import adminApi from '../utils/adminApi';
 import API from '../utils/apiEndpoints';
 import ThemeEditorModal, { computeThemeType, themeTypeBadge } from './ThemeEditorModal';
 import { SvgIconPreview } from '../contexts/IconContext';
-import SystemWallpaperManager from './SystemWallpaperManager';
 import { useI18n } from '../contexts/I18nContext';
 
 /**
@@ -13,16 +12,15 @@ import { useI18n } from '../contexts/I18nContext';
  * 主题 = 壁纸 + UI 图标组合包（仅壁纸 / 仅图标 / 全套）。
  *
  * 功能：
- *   - 主题列表（全部 / 系统 / 个人 / 待审核 筛选），含审核、设默认、
+ *   - 主题列表（全部 / 系统 / 个人 / 待审核 筛选），含设默认（开关）、
  *     系统⇄个人切换、启用停用、删除；
  *   - 卡片展示类型徽章、壁纸缩略图与图标预览；
- *   - 可视化创建/编辑主题（壁纸 + 图标组合，导入导出 JSON）；
- *   - 融入原系统壁纸管理（第二个标签页）。
+ *   - 可视化创建/编辑主题（壁纸 + 图标组合，导入导出 JSON）。
+ * 壁纸与图标素材均融入主题编辑器（素材库选择/上传），不再单独管理。
  */
 const AdminThemes = () => {
   const { admin } = useOutletContext();
   const { t } = useI18n();
-  const [tab, setTab] = useState('themes'); // themes | wallpapers
   const [themes, setThemes] = useState([]);
   const [filter, setFilter] = useState('all'); // all | system | personal | pending
   const [loading, setLoading] = useState(true);
@@ -98,7 +96,7 @@ const AdminThemes = () => {
   // 关闭 = 取消默认（站点可以没有任何默认主题）。
   const handleSetDefault = async (theme, wantDefault) => {
     try {
-      await adminApi.post(API.THEMES.SET_DEFAULT(theme._id), { default: !!wantDefault });
+      await adminApi.put(API.THEMES.ADMIN_UPDATE(theme._id), { isDefault: !!wantDefault });
       notify(wantDefault ? t('adminThemes.defaultSuccess') : t('adminThemes.defaultCleared'));
       fetchThemes();
     } catch (err) {
@@ -156,16 +154,6 @@ const AdminThemes = () => {
     <div className="admin-panel">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <h2 style={{ margin: 0 }}>{t('adminThemes.title')}</h2>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            className={tab === 'themes' ? 'btn' : 'btn btn-secondary'}
-            onClick={() => setTab('themes')}
-          >🎨 {t('adminThemes.tabThemes')}</button>
-          <button
-            className={tab === 'wallpapers' ? 'btn' : 'btn btn-secondary'}
-            onClick={() => setTab('wallpapers')}
-          >🖼️ {t('adminThemes.tabWallpapers')}</button>
-        </div>
       </div>
 
       {error && <div className="error-message" style={{ marginBottom: '15px' }}>{error}</div>}
@@ -176,10 +164,7 @@ const AdminThemes = () => {
         }}>{success}</div>
       )}
 
-      {tab === 'wallpapers' ? (
-        <SystemWallpaperManager />
-      ) : (
-        <>
+      <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {filterTabs.map((f) => (
@@ -321,8 +306,7 @@ const AdminThemes = () => {
               })}
             </div>
           )}
-        </>
-      )}
+      </div>
 
       {/* 主题编辑器 */}
       <ThemeEditorModal

@@ -67,7 +67,6 @@ const ThemeColorPicker = lazy(() => import('./components/ThemeColorPicker'));
 const AdminAnalytics = lazy(() => import('./components/AdminAnalytics'));
 const AdminThemes = lazy(() => import('./components/AdminThemes'));
 const AdminThemeReview = lazy(() => import('./components/AdminThemeReview'));
-const AdminIcons = lazy(() => import('./components/AdminIcons'));
 const Timeline = lazy(() => import('./components/Timeline'));
 
 const getRoutePageTitleKey = (pathname) => {
@@ -95,7 +94,6 @@ const getRoutePageTitleKey = (pathname) => {
   if (pathname.startsWith('/admin/sessions')) return 'pageTitle.adminSessions';
   if (pathname.startsWith('/admin/analytics')) return 'pageTitle.adminAnalytics';
   if (pathname.startsWith('/admin/themes')) return 'pageTitle.adminThemes';
-  if (pathname.startsWith('/admin/icons')) return 'pageTitle.adminIcons';
 
   // 公共路由
   if (pathname === '/') return 'pageTitle.home';
@@ -517,7 +515,6 @@ function AppContent() {
               <Route path="analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
               <Route path="themes" element={<AdminGuard><AdminThemes /></AdminGuard>} />
               <Route path="theme-review" element={<AdminGuard><AdminThemeReview /></AdminGuard>} />
-              <Route path="icons" element={<AdminGuard><AdminIcons /></AdminGuard>} />
             </Route>
           </Routes>
         </Suspense>
