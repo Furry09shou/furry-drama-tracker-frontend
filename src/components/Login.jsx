@@ -43,6 +43,8 @@ const Login = ({ login }) => {
   const [twoFALoading, setTwoFALoading] = useState(false);
   const [twoFactorChallenge, setTwoFactorChallenge] = useState('');
   const [altchaPayload, setAltchaPayload] = useState(null);
+  // 登录检测到邮箱未注册时引导去注册（后端 accountNotFound 标志）。
+  const [suggestRegister, setSuggestRegister] = useState(false);
   const cleanupRef = useRef(null);
 
   const altchaRef = useCallback((el) => {
@@ -78,6 +80,18 @@ const Login = ({ login }) => {
       .finally(() => setDeviceVerifyLoading(false));
   }, [searchParams, t]);
 
+  // 从注册页切换过来时预填邮箱（/login?email=xxx）。
+  useEffect(() => {
+    const email = searchParams.get('email');
+    if (email) setFormData(prev => (prev.email ? prev : { ...prev, email }));
+  }, [searchParams]);
+
+  // 带/不带当前邮箱跳转注册页（预填邮箱，减少重复输入）。
+  const goRegister = () => {
+    const email = formData.email.trim();
+    navigate(email ? `/register?email=${encodeURIComponent(email)}` : '/register');
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -105,6 +119,7 @@ const Login = ({ login }) => {
     setNeedVerification(false);
     setNeedDeviceVerify(false);
     setNeed2FA(false);
+    setSuggestRegister(false);
     setEmailVerifyCode('');
     setEmailVerifyCodeError('');
     setSubmitting(true);
@@ -136,6 +151,8 @@ const Login = ({ login }) => {
         setError('');
       } else {
         setError(data?.message || t('auth.loginFailed'));
+        // 邮箱不存在：后端附带 accountNotFound 标志，展示"去注册"引导。
+        setSuggestRegister(!!data?.accountNotFound);
       }
     }
     setSubmitting(false);
@@ -541,6 +558,25 @@ const Login = ({ login }) => {
     <div className="auth-form">
       <h2>{t('auth.loginTitle')}</h2>
       {error && <div className="error-message">{error}</div>}
+      {suggestRegister && (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',
+          padding: '10px 14px', marginBottom: '14px', borderRadius: '8px',
+          background: 'var(--primary-bg)', border: '1px solid var(--primary-border)',
+        }}>
+          <span style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            {t('auth.accountNotFoundHint')}
+          </span>
+          <button
+            type="button"
+            onClick={goRegister}
+            style={{
+              flexShrink: 0, padding: '6px 16px', borderRadius: '7px', fontSize: '13px', fontWeight: 600,
+              background: 'var(--btn-gradient)', color: 'var(--btn-text)', border: 'none', cursor: 'pointer',
+            }}
+          >{t('auth.goToRegister')}</button>
+        </div>
+      )}
       {successMsg && <div className="success-message" style={{padding: '10px', background: 'var(--success-bg-strong)', border: '1px solid var(--success-border)', borderRadius: '6px', color: 'var(--success-text)'}}>{successMsg}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -573,8 +609,10 @@ const Login = ({ login }) => {
           <button type="submit" disabled={submitting}>{submitting ? t('common.loading') : t('auth.loginButton')}</button>
         </div>
       </form>
-      <div style={{textAlign: 'center', marginTop: '10px', position: 'relative', zIndex: 1}}>
+      <div style={{textAlign: 'center', marginTop: '10px', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap'}}>
         <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowForgot(true); setError(''); setSuccessMsg(''); }} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none'}}>{t('auth.forgotPassword')}</span>
+        <span style={{color: 'var(--text-tertiary)', fontSize: '14px'}}>{t('auth.noAccount')}</span>
+        <span onClick={goRegister} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none', fontWeight: 600}}>{t('auth.goToRegister')}</span>
       </div>
     </div>
   );

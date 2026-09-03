@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { getDeviceInfo } from '../utils/deviceInfo';
 import { useI18n } from '../contexts/I18nContext';
 import PasswordToggle from './PasswordToggle';
@@ -16,6 +16,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState('');
+  // 注册检测到邮箱已被占用时引导去登录（后端 emailTaken 标志）。
+  const [suggestLogin, setSuggestLogin] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
   // 邮箱验证码输入相关
@@ -31,6 +33,7 @@ const Register = () => {
   const [altchaPayload, setAltchaPayload] = useState(null);
   const altchaRef = useRef(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const el = altchaRef.current;
@@ -41,6 +44,18 @@ const Register = () => {
     el.addEventListener('statechange', handler);
     return () => el.removeEventListener('statechange', handler);
   }, []);
+
+  // 从登录页切换过来时预填邮箱（/register?email=xxx）。
+  useEffect(() => {
+    const email = searchParams.get('email');
+    if (email) setFormData(prev => (prev.email ? prev : { ...prev, email }));
+  }, [searchParams]);
+
+  // 带/不带当前邮箱跳转登录页（预填邮箱，减少重复输入）。
+  const goLogin = () => {
+    const email = formData.email.trim();
+    navigate(email ? `/login?email=${encodeURIComponent(email)}` : '/login');
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -78,6 +93,7 @@ const Register = () => {
     e.preventDefault();
     if (submitting) return;
     if (!altchaPayload) return;
+    setSuggestLogin(false);
     if (formData.password.length < 8) {
       setError(t('auth.passwordHint'));
       return;
@@ -101,6 +117,8 @@ const Register = () => {
       setRegistered(true);
     } catch (error) {
       setError(error.response?.data?.message || t('auth.registerFailed'));
+      // 邮箱已被注册：后端附带 emailTaken 标志，展示"去登录"引导。
+      setSuggestLogin(!!error.response?.data?.emailTaken);
     }
     setSubmitting(false);
   };
@@ -207,6 +225,25 @@ const Register = () => {
         {t('auth.registerEmailHint')}
       </div>
       {error && <div className="error-message">{error}</div>}
+      {suggestLogin && (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',
+          padding: '10px 14px', marginBottom: '14px', borderRadius: '8px',
+          background: 'var(--primary-bg)', border: '1px solid var(--primary-border)',
+        }}>
+          <span style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            {t('auth.emailTakenHint')}
+          </span>
+          <button
+            type="button"
+            onClick={goLogin}
+            style={{
+              flexShrink: 0, padding: '6px 16px', borderRadius: '7px', fontSize: '13px', fontWeight: 600,
+              background: 'var(--btn-gradient)', color: 'var(--btn-text)', border: 'none', cursor: 'pointer',
+            }}
+          >{t('auth.goToLogin')}</button>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="accountId">{t('auth.accountId')}</label>
@@ -302,6 +339,10 @@ const Register = () => {
           <button type="submit" disabled={submitting || !agreedToTerms} style={{ opacity: agreedToTerms ? 1 : 0.5, cursor: agreedToTerms ? 'pointer' : 'not-allowed' }}>{t('auth.registerButton')}</button>
         </div>
       </form>
+      <div style={{textAlign: 'center', marginTop: '10px', position: 'relative', zIndex: 1}}>
+        <span style={{color: 'var(--text-tertiary)', fontSize: '14px'}}>{t('auth.hasAccount')}</span>
+        <span onClick={goLogin} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none', fontWeight: 600}}>{t('auth.goToLogin')}</span>
+      </div>
     </div>
   );
 };
