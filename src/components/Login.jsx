@@ -609,10 +609,12 @@ const Login = ({ login }) => {
           <button type="submit" disabled={submitting}>{submitting ? t('common.loading') : t('auth.loginButton')}</button>
         </div>
       </form>
-      <div style={{textAlign: 'center', marginTop: '10px', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap'}}>
+      <div style={{textAlign: 'center', marginTop: '10px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px'}}>
         <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowForgot(true); setError(''); setSuccessMsg(''); }} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none'}}>{t('auth.forgotPassword')}</span>
-        <span style={{color: 'var(--text-tertiary)', fontSize: '14px'}}>{t('auth.noAccount')}</span>
-        <span onClick={goRegister} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none', fontWeight: 600}}>{t('auth.goToRegister')}</span>
+        <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+          <span style={{color: 'var(--text-tertiary)', fontSize: '14px'}}>{t('auth.noAccount')}</span>
+          <span onClick={goRegister} style={{color: 'var(--primary)', cursor: 'pointer', fontSize: '14px', padding: '4px 8px', display: 'inline-block', userSelect: 'none', fontWeight: 600}}>{t('auth.goToRegister')}</span>
+        </div>
       </div>
     </div>
   );
