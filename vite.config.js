@@ -1,8 +1,26 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+function getGitShortSha() {
+  try {
+    const gitDir = resolve(process.cwd(), '.git')
+    const head = readFileSync(resolve(gitDir, 'HEAD'), 'utf8').trim()
+    const hash = head.startsWith('ref: ')
+      ? readFileSync(resolve(gitDir, head.slice('ref: '.length)), 'utf8').trim()
+      : head
+    return hash.slice(0, 8)
+  } catch {
+    return ''
+  }
+}
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(getGitShortSha() || 'dev'),
+  },
   plugins: [
     react(),
     VitePWA({

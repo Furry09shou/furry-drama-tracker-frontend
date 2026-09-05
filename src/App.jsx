@@ -347,8 +347,8 @@ const FooterBeian = () => {
           </div>
         </div>
       </Modal>
-      {aboutData.version && (
-        <span style={{ color: 'var(--text-tertiary)' }}>v{aboutData.version}</span>
+      {__APP_VERSION__ && (
+        <span style={{ color: 'var(--text-tertiary)' }}>{__APP_VERSION__}</span>
       )}
     </div>
   );
