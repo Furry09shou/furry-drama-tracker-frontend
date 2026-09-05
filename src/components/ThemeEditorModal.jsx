@@ -87,9 +87,13 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
       const initialAccent = initial?.accentColor || '';
       setUseAccent(!!initialAccent);
       setAccentColor(initialAccent || '#6366f1');
-      // 内容构成由初始内容推导（有壁纸则含壁纸，有图标则含图标）。
-      setIncludeWallpaper(!!(initial?.wallpaperUrl));
-      setIncludeIcons(!!(initial?.icons && Object.keys(initial.icons).length > 0));
+      // 内容构成由初始内容推导（有壁纸则含壁纸，有图标则含图标）；
+      // 新建（无内容）时默认两者都开，用户可自由关掉其一做仅壁纸/仅图标主题
+      // ——若默认全关，先打开的那个会被"至少一项"约束锁死关不上。
+      const hasWp = !!(initial?.wallpaperUrl);
+      const hasIc = !!(initial?.icons && Object.keys(initial.icons).length > 0);
+      setIncludeWallpaper(hasWp || hasIc ? hasWp : true);
+      setIncludeIcons(hasWp || hasIc ? hasIc : true);
       setError('');
     }
   }, [isOpen, initial]);
@@ -134,9 +138,18 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     try {
       const fd = new FormData();
       fd.append('image', file);
-      const res = await axios.post(API.THEMES.UPLOAD_WALLPAPER, fd);
-      if (URL_RE.test(res.data?.url || '')) pickWallpaper(res.data.url, '');
-      else setError(t('themeEditor.uploadFailed'));
+      // 走个人壁纸接口：上传即保存到「我的壁纸」（≤20 张），后续做主题可复用。
+      const res = await axios.post(API.WALLPAPERS.PERSONAL, fd);
+      if (URL_RE.test(res.data?.url || '')) {
+        pickWallpaper(res.data.url, '');
+        // 同步进个人壁纸列表（网格立即可见，无需重开弹窗）。
+        setPersonalWallpapers((prev) => [
+          { _id: `local-${res.data.url}`, url: res.data.url, name: res.data.name || '', addedAt: res.data.addedAt },
+          ...prev,
+        ]);
+      } else {
+        setError(t('themeEditor.uploadFailed'));
+      }
     } catch (err) {
       setError(err.response?.data?.message || t('themeEditor.uploadFailed'));
     } finally {
@@ -446,7 +459,6 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
                   <span style={{ fontSize: '12px', color: 'var(--foreground)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {label}
                   </span>
-                  <span style={{ fontSize: '10px', fontFamily: 'monospace', color: 'var(--text-tertiary)', flexShrink: 0 }}>{key}</span>
                   <button
                     type="button" className="btn btn-secondary"
                     style={{ fontSize: '11px', padding: '3px 10px', flexShrink: 0 }}

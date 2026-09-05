@@ -466,7 +466,7 @@ const ThemeColorPicker = () => {
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.4 }}>{themeMsg}</div>
               )}
               <button
-                onClick={() => (user ? navigate('/settings') : setThemeMsg(t('colorPicker.needLogin')))}
+                onClick={() => (user ? navigate('/settings?createTheme=1') : setThemeMsg(t('colorPicker.needLogin')))}
                 className="btn"
                 style={{ fontSize: '11px', padding: '6px 10px', marginTop: '2px' }}
               >+ {t('colorPicker.createTheme')}</button>

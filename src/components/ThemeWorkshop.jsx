@@ -77,6 +77,19 @@ const ThemeWorkshop = () => {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
+  // 外观面板「+ 制作我的主题」直达：/settings?createTheme=1 进页自动打开新建编辑器
+  // （一次性消费参数，避免刷新重复弹出）。
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get('createTheme') === '1') {
+      sp.delete('createTheme');
+      const qs = sp.toString();
+      window.history.replaceState({}, '', `/settings${qs ? `?${qs}` : ''}`);
+      setEditingTheme(null);
+      setEditorOpen(true);
+    }
+  }, []);
+
   // ---- 应用 / 取消主题（背景/图标两槽，可跨主题组合） ----
   const doApply = async (theme, part) => {
     const body = {};
