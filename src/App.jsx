@@ -193,7 +193,8 @@ const FooterBeian = () => {
   const copyright = getLocalizedContent(aboutData, 'copyright') || aboutData.copyright || '';
   const aiDisclaimer = getLocalizedContent(aboutData, 'aiDisclaimer') || aboutData.aiDisclaimer || '';
 
-  if (!aboutData.icp && !aboutData.policeRecord && !copyright && !aiDisclaimer) return null;
+  // version 也算有效内容：即便备案/版权全空，右下角版本号仍需显示。
+  if (!aboutData.icp && !aboutData.policeRecord && !copyright && !aiDisclaimer && !aboutData.version) return null;
 
   return (
     <div style={{
@@ -347,8 +348,12 @@ const FooterBeian = () => {
           </div>
         </div>
       </Modal>
-      {__APP_VERSION__ && (
-        <span style={{ color: 'var(--text-tertiary)' }}>{__APP_VERSION__}</span>
+      {(aboutData.version || __APP_VERSION__) && (
+        <span style={{ color: 'var(--text-tertiary)' }}>
+          {aboutData.version ? `v${aboutData.version}` : ''}
+          {aboutData.version && __APP_VERSION__ ? ' · ' : ''}
+          {__APP_VERSION__ || ''}
+        </span>
       )}
     </div>
   );
