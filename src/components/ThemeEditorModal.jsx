@@ -133,6 +133,18 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
     setWallpaperThumb(thumb || url);
   };
 
+  // 删除个人壁纸：后端同时移除记录并删除服务器文件（仅 /uploads/ 下的自有上传）。
+  const handleDeleteWallpaper = async (wp) => {
+    if (!window.confirm(t('themeEditor.wallpaperDeleteConfirm'))) return;
+    try {
+      await axios.delete(API.WALLPAPERS.PERSONAL, { data: { url: wp.url } });
+      setPersonalWallpapers((prev) => prev.filter((p) => (p._id || p.url) !== (wp._id || wp.url)));
+      if (wallpaperUrl === wp.url) { setWallpaperUrl(''); setWallpaperThumb(''); }
+    } catch (err) {
+      setError(err.response?.data?.message || t('themeEditor.deleteFailed'));
+    }
+  };
+
   const handleUploadWallpaper = async (e) => {
     const file = e.target.files?.[0];
     e.target.value = '';
@@ -255,6 +267,66 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
         const url = kind === 'system' ? wp.url : wp.url;
         const thumb = kind === 'system' ? (wp.thumbnailUrl || wp.url) : wp.url;
         const selected = wallpaperUrl === url;
+        const Inner = (
+          <>
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: `url(${url})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            }} />
+            {selected && (
+              <div style={{
+                position: 'absolute', top: '3px', right: '3px', width: '14px', height: '14px',
+                borderRadius: '50%', background: 'var(--primary)', color: '#fff', fontSize: '9px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>✓</div>
+            )}
+            {selected && kind === 'personal' && (
+              <span
+                role="button"
+                tabIndex={-1}
+                title={t('themeEditor.wallpaperDeselect')}
+                onClick={(e) => { e.stopPropagation(); setWallpaperUrl(''); setWallpaperThumb(''); }}
+                style={{
+                  position: 'absolute', top: '3px', right: '3px',
+                  width: '14px', height: '14px', borderRadius: '50%',
+                  background: 'rgba(0,0,0,0.55)', color: '#fff', fontSize: '9px', lineHeight: '14px',
+                  textAlign: 'center', cursor: 'pointer', userSelect: 'none',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.55)'; }}
+              >✕</span>
+            )}
+          </>
+        );
+        if (kind === 'personal') {
+          return (
+            <div key={`${kind}-${wp._id || url}`} style={{ display: 'flex', flexDirection: 'column', gap: '3px', minWidth: 0 }}>
+              <div
+                onClick={() => pickWallpaper(url, thumb)}
+                title={wp.name || url}
+                style={{
+                  position: 'relative', aspectRatio: '16 / 9', borderRadius: '6px', overflow: 'hidden',
+                  cursor: 'pointer', width: '100%', display: 'block',
+                  outline: selected ? '2px solid var(--primary)' : '2px solid transparent',
+                  outlineOffset: '-2px', transition: 'transform 0.15s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+              >{Inner}</div>
+              {selected && (
+                <button
+                  type="button" className="btn btn-secondary"
+                  style={{
+                    fontSize: '10px', padding: '2px 4px', width: '100%',
+                    color: 'var(--destructive-text)', borderColor: 'var(--destructive-border)', background: 'var(--destructive-bg)',
+                  }}
+                  onClick={(e) => { e.stopPropagation(); handleDeleteWallpaper(wp); }}
+                >🗑 {t('themeEditor.wallpaperDelete')}</button>
+              )}
+            </div>
+          );
+        }
         return (
           <button
             key={`${kind}-${wp._id || url}`}
@@ -269,19 +341,7 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
-          >
-            <div style={{
-              position: 'absolute', inset: 0,
-              backgroundImage: `url(${url})`, backgroundSize: 'cover', backgroundPosition: 'center',
-            }} />
-            {selected && (
-              <div style={{
-                position: 'absolute', top: '3px', right: '3px', width: '14px', height: '14px',
-                borderRadius: '50%', background: 'var(--primary)', color: '#fff', fontSize: '9px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>✓</div>
-            )}
-          </button>
+          >{Inner}</button>
         );
       })}
     </div>
@@ -475,9 +535,8 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             )}
           </div>
           <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {ICON_COMPONENT_KEYS.map(({ key, label, desc }) => {
+            {ICON_COMPONENT_KEYS.filter(({ key }) => !THEME_PROTECTED_ICON_KEYS.includes(key)).map(({ key, label, desc }) => {
               const url = icons[key];
-              const isProtected = THEME_PROTECTED_ICON_KEYS.includes(key);
               return (
                 <div key={key} style={{
                   display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px',
@@ -492,12 +551,6 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
                     onClick={() => setPreviewKey(key)}
                   >
                     {label}
-                    {isProtected && (
-                      <span style={{
-                        marginLeft: '6px', fontSize: '10px', padding: '1px 6px', borderRadius: '8px',
-                        background: 'var(--warning-bg)', color: 'var(--warning-text)', verticalAlign: 'middle',
-                      }}>{t('themeEditor.iconProtected')}</span>
-                    )}
                   </span>
                   <button
                     type="button" className="btn btn-secondary"

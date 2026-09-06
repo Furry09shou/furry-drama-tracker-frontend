@@ -55,7 +55,6 @@ export const ICON_COMPONENT_KEYS = [
   { key: 'tab.following', label: '标签页 · 追番', desc: '「追番」标签页标题旁' },
   { key: 'misc.logo', label: '杂项 · 站点 Logo', desc: '站点身份资产：左上角品牌 Logo，不随主题变化（保护名单）' },
   { key: 'misc.empty', label: '杂项 · 空状态', desc: '页面无内容时（如移动端不支持的播放器提示）居中的大图示' },
-  { key: 'misc.loading', label: '杂项 · 加载中', desc: '内容加载时的占位图示' },
   { key: 'misc.star', label: '杂项 · 评分星', desc: '剧集评分数字前的星星（详情页、评分组件、卡片角标）' },
 ];
 

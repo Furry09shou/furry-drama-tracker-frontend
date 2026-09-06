@@ -269,17 +269,27 @@ const AdminThemes = () => {
                           disabled={!th.enabled && !th.isDefault}
                           onClick={() => handleSetDefault(th, !th.isDefault)}
                           style={{
-                            width: '40px', height: '22px', borderRadius: '11px', border: 'none', cursor: 'pointer',
-                            background: th.isDefault ? 'var(--primary)' : 'var(--hover-bg)',
-                            position: 'relative', transition: 'background 0.2s', padding: 0, flexShrink: 0,
+                            display: 'inline-flex', alignItems: 'center', gap: '6px',
+                            background: 'none', border: 'none', cursor: 'pointer', padding: '5px 2px',
+                            fontSize: '12px', fontWeight: 600,
+                            color: th.isDefault ? 'var(--primary)' : 'var(--text-secondary)',
                             opacity: (!th.enabled && !th.isDefault) ? 0.5 : 1,
+                            flexShrink: 0,
                           }}
                         >
                           <span style={{
-                            position: 'absolute', top: '2px', left: th.isDefault ? '21px' : '2px',
-                            width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
-                            transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                          }} />
+                            width: '40px', height: '22px', borderRadius: '11px', flexShrink: 0, boxSizing: 'border-box',
+                            background: th.isDefault ? 'var(--primary)' : 'var(--hover-bg)',
+                            border: th.isDefault ? 'none' : '1px solid var(--border)',
+                            position: 'relative', transition: 'background 0.2s',
+                          }}>
+                            <span style={{
+                              position: 'absolute', top: th.isDefault ? '2px' : '1px', left: th.isDefault ? '21px' : '2px',
+                              width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                              transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                            }} />
+                          </span>
+                          {t('adminThemes.defaultToggleLabel')}
                         </button>
                       )}
                       {th.isSystem && (
