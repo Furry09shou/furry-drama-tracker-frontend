@@ -255,8 +255,8 @@ const NavBar = ({ onFeedback }) => {
               aria-label={t('nav.notifications') || '通知'}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--foreground)', fontSize: '14px', position: 'relative',
-                padding: '6px 8px', lineHeight: 1
+                color: 'var(--foreground)', fontSize: '14px', fontWeight: 500, position: 'relative',
+                padding: '6px 8px', lineHeight: 1, borderRadius: '6px'
               }}
             >
               {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
@@ -287,7 +287,7 @@ const NavBar = ({ onFeedback }) => {
               <li style={{position: 'relative'}}>
                 <button
                   onClick={() => setShowNotifPanel(!showNotifPanel)}
-                  className="desktop-only-notif"
+                  className="desktop-only-notif nav-link-btn"
                   aria-expanded={showNotifPanel}
                   aria-haspopup="true"
                   aria-label={t('nav.notifications') || '通知'}
@@ -296,12 +296,14 @@ const NavBar = ({ onFeedback }) => {
                     color: 'var(--foreground)', fontSize: '14px', position: 'relative',
                     padding: '8px 16px', lineHeight: 1
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--hover-bg)'; e.currentTarget.style.color = 'var(--primary)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--foreground)'; }}
                 >
                   {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
                   <Icon name="nav.notifications" fallback={t('nav.notifications')} size={14} />
                   {unreadCount > 0 && (
                     <span style={{
-                      position: 'absolute', top: '-2px', right: '0',
+                      position: 'absolute', top: '2px', right: '2px',
                       background: 'var(--badge-bg)', color: 'var(--badge-text)', fontSize: '11px',
                       borderRadius: '10px', padding: '1px 5px', minWidth: '16px',
                       textAlign: 'center', lineHeight: '14px'
