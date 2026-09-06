@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 import Modal from './Modal';
 import API from '../utils/apiEndpoints';
-import { ICON_COMPONENT_KEYS, SvgIconPreview } from '../contexts/IconContext';
+import { ICON_COMPONENT_KEYS, THEME_PROTECTED_ICON_KEYS, SvgIconPreview } from '../contexts/IconContext';
+import IconLocationPreview from './IconLocationPreview';
 import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../contexts/I18nContext';
 
@@ -73,6 +74,8 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
 
   // 图标选择器弹窗（pickingKey 为正在挑选的组件 key）。
   const [pickingKey, setPickingKey] = useState(null);
+  // 位置预览弹窗（previewKey 为正在查看位置示意图的组件 key）。
+  const [previewKey, setPreviewKey] = useState(null);
   const wallpaperInputRef = useRef(null);
   const iconInputRef = useRef(null);
 
@@ -404,9 +407,35 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
           {wallpaperUrl && (
             <div style={{
               position: 'relative', aspectRatio: '21 / 9', borderRadius: '8px', overflow: 'hidden',
-              marginBottom: '10px', border: '1px solid var(--border)',
+              marginBottom: '4px', border: '1px solid var(--border)',
               backgroundImage: `url(${wallpaperUrl})`, backgroundSize: 'cover', backgroundPosition: 'center',
-            }} />
+            }}>
+              {/* 站点线框示意：壁纸将作为全站背景铺在导航与内容之下 */}
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: '24%',
+                background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', gap: '5px', padding: '0 8px',
+              }}>
+                <span style={{ width: 8, height: 8, borderRadius: '2px', background: '#fff', opacity: 0.85, flexShrink: 0 }} />
+                <span style={{ width: 40, height: 5, borderRadius: '3px', background: '#fff', opacity: 0.85 }} />
+                <span style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
+                  {[0, 1, 2].map((i) => <span key={i} style={{ width: 16, height: 5, borderRadius: '3px', background: '#fff', opacity: 0.6 }} />)}
+                </span>
+              </div>
+              <div style={{
+                position: 'absolute', bottom: '8%', left: '5%', right: '5%', display: 'flex', gap: '6px',
+              }}>
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div key={i} style={{
+                    flex: 1, aspectRatio: '3 / 4', borderRadius: '3px',
+                    background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.25)',
+                  }} />
+                ))}
+              </div>
+              <span style={{
+                position: 'absolute', right: '6px', bottom: '6px', fontSize: '9px', padding: '2px 6px',
+                borderRadius: '6px', background: 'rgba(0,0,0,0.55)', color: '#fff',
+              }}>{t('themeEditor.wallpaperLocationHint')}</span>
+            </div>
           )}
           <div style={{ maxHeight: '220px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {systemWallpapers.length > 0 && (
@@ -446,8 +475,9 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             )}
           </div>
           <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {ICON_COMPONENT_KEYS.map(({ key, label }) => {
+            {ICON_COMPONENT_KEYS.map(({ key, label, desc }) => {
               const url = icons[key];
+              const isProtected = THEME_PROTECTED_ICON_KEYS.includes(key);
               return (
                 <div key={key} style={{
                   display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px',
@@ -456,9 +486,25 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
                   transition: 'background 0.2s',
                 }}>
                   <SvgIconPreview url={url} size={22} />
-                  <span style={{ fontSize: '12px', color: 'var(--foreground)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span
+                    style={{ fontSize: '12px', color: 'var(--foreground)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', cursor: 'pointer' }}
+                    title={desc}
+                    onClick={() => setPreviewKey(key)}
+                  >
                     {label}
+                    {isProtected && (
+                      <span style={{
+                        marginLeft: '6px', fontSize: '10px', padding: '1px 6px', borderRadius: '8px',
+                        background: 'var(--warning-bg)', color: 'var(--warning-text)', verticalAlign: 'middle',
+                      }}>{t('themeEditor.iconProtected')}</span>
+                    )}
                   </span>
+                  <button
+                    type="button" className="btn btn-secondary"
+                    style={{ fontSize: '11px', padding: '3px 8px', flexShrink: 0 }}
+                    title={t('themeEditor.iconPreviewTitle')}
+                    onClick={() => setPreviewKey(key)}
+                  >👁 {t('themeEditor.iconPreview')}</button>
                   <button
                     type="button" className="btn btn-secondary"
                     style={{ fontSize: '11px', padding: '3px 10px', flexShrink: 0 }}
@@ -550,6 +596,19 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
           {ICON_COMPONENT_KEYS.find((k) => k.key === pickingKey)?.label}
           <span style={{ fontFamily: 'monospace', marginLeft: '6px', color: 'var(--text-tertiary)' }}>{pickingKey}</span>
         </p>
+        {/* 位置示意图：直观展示该图标在页面上的落点与说明 */}
+        {(() => {
+          const meta = ICON_COMPONENT_KEYS.find((k) => k.key === pickingKey);
+          if (!meta) return null;
+          return (
+            <div style={{ marginBottom: '10px' }}>
+              <IconLocationPreview iconKey={pickingKey} iconUrl={icons[pickingKey]} />
+              <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+                📍 {meta.desc}
+              </p>
+            </div>
+          );
+        })()}
         <input ref={iconInputRef} type="file" accept=".svg" onChange={handleUploadIcon} style={{ display: 'none' }} />
         <div style={{ marginBottom: '10px' }}>
           <button
@@ -590,6 +649,41 @@ const ThemeEditorModal = ({ isOpen, onClose, initial, onSave, saving = false, ti
             </div>
           )}
         </div>
+      </Modal>
+
+      {/* 位置预览弹窗：该图标在页面上的落点示意图 + 说明 */}
+      <Modal isOpen={!!previewKey} onClose={() => setPreviewKey(null)} maxWidth="560px">
+        {(() => {
+          const meta = ICON_COMPONENT_KEYS.find((k) => k.key === previewKey);
+          if (!meta) return null;
+          const url = icons[previewKey];
+          return (
+            <div>
+              <div className="modal-header">
+                <h3>{t('themeEditor.iconPreviewTitle')}</h3>
+                <button className="btn btn-secondary" onClick={() => setPreviewKey(null)}>{t('common.close')}</button>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                <SvgIconPreview url={url} size={24} />
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--foreground)' }}>{meta.label}</span>
+                <span style={{ fontSize: '11px', fontFamily: 'monospace', color: 'var(--text-tertiary)' }}>{meta.key}</span>
+                {THEME_PROTECTED_ICON_KEYS.includes(meta.key) && (
+                  <span style={{
+                    fontSize: '10px', padding: '2px 8px', borderRadius: '8px',
+                    background: 'var(--warning-bg)', color: 'var(--warning-text)',
+                  }}>{t('themeEditor.iconProtected')}</span>
+                )}
+              </div>
+              <IconLocationPreview iconKey={previewKey} iconUrl={url} />
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '10px 0 0 0', lineHeight: 1.6 }}>
+                📍 {meta.desc}
+              </p>
+              <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+                {t('themeEditor.iconPreviewHint')}
+              </p>
+            </div>
+          );
+        })()}
       </Modal>
     </Modal>
   );

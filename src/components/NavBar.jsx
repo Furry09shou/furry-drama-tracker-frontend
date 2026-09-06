@@ -259,8 +259,8 @@ const NavBar = ({ onFeedback }) => {
                 padding: '6px 8px', lineHeight: 1, borderRadius: '6px'
               }}
             >
-              {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
-              <Icon name="nav.notifications" fallback={t('nav.notifications')} size={14} />
+              {/* 主题图标映射存在时显示「图标+文字」，未配置时仅显示文字（不使用 emoji） */}
+              <Icon name="nav.notifications" size={14} /> {t('nav.notifications')}
               {unreadCount > 0 && (
                 <span style={{
                   position: 'absolute', top: '0', right: '-2px',
@@ -299,8 +299,8 @@ const NavBar = ({ onFeedback }) => {
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--hover-bg)'; e.currentTarget.style.color = 'var(--primary)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--foreground)'; }}
                 >
-                  {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
-                  <Icon name="nav.notifications" fallback={t('nav.notifications')} size={14} />
+                  {/* 主题图标映射存在时显示「图标+文字」，未配置时仅显示文字（不使用 emoji） */}
+                  <Icon name="nav.notifications" size={14} /> {t('nav.notifications')}
                   {unreadCount > 0 && (
                     <span style={{
                       position: 'absolute', top: '2px', right: '2px',
