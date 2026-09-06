@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { useI18n } from '../contexts/I18nContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { Icon } from '../contexts/IconContext';
 import useTranslation from '../hooks/useTranslation';
 import useNotifications from '../hooks/useNotifications';
 import usePushNotifications from '../hooks/usePushNotifications';
@@ -254,11 +255,12 @@ const NavBar = ({ onFeedback }) => {
               aria-label={t('nav.notifications') || '通知'}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--foreground)', fontSize: '20px', position: 'relative',
-                padding: '6px', lineHeight: 1
+                color: 'var(--foreground)', fontSize: '14px', position: 'relative',
+                padding: '6px 8px', lineHeight: 1
               }}
             >
-              <span aria-hidden="true">🔔</span>
+              {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
+              <Icon name="nav.notifications" fallback={t('nav.notifications')} size={14} />
               {unreadCount > 0 && (
                 <span style={{
                   position: 'absolute', top: '0', right: '-2px',
@@ -291,11 +293,12 @@ const NavBar = ({ onFeedback }) => {
                   aria-label={t('nav.notifications') || '通知'}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
-                    color: 'var(--foreground)', fontSize: '20px', position: 'relative',
-                    padding: '4px 8px', lineHeight: 1
+                    color: 'var(--foreground)', fontSize: '14px', position: 'relative',
+                    padding: '8px 16px', lineHeight: 1
                   }}
                 >
-                  <span aria-hidden="true">🔔</span>
+                  {/* 主题图标映射存在时显示主题 SVG，否则显示「通知」文字（不使用 emoji） */}
+                  <Icon name="nav.notifications" fallback={t('nav.notifications')} size={14} />
                   {unreadCount > 0 && (
                     <span style={{
                       position: 'absolute', top: '-2px', right: '0',

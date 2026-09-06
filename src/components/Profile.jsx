@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useI18n } from '../contexts/I18nContext';
 import useTranslation from '../hooks/useTranslation';
 import { useAuth } from '../contexts/AuthContext';
+import { Icon } from '../contexts/IconContext';
 import API from '../utils/apiEndpoints';
 import useScrollReveal from '../hooks/useScrollReveal';
 import ShareModal from './ShareModal';
@@ -698,7 +699,7 @@ const Profile = ({ user, setUser, logout }) => {
                     lineHeight: 1
                   }}
                   title={t('share.shareFolder')}
-                >🔗</button>
+                ><Icon name="action.share" fallback="🔗" size={12} /></button>
               </div>
             </div>
             {favoriteFolders.map(folder => (
@@ -783,7 +784,7 @@ const Profile = ({ user, setUser, logout }) => {
                       }}
                       onMouseEnter={(e) => e.target.style.background = 'var(--hover-bg)'}
                       onMouseLeave={(e) => e.target.style.background = 'none'}
-                    >✏️ {t('profile.renameFolder')}</button>
+                    ><Icon name="action.edit" fallback="✏️" size={13} /> {t('profile.renameFolder')}</button>
                     <button
                       onClick={(e) => { e.stopPropagation(); setShareFolder(folder); setShowFolderMenu(null); }}
                       style={{
@@ -793,7 +794,7 @@ const Profile = ({ user, setUser, logout }) => {
                       }}
                       onMouseEnter={(e) => e.target.style.background = 'var(--hover-bg)'}
                       onMouseLeave={(e) => e.target.style.background = 'none'}
-                    >🔗 {t('share.shareFolder')}</button>
+                    ><Icon name="action.share" fallback="🔗" size={13} /> {t('share.shareFolder')}</button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -809,7 +810,7 @@ const Profile = ({ user, setUser, logout }) => {
                       }}
                       onMouseEnter={(e) => e.target.style.background = 'var(--destructive-bg)'}
                       onMouseLeave={(e) => e.target.style.background = 'none'}
-                    >🗑️ {t('profile.deleteFolder')}</button>
+                    ><Icon name="action.delete" fallback="🗑️" size={13} /> {t('profile.deleteFolder')}</button>
                   </div>
                 )}
               </div>
@@ -899,7 +900,7 @@ const Profile = ({ user, setUser, logout }) => {
                       }
                     }}
                     style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}
-                  >🔗 {t('share.shareFolder')}</button>
+                  ><Icon name="action.share" fallback="🔗" size={13} /> {t('share.shareFolder')}</button>
                 </div>
                 {activeFolderId !== 'unclassified' && (() => {
                   const currentFolder = favoriteFolders.find(f => f._id === activeFolderId);
@@ -944,7 +945,7 @@ const Profile = ({ user, setUser, logout }) => {
                           }}>
                             {currentFolder.description || t('profile.folderDescPlaceholder')}
                           </p>
-                          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', flexShrink: 0 }}>✏️</span>
+                          <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', flexShrink: 0 }}><Icon name="action.edit" fallback="✏️" size={12} /></span>
                         </div>
                       )}
                     </div>
@@ -968,7 +969,7 @@ const Profile = ({ user, setUser, logout }) => {
                       <h4>{getLocalizedTitle(episode)}</h4>
                       <p>{t('episode.updatedTo')}{episode.currentEpisodes}{isUnknownTotal ? t('episode.unknownTotal') : `${t('episode.epTotal')}${episode.totalEpisodes}`}{t('episode.epSuffix')}</p>
                       {episode.averageRating > 0 && (
-                        <p style={{fontSize: '13px', color: 'var(--warning-text)'}}>⭐ {episode.averageRating} ({episode.ratingCount}{t('episode.ratingCountLabel')})</p>
+                        <p style={{fontSize: '13px', color: 'var(--warning-text)', display: 'flex', alignItems: 'center', gap: '4px'}}><Icon name="misc.star" fallback="⭐" size={12} /> {episode.averageRating} ({episode.ratingCount}{t('episode.ratingCountLabel')})</p>
                       )}
                       {fav.folderId && fav.folderId.name && (
                         <span style={{
@@ -983,8 +984,8 @@ const Profile = ({ user, setUser, logout }) => {
                           {t('profile.unfavorite')}
                         </button>
                         <button className="btn btn-secondary" onClick={() => setShareEpisode(episode)}
-                          style={{fontSize: '13px'}}>
-                          🔗 {t('share.share')}
+                          style={{fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px'}}>
+                          <Icon name="action.share" fallback="🔗" size={13} /> {t('share.share')}
                         </button>
                         <div style={{position: 'relative'}}>
                           <button
@@ -1009,7 +1010,7 @@ const Profile = ({ user, setUser, logout }) => {
                                   }}
                                   onMouseEnter={(e) => e.target.style.background = 'var(--destructive-bg)'}
                                   onMouseLeave={(e) => e.target.style.background = 'none'}
-                                >↩️ {t('profile.removeFromFolder')}</button>
+                                ><Icon name="action.delete" fallback="↩️" size={13} /> {t('profile.removeFromFolder')}</button>
                               )}
                               {favoriteFolders.filter(fd => !fav.folderId || fd._id !== fav.folderId._id).map(fd => (
                                 <button

@@ -6,6 +6,7 @@ import { EpisodeCardSkeletonFixed as EpisodeCardSkeleton } from './Skeleton';
 import { useI18n } from '../contexts/I18nContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { Icon } from '../contexts/IconContext';
 import useTranslation from '../hooks/useTranslation';
 import useScrollReveal from '../hooks/useScrollReveal';
 import useStaggerReveal from '../hooks/useStaggerReveal';
@@ -278,7 +279,7 @@ const Home = () => {
               alignItems: 'center',
               gap: '8px',
             }}>
-              ▶️ {t('home.continueWatching')}
+              <Icon name="action.play" fallback="▶️" size={18} /> {t('home.continueWatching')}
             </h2>
           </div>
           <div style={{
@@ -402,7 +403,7 @@ const Home = () => {
               alignItems: 'center',
               gap: '8px',
             }}>
-              🎯 {t('home.guessYouLike')}
+              <Icon name="tab.recommended" fallback="🎯" size={18} /> {t('home.guessYouLike')}
             </h2>
           </div>
           {recLoading ? (
@@ -482,7 +483,7 @@ const Home = () => {
                         fontSize: '11px',
                         fontWeight: 600,
                       }}>
-                        ⭐ {rec.averageRating.toFixed(1)}
+                        <Icon name="misc.star" fallback="⭐" size={11} style={{ color: '#f59e0b' }} /> {rec.averageRating.toFixed(1)}
                       </span>
                     )}
                   </div>
@@ -550,8 +551,8 @@ const Home = () => {
         }}
         onClick={() => navigate('/login')}
         >
-          <span style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 500 }}>
-            🎯 {t('home.loginForRecommendations')}
+          <span style={{ color: 'var(--primary)', fontSize: '14px', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Icon name="tab.recommended" fallback="🎯" size={14} /> {t('home.loginForRecommendations')}
           </span>
         </div>
       )}
@@ -574,7 +575,7 @@ const Home = () => {
           padding: '60px 20px',
           color: 'var(--text-secondary)',
         }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+          <div style={{ fontSize: '48px', marginBottom: '16px', lineHeight: 1 }}><Icon name="nav.search" fallback="🔍" size={48} /></div>
           <p style={{ fontSize: '16px', margin: 0 }}>
             {searchQuery ? `${t('home.noResults')}` : t('home.noResults')}
           </p>

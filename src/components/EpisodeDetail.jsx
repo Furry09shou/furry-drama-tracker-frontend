@@ -9,6 +9,7 @@ import { useI18n } from '../contexts/I18nContext';
 import useTranslation from '../hooks/useTranslation';
 import { useAuth } from '../contexts/AuthContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { Icon } from '../contexts/IconContext';
 import API from '../utils/apiEndpoints';
 import useScrollReveal from '../hooks/useScrollReveal';
 
@@ -400,7 +401,7 @@ const EpisodeDetail = ({ user }) => {
             <p><strong>{t('episode.views')}</strong>{episode.views} {t('episode.viewCount')}</p>
             {episode.averageRating > 0 && (
               <p><strong>{t('episode.ratingLabel')}</strong>
-                <span style={{color: 'var(--warning-text)'}}>⭐ {episode.averageRating}</span>
+                <span style={{color: 'var(--warning-text)', display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Icon name="misc.star" fallback="⭐" size={13} /> {episode.averageRating}</span>
                 <span style={{color: 'var(--text-tertiary)', fontSize: '13px', marginLeft: '6px'}}>
                   ({episode.ratingCount}{t('episode.ratingCountLabel')})
                 </span>
@@ -583,10 +584,10 @@ const EpisodeDetail = ({ user }) => {
                     onMouseLeave={() => setHoverRating(0)}
                     style={{
                       background: 'none', border: 'none', cursor: 'pointer',
-                      fontSize: '22px', padding: '0 1px', lineHeight: 1,
+                      padding: '0 1px', lineHeight: 1,
                       filter: star <= (hoverRating || userRating) ? 'none' : 'grayscale(1) opacity(0.4)',
                       transition: 'filter 0.15s'
-                    }}>⭐</button>
+                    }}><Icon name="misc.star" fallback="⭐" size={20} /></button>
                 ))}
                 {userRating > 0 && (
                   <span style={{fontSize: '13px', color: 'var(--warning-text)', marginLeft: '4px'}}>{userRating}{t('episode.scoreUnit')}</span>
@@ -746,7 +747,7 @@ const EpisodeDetail = ({ user }) => {
                   <div style={{fontSize: '14px', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{getLocalizedTitle(rec)}</div>
                   <div style={{fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px'}}>
                     {t('episode.epPrefix')}{rec.currentEpisodes}{rec.totalEpisodes ? `/${rec.totalEpisodes}` : ''}{t('episode.epSuffix')}
-                    {rec.averageRating > 0 && <span style={{color: 'var(--warning-text)', marginLeft: '6px'}}>⭐{rec.averageRating}</span>}
+                    {rec.averageRating > 0 && <span style={{color: 'var(--warning-text)', marginLeft: '6px', display: 'inline-flex', alignItems: 'center', gap: '2px'}}><Icon name="misc.star" fallback="⭐" size={11} />{rec.averageRating}</span>}
                   </div>
                 </div>
               </Link>
@@ -805,7 +806,7 @@ const EpisodeDetail = ({ user }) => {
                       {embedUrl ? (
                         (typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && embedUrl.includes('player.bilibili.com')) ? (
                           <div style={{textAlign: 'center', color: 'var(--text-secondary)', padding: '20px 16px'}}>
-                            <div style={{fontSize: '40px', marginBottom: '12px'}} aria-hidden="true">📱</div>
+                            <div style={{fontSize: '40px', marginBottom: '12px', lineHeight: 1}} aria-hidden="true"><Icon name="misc.empty" fallback="📱" size={40} /></div>
                             <p style={{fontSize: '15px', fontWeight: 600, color: 'var(--foreground)', marginBottom: '6px'}}>{t('episode.mobileEmbedUnsupported')}</p>
                             <p style={{fontSize: '13px', margin: 0}}>{t('episode.mobileEmbedUnsupportedHint')}</p>
                           </div>

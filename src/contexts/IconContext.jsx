@@ -44,6 +44,7 @@ export const ICON_COMPONENT_KEYS = [
   { key: 'action.delete', label: '操作 · 删除' },
   { key: 'action.upload', label: '操作 · 上传' },
   { key: 'action.download', label: '操作 · 下载' },
+  { key: 'action.play', label: '操作 · 播放' },
   { key: 'action.close', label: '操作 · 关闭' },
   { key: 'action.refresh', label: '操作 · 刷新' },
   { key: 'status.playing', label: '状态 · 播出中' },
@@ -55,6 +56,7 @@ export const ICON_COMPONENT_KEYS = [
   { key: 'misc.logo', label: '杂项 · 站点 Logo' },
   { key: 'misc.empty', label: '杂项 · 空状态' },
   { key: 'misc.loading', label: '杂项 · 加载中' },
+  { key: 'misc.star', label: '杂项 · 评分星' },
 ];
 
 // ---- SVG 内容清洗：移除脚本与事件属性，颜色改为 currentColor 以适配主题 ----
