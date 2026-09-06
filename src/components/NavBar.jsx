@@ -209,10 +209,10 @@ const NavBar = ({ onFeedback }) => {
         </li>
       ))}
       <li>
-        <button onClick={() => { setShowMobileMenu(false); setShowMobileMore(false); onFeedback(); }} style={{
+        <button className="nav-link-btn" onClick={() => { setShowMobileMenu(false); setShowMobileMore(false); onFeedback(); }} style={{
           display: 'block', width: '100%', textAlign: 'left', padding: '10px 12px',
           color: 'var(--foreground)', background: 'none', border: 'none',
-          fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '8px',
+          fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '6px',
           transition: 'background 0.2s'
         }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
@@ -220,10 +220,10 @@ const NavBar = ({ onFeedback }) => {
       </li>
       {user && (
         <li>
-          <button onClick={() => { setShowMobileMenu(false); setShowMobileMore(false); logout(); }} style={{
+          <button className="nav-link-btn nav-link-btn--danger" onClick={() => { setShowMobileMenu(false); setShowMobileMore(false); logout(); }} style={{
             display: 'block', width: '100%', textAlign: 'left', padding: '10px 12px',
             color: 'var(--destructive-text)', background: 'none', border: 'none',
-            fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '8px',
+            fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '6px',
             transition: 'background 0.2s'
           }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--destructive-bg-subtle)'}
              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
@@ -311,14 +311,14 @@ const NavBar = ({ onFeedback }) => {
               </li>
               <li style={{position: 'relative'}}>
                 <button
-                  className="desktop-more-btn"
+                  className="desktop-more-btn nav-link-btn"
                   onClick={() => setShowMoreMenu(!showMoreMenu)}
                   aria-expanded={showMoreMenu}
                   aria-haspopup="true"
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     color: 'var(--foreground)', fontSize: '14px',
-                    padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '4px'
+                    padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '4px'
                   }}
                 >
                   {t('nav.more')}
@@ -343,7 +343,7 @@ const NavBar = ({ onFeedback }) => {
                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >{item.label}</Link>
                   ))}
-                  <button onClick={() => { setShowMoreMenu(false); onFeedback(); }} style={{
+                  <button className="nav-link-btn" onClick={() => { setShowMoreMenu(false); onFeedback(); }} style={{
                     display: 'block', width: '100%', padding: '12px 16px',
                     color: 'var(--foreground)', background: 'none', border: 'none',
                     fontSize: '14px', cursor: 'pointer', textAlign: 'left',
@@ -351,7 +351,7 @@ const NavBar = ({ onFeedback }) => {
                   }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >{t('nav.userFeedback')}</button>
-                  <button onClick={() => { setShowMoreMenu(false); logout(); }} style={{
+                  <button className="nav-link-btn nav-link-btn--danger" onClick={() => { setShowMoreMenu(false); logout(); }} style={{
                     display: 'block', width: '100%', padding: '12px 16px',
                     color: 'var(--destructive-text)', background: 'none', border: 'none',
                     fontSize: '14px', cursor: 'pointer', textAlign: 'left',
@@ -362,10 +362,10 @@ const NavBar = ({ onFeedback }) => {
                 </div>
               </li>
               <li className="mobile-more-toggle">
-                <button onClick={() => setShowMobileMore(!showMobileMore)} style={{
+                <button className="nav-link-btn" onClick={() => setShowMobileMore(!showMobileMore)} style={{
                   width: '100%', textAlign: 'left', padding: '10px 12px',
                   color: 'var(--foreground)', background: 'none', border: 'none',
-                  fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '8px',
+                  fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '6px',
                   transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
                 }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
@@ -385,14 +385,14 @@ const NavBar = ({ onFeedback }) => {
               </li>
               <li style={{position: 'relative'}}>
                 <button
-                  className="desktop-more-btn"
+                  className="desktop-more-btn nav-link-btn"
                   onClick={() => setShowMoreMenu(!showMoreMenu)}
                   aria-expanded={showMoreMenu}
                   aria-haspopup="true"
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     color: 'var(--foreground)', fontSize: '14px',
-                    padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '4px'
+                    padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '4px'
                   }}
                 >
                   {t('nav.more')}
@@ -420,10 +420,10 @@ const NavBar = ({ onFeedback }) => {
                 </div>
               </li>
               <li className="mobile-more-toggle">
-                <button onClick={() => setShowMobileMore(!showMobileMore)} style={{
+                <button className="nav-link-btn" onClick={() => setShowMobileMore(!showMobileMore)} style={{
                   width: '100%', textAlign: 'left', padding: '10px 12px',
                   color: 'var(--foreground)', background: 'none', border: 'none',
-                  fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '8px',
+                  fontSize: '14px', fontWeight: 500, cursor: 'pointer', borderRadius: '6px',
                   transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
                 }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}

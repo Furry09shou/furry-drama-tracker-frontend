@@ -112,6 +112,23 @@ const EpisodeDetail = ({ user }) => {
     };
   }, [episode, lang, siteSettingsData, t, getLocalizedTitle]);
 
+  // 待审核/未通过剧集：动态插入 robots noindex meta，禁止搜索引擎收录（SPA 端兜底，
+  // 后端同样对该情形返回 X-Robots-Tag 响应头）。组件卸载或恢复已审核时移除。
+  useEffect(() => {
+    const unapproved = episode && episode.reviewStatus && episode.reviewStatus !== 'approved';
+    if (unapproved) {
+      let meta = document.querySelector('meta[name="robots"][data-episode-noindex]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'robots');
+        meta.setAttribute('data-episode-noindex', 'true');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', 'noindex, nofollow');
+      return () => meta.remove();
+    }
+  }, [episode]);
+
   const handleWatch = async (singleEpisode) => {
     try {
       await axios.put(`/api/episodes/single/${singleEpisode._id}/view`);

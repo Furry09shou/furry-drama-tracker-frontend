@@ -224,7 +224,8 @@ const Register = () => {
       }}>
         {t('auth.registerEmailHint')}
       </div>
-      {error && <div className="error-message">{error}</div>}
+      {/* 已注册引导条已含完整提示语义，与错误提示融合为单条，避免重复 */}
+      {error && !suggestLogin && <div className="error-message">{error}</div>}
       {suggestLogin && (
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',

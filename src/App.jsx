@@ -31,6 +31,7 @@ const AdminUsers = lazy(() => import('./components/AdminUsers'));
 const AdminCategories = lazy(() => import('./components/AdminCategories'));
 const AdminBanners = lazy(() => import('./components/AdminBanners'));
 const AdminReview = lazy(() => import('./components/AdminReview'));
+const AdminEpisodeTrash = lazy(() => import('./components/AdminEpisodeTrash'));
 const AdminCreatorProfile = lazy(() => import('./components/AdminCreatorProfile'));
 const AdminCreatorProfiles = lazy(() => import('./components/AdminCreatorProfiles'));
 const AdminAnnouncements = lazy(() => import('./components/AdminAnnouncements'));
@@ -78,6 +79,7 @@ const getRoutePageTitleKey = (pathname) => {
   if (pathname.startsWith('/admin/categories')) return 'pageTitle.adminCategories';
   if (pathname.startsWith('/admin/banners')) return 'pageTitle.adminBanners';
   if (pathname.startsWith('/admin/review')) return 'pageTitle.adminReview';
+  if (pathname.startsWith('/admin/episode-trash')) return 'pageTitle.adminEpisodeTrash';
   if (pathname.startsWith('/admin/theme-review')) return 'pageTitle.adminThemeReview';
   if (pathname.startsWith('/admin/reports')) return 'pageTitle.adminReports';
   if (pathname.startsWith('/admin/stats')) return 'pageTitle.adminStats';
@@ -515,6 +517,7 @@ function AppContent() {
               <Route path="categories" element={<AdminGuard><AdminCategories /></AdminGuard>} />
               <Route path="banners" element={<AdminGuard><AdminBanners /></AdminGuard>} />
               <Route path="review" element={<AdminGuard><AdminReview /></AdminGuard>} />
+              <Route path="episode-trash" element={<AdminGuard><AdminEpisodeTrash /></AdminGuard>} />
               <Route path="reports" element={<AdminGuard><AdminReports /></AdminGuard>} />
               <Route path="stats" element={<AdminGuard><AdminStats /></AdminGuard>} />
               <Route path="creator-profile" element={<AdminGuard><AdminCreatorProfile /></AdminGuard>} />

@@ -557,7 +557,8 @@ const Login = ({ login }) => {
   return (
     <div className="auth-form">
       <h2>{t('auth.loginTitle')}</h2>
-      {error && <div className="error-message">{error}</div>}
+      {/* 未注册引导条已含完整提示语义，与错误提示融合为单条，避免重复 */}
+      {error && !suggestRegister && <div className="error-message">{error}</div>}
       {suggestRegister && (
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',

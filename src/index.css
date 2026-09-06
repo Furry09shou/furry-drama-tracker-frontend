@@ -3018,6 +3018,36 @@ nav ul li a[aria-current="page"]::after {
   width: 60%;
 }
 
+/* ---- 导航内按钮与链接（a）样式统一 ----
+   button 元素 UA 默认不继承字体/字重，且此前仅 a 命中导航链接规则，
+   导致「更多 / 用户反馈 / 退出登录」与其它导航项字体、字重、圆角、
+   hover 下划线动画不一致。以下规则将带 nav-link-btn 类的按钮完全对齐。 */
+nav ul li button.nav-link-btn {
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+nav ul li button.nav-link-btn:not(.nav-link-btn--danger) {
+  font-weight: 500;
+}
+nav ul li button.nav-link-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width 0.3s var(--ease-spring);
+  box-shadow: 0 0 8px var(--primary);
+}
+nav ul li button.nav-link-btn:not(.nav-link-btn--danger):hover::after {
+  width: 60%;
+}
+
 /* logo 文字：纯色清晰 */
 nav .logo h1 {
   color: var(--foreground);
