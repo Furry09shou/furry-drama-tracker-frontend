@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:fd3c78aa8240a232f02ef61be762b3acf4f815b947ae59329b4341188696d692",
+  "claims": [
+    {
+      "id": "claim_073e705a486343c6bd68b257d759e445",
+      "statement": "src/utils/apiEndpoints.js 默认导出按领域分组的 API 注册表（AUTH/EPISODES/USERS/THEMES/ICONS/NOTIFICATIONS/ADMIN/STATS/USER_SESSIONS 等），无参端点用字符串常量、带路径参数用工厂函数；它是前端唯一集中登记的端点清单，但不是完整真源——ADMIN 整组从未被引用，而 /api/auth/refresh、/api/auth/sse-ticket、/api/translate 等关键端点只以组件内字面量存在。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useNotifications.js#L47-L50",
+          "version": "repo-lines-v1:sha256:6812ed81d3e9273bc58022a47bb77ead09762b1d9b49a9e642abed1060c216b3:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVhMTNjNjIzZmE5MmEyMDA1YTFhOTU2Mzk1MTIyOTgzZjFlMmJiZmVkZDhjOTBiNDg4ZmY1N2ViNDBiZGFmZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjhiMGE4ZGIzZDJkMTBmMjBiOTJjZWY1ZDFiMGMyMjU0ZGI1N2ZjOTBlOWEyNDdlNDU5M2ExZjI4OGQzYWY4MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2JlMzNmZjdjMTE1NjNmZGYzYWRjYmY3NDNiMDJlNzVmZmJiZGNkNDA3OTVhZTA2NjM1ZDc0OTU4NjNkZThmNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGVjMDBkNDc4YzQ0Y2MzODI5MzAzOGI0NjgxZDhiZjU2YjA5MTU4ZDMzNWY4MGFjNGI3MDhmM2YwZjlkYjczOSJ9"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L16-L18",
+          "version": "repo-lines-v1:sha256:aaf3228805e2b34345c4f599fdeea9b0e69948f2eaf990e388a7e94690df2172:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjdiYTBkODIzNWU4N2VhNjUxOTE4NTkyNjA3MDA5ZDg2ODgwOGFjMjc4ODc5NjMxZDUzN2UxNWE0NzNmZmJlMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmQxMGVlYzE2OGEzYjAyMjM5YmYyYTYyYTg3ZjU3M2MxNWQ5ZjJjMzVmNjY4YTZmZTQ0ZDc1NzZhYzg3MTM2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmVhYjliMjlhZjc2MWI4OGNlMjhjY2VjOGIzZmQzMTkwNDljOTA0OTFlMzYxY2UwYzE1NTRlYTUyNGRiMzQ4YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODZiMDEyNjkwYmU5MzMyZmQ1Y2Q1OWYwZGE3Y2FjYzU3ODlkOGU2NTk0MWNhMWFjMjc2MmY2NGZhZWQ5MTEzZCJ9"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L1-L128",
+          "version": "repo-lines-v1:sha256:ce717dfcce9a1ef7aceecd32098f6b9d66e048f8feab71c46ad690481822b31d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMmNjZGQxZTFiOTgwOGMyZDI4OTkyZDE3YWI2M2RkMDk2ZDA2NzkzODI2YjhhMjlmZWViMTU3NzcwNmIxM2RjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyZmUxMWE3MTJiOGM3M2MwOTdlOGExZjBhY2JhOWM0MjI2MTVjM2I5ZWU3N2Y3YTcwYjE2YWRmMTE5NzEzZTBkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MiwiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwYzRhMGNiNTk2ZTE5N2U3ZjFiOTc0M2Y3NGVkZTE1ODlkODZkNzJhYjk4YTc3OWY0NWJiNTk3YWM5MjY1ZTY0In0"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L165-L176",
+          "version": "repo-lines-v1:sha256:9f15aa1dfa105acf8690e10a375133ec599176f54ba51c52410c13c2cc62a687:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4ODczMTgwYzlkMGMxMGQ3MzM3MDQ1Mzc1ZGFmMzU0ZjliMzEwOTA0MjJmMWQyYTM0MmEzOTE5Y2RmYzE5ODQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3NzNiYWFlOGFjZjkxZWEwNGM2N2I1NGY1OTg5NjIzODEyNzc5YTU3OTJlZTFjODViNjE2ZWZjODJlMGI1M2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhMjI1MTQzYjgzYzA3MzUyMzIyNjdiOGY3YzgwZTYzYzAyODNhM2I1ODNkMWZhY2QzMzczYzg5MDYyYmNhMDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4ZWMzMDZkYjdjOWQ2Nzk3YjFhYmYxMzk3YzFmOWRmYWZlNTZjNTgzYjAyY2NmYjVmNTAzZTIyMzkyOWY1ZTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1c00952c653f449180a7e6e626545088",
+      "statement": "src/utils/adminApi.js 不是独立 HTTP 客户端，只是把 get/post/put/delete/patch 转发给全局 axios，getAdminToken/getAdminData 恒返回 null，因此管理端鉴权完全依赖 httpOnly cookie；后台 20+ 页面实际调用的是 adminApi 加内联 '/api/...' 字面量，而非注册表的 API.ADMIN 组。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L43-L48",
+          "version": "repo-lines-v1:sha256:f42deb0fbfb696b6c03ea7b5232f2a5d68595b9450447a919481326b693adef5:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzM3MGIyNDEwZmUwZWZjNDY1YmI1OGVlZWQ4Zjk3YzRlMmVmNWMyYmE1MWE1MDBlYjAxZGNlMTZkMWYyYTc0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjY5M2ZmYzRlMjYyNjFhN2Q2NGIyNmIzNDVhMjVmMzhmZThhZDQ1ZjgyZTk5NGNhZmFlZWIxYjZkYzg3YjFkZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L12-L29",
+          "version": "repo-lines-v1:sha256:ce9b197685ea816cc299219322dffd56bd1997c60b75040d84f11b78b7984781:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzNmEwMDdmYjYyNDExZjFkMTZiY2VhOWI3YTM0MGE1NGMwNDBkYzVjMWJkOThjN2ZhNDhhM2QyYmQ5ZDhmNDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3ODg3MmZmYjljMGQ4N2U1MGViNDAyNjRhNzZlZDI3YjhjNTUwMGZmOTdmNDM3MDI4ZWMxMWU0ZTA2NWJiOTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxMzAzYTU2YzgyNjdjNGEwMjFkOTYwNjU0ODVjMDMzM2QzNDcyMDNiODg2MDczYThkODhlNjliZDY2YzBlODQifQ"
+        },
+        {
+          "resource": "repo://src/utils/adminApi.js#L1-L15",
+          "version": "repo-lines-v1:sha256:71ed084f37354be1b45adbf236f99b2a3704cbf30c3cb50c1d646ec3f052e8ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNTI2OThlZmEyN2RkNTIwMGVmN2M1NDk1M2YwMjE2M2M5MGM1ODJlNThkYzFmMDA1NGE1OGI5M2I1NmM0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwZTQzMTY3NTY1YmYyNGI4ODY0MTRlNDZkOWMwNGRmOTU1MmYyNjY1ZTI2YTU2OWQxNjU3MDk4ODBmMjU3OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L78-L100",
+          "version": "repo-lines-v1:sha256:c3b9f5b6f7c017f6a8d08b4805b1d33a1d5d6f02aca7115825603e582410fa22:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU2NDM5NjkzM2Y4N2UxYTdkZTg2ZDRmOWUyOTQ0YjYyZDUwYTM5N2UzMDY1NWM2OWU0OWEwYzAyMDhjNGVlYmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJlZTJkOTc3YTg1M2I2NzA4M2FiNzkzYmE4ZWVjN2M3MDJiOWE2M2NmZTQ4N2Y4NzJlNTJkNGI5MzhmZGU2ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE0ODZhZmViNzdhYjNiZjhhNGU3YTRlOWY5MzYyNTM3OTQ1ZmRmMzFkY2QzYzE5MjY3Y2QyYTY3MTgxNzJlMWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dccf4746b9da4450b510763fcba841c4",
+      "statement": "后端交互有三条通道：全局 axios（含 adminApi，共享 CSRF 头与 401/419 刷新、5xx 提示）、原生 fetch（仅用于 GET /api/users/export-my-data，显式传 credentials: 'include'，因此没有 X-Requested-With、不会触发会话续命或跳转）、EventSource（通知 SSE，无法自定义请求头，改用 ticket 查询参数鉴权）。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AccountSecurity.jsx#L24-L44",
+          "version": "repo-lines-v1:sha256:7135291d741a149b5add5c6fa36e75f8ca99e3d9e42c94b6c6af24f7e511ed6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkY2VmMDYxY2IwMTU5M2EzMDA1NGY4MWEzMjQxZGZjYTEzZTUxNzZiZjlkNWEwMDQ3MDYxMjYzMzJkOTAyMGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjOGU2MWNjM2VlZTEzZTBlYTBkYzcwNzAwOTNiMGE2YThlYzlmZWJjODU3ODgzZjY4MzdjMDEzZmEzMTVlZjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlMTZiYWY4YjM3ZmYxMTU3YTJjNmEzNGNlZDVjNGVjMGU1NjhiY2Q1OTk5ZmI1ZDVkNmQxNWNkNzA4ODJmYzQifQ"
+        },
+        {
+          "resource": "repo://src/hooks/useNotifications.js#L40-L51",
+          "version": "repo-lines-v1:sha256:63483bdb0ad64f298215c150088f41c94800265331cde1bf6e47786c3e06e154:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkYjRlZDZiODYxODE3NzA3Yjc5NzI3ZWM2M2QwMDdlY2U5NDE2MzJlMjg5MzQ2OTM5MjVlZjA2MTUwYjQ2Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk4MDI0NzYwOGZkYzkyMmI3NDc5NzFkNWUxY2Y4YTM3MzI4Y2RhYzdmMDU4ZTYxMTYwMTgzODU1NTUxNWU0MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlMzk0ZDNmYzhkNGRkOTUyMzY0MjQ0ZDE2Nzc0N2EzN2IxMWI1MTM2MmVhNzE5ZDBhMDU2N2IyNzFmYWIzMzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZjNjUxZGU0ZDJkMWFjNDJmMzc3NGZhOTliNWNmYzdjZjBhODQwYjcxOWQ1ZTk1MGJjOWE2YTE2YzE2ZGQ1M2IifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L24-L42",
+          "version": "repo-lines-v1:sha256:c5419fbe7efeaa60f9c9efd2493b0f462eb18f61f166a11482c54a94f01c1738:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk4ZjY5N2Q2MDNkMTZkYmVmOTE4ZWU0Yjg4MjM4ZmIwOThmOTk3YzNiODM3ZTFjOWVjOWEyN2IzZjM5MTM0NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjZDlkYjBkNzJhNjRhZjEwNmY1MTY2YmRhMGJkNjYzOWQ0YjI4NTFlY2JiOWFkMWEzNTYwYzUwNmU2Njc3NDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEzM2VhNGFjZTBkNWRiYmRhZWRiYTRjNGQ5ZTM0Mzg2Yzg1NGU4ZmJhMzRmYTVhOTQ3YWIxYjU3OTZkZDkwNjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkZDE2YjVmZmE5MGY2Y2Y3NGJhMmM0OTNiZDhkNzliMTBhYThiMjgwNmUxOGUzZmJlZGJiMGU1MTI2NTExMWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba53b906dc3b46a9b82e440585b676c5",
+      "statement": "通知实时通道的契约是：先用 cookie 认证的 GET /api/auth/sse-ticket 换取 { ticket }，再用 EventSource 连接 /api/notifications/stream?ticket=...；服务端事件名 notification 的 JSON 载荷携带权威 unreadCount（前端不再自增），同时每 60 秒 GET /api/notifications/unread-count 拿 { count } 兜底，断连按 5s×1.5^n（封顶 60s）退避且最多重连 5 次。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useNotifications.js#L37-L104",
+          "version": "repo-lines-v1:sha256:0019131c53988a342b9d67f0cdede98c3a911c0951f73b06a6d1c4d25b92b33e:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MGJiYmZkNmIzYzNhYWQ4MmI4ZDEwZjljMjRhZTUzNDY3MDRkNDRhZWFhMTJmNmY5OGY4ZDc2MjgzZmJkYTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhN2I4ZDM0YTA2MTU4MjczYTdlOTI1MDRjMzI0ZGZhOGUwZGIzMGRmMjYzOGFkNWNhN2YxNDUxNmJmYjI0ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYzMjg4ZDQ0N2I0YjcxYTIzN2U4OTRiM2NhOTQ4OTgyNjRjYmQ0N2MzMDI0OTBiNWFlYWYyOWM1YjU4ZWRlYTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNhMGI4Zjc0OTkwOWE1MDg0NjRjZDk5MWM2MjI4MmZhNjYxYTNhNjZlYzU3YmRiNmM3OTI2ODM1NmIyOTY1YzEifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L69-L77",
+          "version": "repo-lines-v1:sha256:52c1a10d243e29eb304b8d74230513837bd9374feb85fb80d70a9d6b3fea8978:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYThhMjFiNmIzYmU4NDQ2ZmM1YTcxN2VlY2MzY2RkMDEyZDA3YWVhM2FkMDkzNGYyODg4ZWJiNGMzYjI0MjJhZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjBjOTQ5ODU1MjZjMWM1N2VmMDBjMDBkM2Y0ZGM5MDYxNTY3N2EwYTM2YThiNzk1ZGZmOWFmZmQ1MGZlOWY1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWRkZDc3NGJiNTg5NGU4NDYwYmY2OTNiZDZiMmYxYzgwMGUyNTc5NzBkNDU1NWQ3MDA2OWY3NDIzZmI5YWIzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNkNDkzN2RlYmI1YjI2NzU3YzcxYjQ5MDExZWI2NGMyZjcxMDBkN2E3MDJkZmFkYmYwZjM3OWNmMTU5Nzc2NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_48d12a9154074ac59dafa3aba0fc8eee",
+      "statement": "通知的读侧/写侧端点分布在注册表与内联字面量两处：PUT /api/notifications/read/:id 与 /read-all、DELETE /api/notifications/:id、DELETE /api/notifications/clear-read（未注册，clearRead 与 deleteAllRead 共用）、PUT /api/notifications/read-episode/:episodeId（记录观看进度后置读）、POST /api/notifications/subscribe-reminder（日历订阅提醒），列表实际路径是 API.NOTIFICATIONS.LIST + '/list'。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L316-L330",
+          "version": "repo-lines-v1:sha256:6693a18285796b4e06bfa9e84ae3781e9a0f6261dc13801616c4308af24f2929:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwZTgxMmY4NjhmNDA4NDI1OTc1M2JmMmQ5NjE0ZDdiYTA0ZWM1YzMzNDQzYjE1ODlkMTk1YWU4NWNmMTM4ODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxNDU4ZWEwYjZkNzFhZWI1YWYxZTc2YWUzZjMwYmQ1MGE5M2MyYjc5ZmFhZTg0NTRmOTg5Y2U5ZmE4ZDI5YmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkOTcxNjI4ZTcxN2ExZTM5NThlZjI2NTE1OWY0YTIzYmMyOWE3NzZkZjNhM2U2MGU1ZDQzOWUxZDc1M2Y2NjAifQ"
+        },
+        {
+          "resource": "repo://src/components/UpdateCalendar.jsx#L95-L99",
+          "version": "repo-lines-v1:sha256:7026cfea15945ff3ea12f77344acdc4cf1f11564045cd6e6cc52885f9993c538:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTE3OTViMTY3Yzc5M2NkMzQxODM5YWI3ZjcxODViMzRhMDU4NDMzMzMzZTM5ZDFjMjE4ZTZjNjI0NjgyZjE0MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzMzYTg3MzNmOTBiNjIwNjQ3M2ZjZjhjYmJiZjIxNDlhMjdmNDY3ZDkzN2M4M2VlZjY4MGJiNWI1YjFhNDA5ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmYxNTA0NGVhZjUyOGEyNTVlNDQ4ZmFiNTY2Y2VlNzQ5MjdiMzlhMjcwODE4NGY5MmExYzI1NzFjMjk0NjcyNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWVmYTJiYjMzOTQxZTNjMDUyNmY3NDgyMjE2MzIyYzI1ODFkMmJlNDQ5ZDljM2MwNTExYWJiZmEyMTA0YjhhMCJ9"
+        },
+        {
+          "resource": "repo://src/hooks/useNotifications.js#L106-L169",
+          "version": "repo-lines-v1:sha256:695e6c8b6964659902502a3bdd50ce19cd8b204cc5695f3b47b23ec19b4ce2bf:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyNjVkMzVmNzNhYTZmYjE5ZjM5ODNjODU5M2RkNjUxOGQwMjA5YzQ1Y2Q3MjViMmNhNTgxNWFhY2Q0ZDkxMjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkMDgyYWEyYWI0OGQ1ODQxOWEyNWM0ZjBlZjI3MjdkY2Q4ODVmNDIyMmY2YjViOTA3NzRmM2M5YmZmNTk2YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5YTlkNzhiZjVlMDNhM2RiZWU5YWQ4YjI4NTliYjc2YjNjOGEzYjNiNDU2ZTdmOWE2NTY1MjgxYjVmMTUyYTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFkNGUwNmI3Zjc1NTRkMTVmMWY5YTI2ZTg0NWZlMmQ3YTI2NmFlM2IwN2JlNTYxZWM1YjI0NDVhM2RjODM1OTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d137df423d5c4314bf040f0e004b3e3a",
+      "statement": "认证组覆盖登录/注册/登出/me/改密/改邮箱/邮箱验证/找回重置/注销申请与状态/邮件通知偏好共 16 个登记端点，另有 6 个未登记端点（/api/auth/refresh、/api/auth/sse-ticket、/api/auth/verify-device、/api/auth/confirm-device-login、/api/auth/login-2fa、/api/auth/resend-verification-by-email）与整组未登记的 /api/2fa/enable|verify-enable|disable 承担设备验证、二步验证与会话续命。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/Login.jsx#L180-L223",
+          "version": "repo-lines-v1:sha256:fa3278d29add4efefb49f27ded6fff8c6a80273eaf24c1de69a8b408754bd807:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2NDgxY2UzYmEwOTRlNmU5ZDFlZGFlYzRmYTQ0OTU5MjRjNDU0NDQyM2EyNGI1MmYxNmMzNTI3Y2FjNmY0OTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkMTU0NzE5MjBmODFlMTJkOGU0Mzc2MTg4NWNlODg4ZjAwNjA3YTliNTIxM2IxOTM1YzI1MGU0OWJhYjBlZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjczMDdjNTJiNjI3NWJmM2IwYzc4YjI3NzhmMmY5MmZkZTYxMmRiMTA3MWE0OGRjYjgzZjc2ODJhMzY3ZjIxYmYifQ"
+        },
+        {
+          "resource": "repo://src/components/Login.jsx#L63-L87",
+          "version": "repo-lines-v1:sha256:73f504e3df3402ca73ca00f9f7bafb689dd043be8adf2be9dace65bbd70b94de:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmYzYwYmM3ODVlODQxMGY4NjUzMmQ2NGZiMWQ3ODhmYmIzMmNkZWM1NGMzNjJjOWU2ZDE3NGZlNjY1NzUxMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhNzZkZGQ0NzliODJiNzUwN2I1ZTNjZjJhZWI2NTI0NzAyNTg1NDk5OTc2YmVjMDY4OGE0ZTk1OWViNmJhYTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5NmU0YWU4MTNhYTBiYmEyZDllNjI3NzM3OGI4NzkyM2IzY2MwMWM2Y2FkNjlhMjdlMjAwMjMyZjI3MTZiZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1OTNiNzg2ODc5OWM4YWZiOWYyZmI0ZDFhOWU4NzhiN2NjYTY1Y2EzM2MxZThhNzY4NTFlNTJiOGNjZmNkNDEifQ"
+        },
+        {
+          "resource": "repo://src/components/TwoFactorAuth.jsx#L30-L78",
+          "version": "repo-lines-v1:sha256:738de94c1ce958ba881916578692372681e2aad433db9ca3a0370882d51b27a5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0OWQ5ZTFlZDU5ZTBjMGI0MjBhNDY0OTk3NzUxZDNiNWRlNzQwNjE5MGExMTIxN2Q0MWZjMTAzYmIwOGZhZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliMjdmNjViZDhkNjE0ODM1NWE1NDQzZDJmNmJjNDA0NTM3NmU4OWE5NTEzNzQ2YTFhOTZmMDFiOTZjZWRiYzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJkN2M0YzNjMGM4YmUwYTQwNzdiMjVlMGNiYjUyOWJiYzM0MzBmZmYzYjllNzhhN2YxYTc4OWY0MDYxZDBhOWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzNDEzYjQwM2U0MzI3Nzk3NTg0YmIwMjU2MTdkNTBhNzk2OGE3MWQ3YjFiYjdhNTIxZTM4Y2Y1MzdlZDMyZWIifQ"
+        },
+        {
+          "resource": "repo://src/components/VerifyEmail.jsx#L60-L70",
+          "version": "repo-lines-v1:sha256:717c55b5996e4230eabc78b26b1eab7b31a5b4f4e022ca6a98847c6dc7d76c1e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5MjJhYTQ1MDU1Yzc2ZDhjMDVmOTE2OTZkMDc3YWU5YzVkODIwZTgxNzdhZDkxMTAyYWE3YThhZDk2MDExYTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjNjYxNjQ2NzVjNmU2YmFjMzIwNmIyYzJhODc3OTVjNjI0ZmVlMTZjYWUwODM4ZWNhMWU0NjIwOWIyZmZlMjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRhNzQ5MWU5OTg0NDA0YjkwZGZiNWVlMTFmNmY5NTNjZjUxNTk3ZjlhMjYxOTEyY2ZmMjE1YTY1MGVjZWE1MTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwMTE5MjUzMDAxZDViMDhhNjI5YzhhOWJhZjY1ZTczNGIxMjBjYzk4ZjBkNzk4ZTIwMmY3OTJjODA2YjQ2Y2MifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L1-L21",
+          "version": "repo-lines-v1:sha256:653d909250263fa2d220551000a27cce82f8a64d3f12071cab8f591b3dcbb4f9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyY2NkZDFlMWI5ODA4YzJkMjg5OTJkMTdhYjYzZGQwOTZkMDY3OTM4MjZiOGEyOWZlZWIxNTc3NzA2YjEzZGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2M2ViOGYyMjJlNDBlY2ExZmJmMWRkNzM2Y2FkMTlhMmM1OWVhOTFhMDcwMmQzMGJmZjJkOWI4ZTM2ZTI2NWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5f480b8edee54e02add2ccb585368238",
+      "statement": "用户会话（在线设备）契约由 /api/user-sessions/* 承担：create 在启动时 /api/auth/me 成功后传 { screenWidth, screenHeight, language } 且失败重试一次，heartbeat 由 AuthContext 每 5 分钟发一次并在页面 hidden 时跳过、AdminLayout 复用同一端点，my / my/all / :id / :id/name 负责列出、全部下线、单设备下线与用 { deviceName } 重命名，后台另有 all、admin/:id、admin/user/:userId/all 三个内联端点。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L24-L29",
+          "version": "repo-lines-v1:sha256:76249f278ef994145c91d8de418f48e0932ff32784641a155f957e3ee7eb469c:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNzAyNTc1OTNkYTA2ZjY4MmEzZGRkYTU0YTlkMjYwZDRmYzUxNGY2NDUyMzdmNWNhNzRiMDhmOGRhNjFhNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTM2YTAwN2ZiNjI0MTFmMWQxNmJjZWE5YjdhMzQwYTU0YzA0MGRjNWMxYmQ5OGM3ZmE0OGEzZDJiZDlkOGY0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmQ5MGY0MjJmNjEyODQ3YjcyNjA5MzU5YzcwNTIwODA4NTdjMmZiMmQ5N2ZlMzAwYTJiZjI5ZWIyZjcyZjBlMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjEzMDNhNTZjODI2N2M0YTAyMWQ5NjA2NTQ4NWMwMzMzZDM0NzIwM2I4ODYwNzNhOGQ4OGU2OWJkNjZjMGU4NCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminSessions.jsx#L25-L52",
+          "version": "repo-lines-v1:sha256:8e453941e10288944cfc5f7331af70474312e8c4563a6b2d98417b31d2a35295:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjExZjE1NDJkNTJiNzRmMDU0YjIyOTBmYWI5NTFmZmE0OGIzZGMxNzZhYWVjZGViMmEzZTE3Yzk0N2YwZWYxOGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiYThiZDFiMDcyNTM3ZWZhOTc2NDQyNmQxMmVmODQ4Yjc0ZjUzZWZjYTBkOGQzZDFlNTU3NDk4M2JiYTFmMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjN2ZhZTNkYmQ1ZmJhZDE3ZTIyZjA5YTliYjgzNmM0ZTcwMjkwOGQ3MWMwMjRmNzg5ZjJmMzMxMDVhNjZmZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlNmMyMjkyNmIyZmM3YmNhYzY1NDVhMzRkNjMzNjJkZjM5YWExZjVkNmQ2NGEyOTcyZTU1MGY0YjQyNjMxNjgifQ"
+        },
+        {
+          "resource": "repo://src/components/UserDevices.jsx#L29-L92",
+          "version": "repo-lines-v1:sha256:4784e14b687826fbddcb9c359cde46ad33aa0fa072c1bd2b4952b52fecdb0210:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjExZjE1NDJkNTJiNzRmMDU0YjIyOTBmYWI5NTFmZmE0OGIzZGMxNzZhYWVjZGViMmEzZTE3Yzk0N2YwZWYxOGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0NjJmYTU3OTcxMGIzZmY1ZTQyYThlMTAwMDJjNWFlN2JmMDUwOTllN2Y0Yzk5NWE2ODVmNTc2YWM3ODc1OTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4Njk0OWM2YzVlY2RjZTVkMDgxOTM1NzU2ZGJhODc2MDZhNmM1Yjg5YzVkMGU5YmY5NDI4YTgxMDAwNDlhNzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFiODdjNGI1YzI2ZjkyZTc1YzdlODMxZmQzNmVmNTJkZmEzMjZjMDFhZWJhNDU1YzJkNjJjMTQ0ZGI5NzIzN2QifQ"
+        },
+        {
+          "resource": "repo://src/contexts/AuthContext.jsx#L34-L124",
+          "version": "repo-lines-v1:sha256:66205745e06521d50b4d47e5c9ad3ee67c5b4c53230fa2d4e343433d7556da10:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjZWE4YThkZWQ0MzBjZTAwZDgxM2ZiYTE0OTg2OTlkNDRjNDU4N2JlNjE1YjUzZTQzNmY1M2I4ZjZmOGVlNTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhN2I4ZDM0YTA2MTU4MjczYTdlOTI1MDRjMzI0ZGZhOGUwZGIzMGRmMjYzOGFkNWNhN2YxNDUxNmJmYjI0ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlMDljMjRmY2E0N2E5NWFiYjQ3OGE2MDdiY2RhMDdmOTNiMDJjZDllMmFhYzc5NDY3MDZmNTU3MTU1YTJmOWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwNTMwZWI1OTQ5ODhmZTg0MTNlNDM1MjhiN2QyYjgxY2Q5ZTMxOTJlNTg4ZDFlYmU0Y2EzZWNmMjdhYzEyYzcifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L117-L125",
+          "version": "repo-lines-v1:sha256:c32c8ac6f5cb911c1876382d29859811fca868ab8d819d30869183a4587cb62f:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWU4N2E3YzUzNGFlOWEzYjg2NWJhYmZmYjQyYjY0Yzc0OTRmMDQ5MjkwZWI1NzZiZGQwZDhjMjZlYTdmODcxZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjBjOTQ5ODU1MjZjMWM1N2VmMDBjMDBkM2Y0ZGM5MDYxNTY3N2EwYTM2YThiNzk1ZGZmOWFmZmQ1MGZlOWY1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWU3YWVhZmNhZjQ4OGQ4NDBlZDg3NDA4N2Y2NDc3YTE0N2M5ZWUxYmVmN2NmNzk3OWU4M2RlMzk5NTc3OWQ4NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjFkNGFiNjU3NjI2MDU0NGFjMTVhNzA0OWVmNDdiNTUwZGE1M2NhOGY5NWRhMzdhNzc4Mzc0NDFiNjI2Y2UwMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_35a81c6ab4194a0592bb17fe60774ad2",
+      "statement": "剧集内容采用「剧集 → 单集」两级路径而非独立顶层资源：/api/episodes/:id/episodes 增单集、/api/episodes/single/:id 改删单集，播放量上报拆成 PUT /:id/view 与 PUT /single/:id/view，登录态聚合读 GET /api/episodes/:id/user-status 返回 isFollowing、followedAtEpisodes、watchedEpisodes、score、isFavorite；后台另有回收站 /api/episode-trash/:id(/versions|/restore) 与版本 /api/versions/:episodeId(/diff/:v1/:v2|/rollback/:version)。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminEpisodeTrash.jsx#L34-L77",
+          "version": "repo-lines-v1:sha256:a1e9ec3bf5bdfc39e6b65f9cb5ddc692fb1c4e5a296332c40a77201089292d6a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzNTQ5YzUzM2JmMTc0OTA4MzcyYzNhNTI5ZTY5ODlhYmY0M2M3MmNjOGYxYWJiMjNiZjY4MDQ1NWZiYWRlOTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxMDAzMmM3ZGIxMTZlYjgzNjFlZDU2NmMyMWYwNjExNDUxMzYzMTgzZDNjNGJkZThlODgyNmM0NWFjMDZhZTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0NThmNzA0YWUxZjk2NTAxMzdlZTMyMzVkM2Y1ZmVhODE1YWFkNDQ5MTFhMDEzOTA2Y2QxYThiMGJhMGU5MGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhNjE0YWQzMWYxYjc3ODAyOTZkYWJkOTc5N2FjMTMxYWE0ZmVmMjU0MTEyOTIxYmE3MGYyZjA0MDdiMmE5MTcifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEpisodes.jsx#L286-L330",
+          "version": "repo-lines-v1:sha256:0dcc63f8ede030b93f9da73d972c47a6c865d8ce25d7d12e6086bff7911f37e4:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliYzVkZTBmYWFlOWVjYjQwYmE4NDc3YTg3YzIxYTliZGU2ODBhNGNlMWNhYTllMDExODViZmRmNjYzMzc0NjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzNmNmOThjODlhYWFmZjQwMzhmNmI5Mjc4ZTE1MWY0NWJkNGE0NDIzNWViNzllMjI2OGEwYmYzNTQyZWFjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyZTVjYzg3YzU4ZDZjMTQ4Y2FjYmIxNDMzZTRiZmE2YTA1NWMwMGM5NWM2ZTU5N2U4OTZjNzA4ZTgxZTIxNzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyM2ZlYTU4NGE4MTNlMjE4YWUxZTEyMWYyMzNlYjdjM2NmOTNlYjBhMzMwMjRlOTNjNzhlZTlmNWM5YjYzYTIifQ"
+        },
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L133-L143",
+          "version": "repo-lines-v1:sha256:186bcf93507ef870d847606f2633dd47c9f2cc459fc97bf02ef3a91903d55440:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxNWU5ZDAxNzdlODVlZWU2OGJjZDYzMDZjNDljOGQ1MjU1ODY1YTQzZjI3OGVmNmJlNTk5NmUxNmE1ZTY0MWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxMWVhMGM2YWI1NzYxYmM2ODg5MjljZTEwODRmN2YzYWY3ZjliZmIxZmM5NWQ0MmRlOGJiNTQxYzFhZWQ1MDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc4YzUxYjUwZWE0MzE1NDY0ODBiMGRlMzA4YzQwMDliZmYzZDM4YzA0ZjM4ODhkMmI4YWQzYzA1YTdmZDljNjQifQ"
+        },
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L48-L100",
+          "version": "repo-lines-v1:sha256:42dea84c840d4041c842c9e40270e393b27312913d0c3c962afaf6a92a343d92:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMGVjNzllOTY2ZTY5MDZiMjNlMDg1YWNjZDQyNTU5MGI1ZDlkZjE5Y2JhOGYyYjZmMDEwNDVkZGM4OWMxZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAzZTgwYjU5YjFkMGM0ZTVmMjgzNjFmNGIxMjk1NTdmMzU3MDczODc4ODJjMjY5N2M3OGZmNTQ2ZmZmNDJiNmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5YmIwNDc3YzBmOGI3NDQ4Y2JjNmU0NGMyYTY4ZGQxNjVlZjA1MTJmNDcwYjMzNjljNzFiMTc4NzczYTczNzYifQ"
+        },
+        {
+          "resource": "repo://src/components/EpisodeVersionHistory.jsx#L30-L77",
+          "version": "repo-lines-v1:sha256:0c29d839dd95d38047ca01ee4e676e5064a21806e0d42d47f3eac04ac529ebac:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2MmI0MTRkNzJiMjI3NTg3NDZlYjQ1MDM2NTQ4OGIzMTFhOGEyNDY5Y2E4NWM0ODhkOWIxNzVlNDcwODM0MDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwYTljZmRjZDZhZGU0NjY4NmQ2MDYzMzM0ZjE2ODhkZjM4NzA5ZDZmZWUwOGIxZmE5M2FjOGEzMzBkZmZlYTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUyZWQwZDZiOTE2ZWFiMDI0ODI3NWY5MzNiMGMzYzM5ZDk4NzZmMWMxYzEwZGNiNTY2OWU5N2JhZjllZjEyNTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3MzFkODQ2NTViZDhlNDY3ZGM4NWRhYWE1NjcxOTNjMWE3YzQ5NTY0ZDFmZTA0MTY2MzQxMWY2OTI2MjkxZDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dad0c2e6cb7a4f278f09124e6df0732c",
+      "statement": "剧集列表 GET /api/episodes 的查询参数为 search、category、sort、order、status、tag、minRating、year、page、limit，响应兼容 { episodes, total } 与裸数组两种形态（Home 对两者都分支，hasMore 依据 total 或本页是否满 24 条）。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/Home.jsx#L123-L189",
+          "version": "repo-lines-v1:sha256:a308861985beaf095802da31c73615ff6af5154ce790e94459f28b08da620d90:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5ZjFkY2IxM2M4NTlhNjQyZTU1ZWZjMGIwZmExZDk1NmZhYWViNTAzN2U0OWM1OWQ5ZDRhZjAyYzg3YzcwMjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZiYzZkY2EyZjZhYzM3NGMzODNmZTQ4ODMzN2FlN2NiYjFiNzUyZTQ5NDA2ZTQ0NTBkOTVkNTlkODU4OGRjNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhMTNjZDNmMDM0ZmE5ZGYzM2ViN2NmNTRjNjQ0M2NjMDgyODI3MGY0NTdiNmQ0YzBjYWJlYmM1M2UwZTk0MmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a2d2f78dd6f444c59f9f74c1543c2cfa",
+      "statement": "用户内容库的契约细节：/api/favorites/add 接收 { episodeId, folderId? }（缺 folderId 即未分类）、/api/folders 按 ?type=favorite 过滤、POST /api/folders/:id/share 与 /api/folders/share-unclassified 返回 { shareToken } 且 GET /api/folders/shared/:shareToken 的 404 映射为「分享不存在」、/api/histories/record 传 { episodeId, episodeNumber }、/api/follows/add 返回 followedAtEpisodes、/api/ratings 的 POST/DELETE 回传 { averageRating, ratingCount } 供详情页局部刷新。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L225-L330",
+          "version": "repo-lines-v1:sha256:d748ac1349b0b5a1d8820689c62c05a267510ab9d91a1277aa53baa59efddd7a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhYTYwYmQzODJhZDE5YjhkMzRkZjMzNDRmYzY3YjA3YTIzMDhiMjliMzQ5NTFmOTYwOTY1MTBmMzgxY2E3ODVlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1M2ZiOTNlY2NmYWMxMTZmYzdkODhkNzk5NWRkZDkyYjk3YjJhMmQ0OWIzMWQzOTZlNmVhMmIxYWZhZThkODBkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0ZGI3OTAyMjI3ZWFlZWQ3MjZmN2RiZGMwODEwMTc0YmQxZGEzM2I3ZGUyMjk4YmRmYWYwNDViNjFmMGZkOTQ2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyZDk3MTYyOGU3MTdhMWUzOTU4ZWYyNjUxNTlmNGEyM2JjMjlhNzc2ZGYzYTNlNjBlNWQ0MzllMWQ3NTNmNjYwIn0"
+        },
+        {
+          "resource": "repo://src/components/FolderShareModal.jsx#L41-L55",
+          "version": "repo-lines-v1:sha256:66e88b62bb22a2ffcf0681a9b54d6bdf3090bc6c0dbade2937df2152f7e972b8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFkY2E1N2IyYTE1MTY0OWViNzBlZTllZTJkMDU0OGZmMWYwMzNlNmRhNzE0OTEzZGZhMmEwMzBlYzJjZWMwNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJkM2Q5MDAwNjIyYzY4Yzg5MjY5OTFkYmE1YjJiNjAyZTdmMGQ5ODIzMWEwNTE2MjhiZDllZjZiMDg4MDVhOGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA5ZGI0Mzk3NmI1ODUwOWQ5OTg2ZGU2ZjA5ZjEyMDlmY2FhY2UyNmJhN2M5NGYyZTE5YWE1ODhiNzY4YTdlM2YifQ"
+        },
+        {
+          "resource": "repo://src/components/Profile.jsx#L70-L80",
+          "version": "repo-lines-v1:sha256:5ad79a01b7db5d15e3082572be137d5fab0b9d3704a1590b8c4c03fa429d1ba5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjcwMjU3NTkzZGEwNmY2ODJhM2RkZGE1NGE5ZDI2MGQ0ZmM1MTRmNjQ1MjM3ZjVjYTc0YjA4ZjhkYTYxYTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYjFkOTczNTg4NWJhMjMyM2Y2YTFlZjE0NGU0MTlhYWUwOWY0OWFjZjgzMTNiZTU0MDk2MzMzNTY1YzE1NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxOWY3ZTg3ZmVhMWQ2ZWE5ZWVmMGYzNGQwMTMzYmNiYzAyMDdjNDVkODkxYjllNDZjZTczNjI1MmZiZjIzMTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmNzViMjQ0OGNmNmRjNWE5MTk5ODM2NWZlOTkyNDdjYTE1ZmMxNDBiNjdiZThjYjBmYjRhYTVjYTE5MTFiYTkifQ"
+        },
+        {
+          "resource": "repo://src/components/SharedFolder.jsx#L20-L56",
+          "version": "repo-lines-v1:sha256:245de9edfdaa32cddc92ef4c8db36207ea0ba30ed2dfcd2a97720a7370ac4bcb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiZmVkZDRjNDMyMDVmODY4MTU3MDFiNDI5ZTgyYjk0YmM5YTViN2E5MGRlODYwYmZiOTU2ZWU1NDI5NGJkNGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2NWI3NWI4ZGZmOWFhOWQ0YTcxZWQxZDdhMTMzYTRiNjE5MjdlOGQxNTI5YzhjNzRjOTA1MWI4Y2EwODdhMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc0ZmJlZmYyMTllM2RkYWUzNDhkY2EyYWI0YTBkZWZiZTk4MzgxZjFjMDQ4M2IyYTk5OWM3OTRlNzdhMjdmY2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzNDFjYzQ5N2NhY2MxZGQ1MWFkNzUzMWYyNWRmMGExMDZiYjZlMWE2NzUyZTQwYTlhNDFkMzI2ODMwMzUyNTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_938195353d9c4e46938df6ff631cd7dc",
+      "statement": "评分是唯一进离线队列的写操作：离线时把 { method: 'post', url: '/api/ratings', data } 存入 offline_queue，联网后由 AuthContext 监听 online 事件回放；队列按 24 小时过期、每条最多重试 3 次后丢弃，且队列里存的是字面量 URL，改路径会让历史排队动作永久失败。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L273-L295",
+          "version": "repo-lines-v1:sha256:c29e0b796a4fcab0449e2abee2f17deec12d8987f2d932190cd0b8d514a66b0d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkN2E5MzYyYjMzNTdiYWYyNTgzODMwYWVlMGRiNWM0ZTM2YWE4ZGQ2ZjEyNDliMjkyNDliYTc5NjY1NTE4YTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxNDU4ZWEwYjZkNzFhZWI1YWYxZTc2YWUzZjMwYmQ1MGE5M2MyYjc5ZmFhZTg0NTRmOTg5Y2U5ZmE4ZDI5YmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEwOTRhYmNiNWUyOTczODBiM2NiMjMxYWJlNWRmNTRmODEyOTg0NzA0Mjg0YWY3NTMyNmYzZWVhMDE1MDhhMTEifQ"
+        },
+        {
+          "resource": "repo://src/contexts/AuthContext.jsx#L140-L147",
+          "version": "repo-lines-v1:sha256:d2aaaaefbb624b6337064f4ad4212e791c28077b2fdcc2dc5e272e471a2c1a61:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQwODJhYTJhYjQ4ZDU4NDE5YTI1YzRmMGVmMjcyN2RjZDg4NWY0MjIyZjZiNWI5MDc3NGYzYzliZmY1OTZiOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTIxYzI2OWMyZjY1ZmQzYTllNGNjNjgwY2NkYzc1OGY3NDA1MjBjMDZlYzU3NzlhZGIxY2Q3ZGRlMzkzZDYxYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDE0Nzk2YzJmNWM5OWVkNDRjOWRkNzA2YjYwY2IwNGNiYTYxNWJiY2Q1MTYxZTc3YzUyZDI3NDg0NzFlNjlkNCJ9"
+        },
+        {
+          "resource": "repo://src/utils/offlineQueue.js#L1-L54",
+          "version": "repo-lines-v1:sha256:4d2a5ef0e760bc2cc3866ac1c55e95092e236e587f7dc0c6cf411aa2f5331dc6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2ZTE2MjQ4NDM0NmQ3N2MyYzhkYTg5NDBmOTYwMGNkYWRhODk1ZjNmNGVkMTgzNTI0ZDQ3OTE3YjBkODY1MjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bc0ca5c08c6944798ed597dba1905fcc",
+      "statement": "主题是两槽（壁纸槽 + 图标槽）模型：GET /api/themes/my/selection 返回 wallpaperTheme/wallpaperIsDefault/iconsTheme/iconsIsDefault（*IsDefault 为真表示回落站点默认、不算用户选择），PUT /api/themes/selection 接收 { wallpaperThemeId, iconsThemeId }（空串清槽）并可能回传 backgroundPrefs 与 accentColor 供前端同步 localStorage.user 与主题色，GET /api/themes/active 返回 { theme } 作为未登录与兜底来源。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L402-L417",
+          "version": "repo-lines-v1:sha256:f986004304ffefa2f836db11bba7e1af6beef7f223a020b7c1975126a89b82af:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZDdlMWE5MzgxNjNhZjRiZTNhZWQ1MTQ3ZDM1ZDk1ZTc1MjNlOWM3NzY3ZTIzNTI0ODEwZGI0NmQzNWYxOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkMDgyYWEyYWI0OGQ1ODQxOWEyNWM0ZjBlZjI3MjdkY2Q4ODVmNDIyMmY2YjViOTA3NzRmM2M5YmZmNTk2YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1YTFiOTBjOWIxYThjZTkwYTNjNTJlZWU1MWMzYmQ0OWRiZDIxNDkyMWQ2MGY3ZjMxZWUzYmU3YjA2NjA3YTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0ZTI1M2IzMGI5YzI5Nzc0ZDZlYTY2ZDhiNDI4M2YxOTViYzU1ZTdmMzY1ODg2MTQwNTlhMjQwNDA3ODNhN2MifQ"
+        },
+        {
+          "resource": "repo://src/components/ThemeColorPicker.jsx#L48-L164",
+          "version": "repo-lines-v1:sha256:c2ed1812ecb0055c58c4f4002a7f70fdfca6ac08d602b883a92fa1a08a5343b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxN2EwNTcyNDdlYWU3NDRiZjY2MDg4NTRkNmQ0ZWQ5MzJiYmJmNzg3OWZkNjc0NTY4MzExMjE4MDQ3OTVkM2ZlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1M2ZiOTNlY2NmYWMxMTZmYzdkODhkNzk5NWRkZDkyYjk3YjJhMmQ0OWIzMWQzOTZlNmVhMmIxYWZhZThkODBkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2YTg2MTBhZWY4MmY3ZDEzZmI1YmM1MWM1ZjFlZWQ4ZmM0Yzk1YzFjZmM3M2NhMjMyZTIyYjUxODQ0NjVmZjM5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyMTA4NTYxNzBjODAzZWExZGZiYzlhMTRiMGRjMWQwNTQ4ZDllOWIxOGRlZDNjY2M3YmRlY2IyOTVhODgyODhmIn0"
+        },
+        {
+          "resource": "repo://src/contexts/IconContext.jsx#L127-L144",
+          "version": "repo-lines-v1:sha256:c46ae02cb8554dce04d5f7d8d38ff208988bc0672feb349ff27e2198eab00761:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5OGNmY2JlMDAzYWZmZjM1OTM3MmM4MWRkODhhNGQ2N2E3YzQyZTUwMzIxYzg2YmExYmE0YjYxYjYyMmM5YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlYjAzYWY3ZmZlOWM0N2QwYTYxYTBjNWIxZWQ1YTdlZGM4M2MyYWNhNTdlNDJjZTFhZGZmMjQ0ZTNhOTJhMGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzNTE0NDc3NDQzZTE1ZDhlZDViMWE0Y2U5ZGQzOTgzNDJiMWQ3YTcyYTFkNTJiMTI3Zjc1OWFjMjI2NGUwMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhmZmJhNGRhYjRkMjljNThiZWU2YzdiYjlkNjBlOGY0NmFmMGI2ZDkzNDIxZGQ3MDMxMWZhNGVlN2EwOWJkZTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b57a1c305d8a43bf8786ac98a4d23b1d",
+      "statement": "图标契约是 GET /api/icons/list 返回 { icons, mappings }，mappings 的值是 SVG URL，IconContext 再用 axios responseType: 'text' 逐个取回、净化后内联；登录用户用 /api/themes/my/selection 的 iconsTheme.icons 覆盖、未登录用 /api/themes/active 的 theme.icons 覆盖。",
+      "evidence": [
+        {
+          "resource": "repo://src/contexts/IconContext.jsx#L113-L173",
+          "version": "repo-lines-v1:sha256:280166c3b57a72cacfc54ff993ed59069aead4ebb26deb575b269a69a2e897fc:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzMGE4ZjNhMzJmNWYwNzhiZWE0YjZiY2Q5YzRmY2U2NGUxZjBjZTM5ODQ0NzJlZjI3NmI3ZTFjZDliMTE2YWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwNDMyODg1ZjExYjZjZmY0N2RmNGIyOTZhYjlkNmI1NDA4MTc4YjUzNmFiODI0NzIwNjA2Y2Y0MjIyY2NlMTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiYTY0ZDNjYjU0ZTQ0ZDk0YzEzZTAyZDAxZjg5MjZmZmU2YWEzMjlkMGM2OTYxOWE2ZjdiNzJkZGVhODgyZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMxMTNiNzdiM2M3ZjUzNWQxYmQ5ODQwOWMzMTJiNmU0ZDllMWUzYjg2ZmE0MjBkZTRmYWEyOTA5NGJmN2QzMzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba4ca594762842aaa4f4323fffabaa7e",
+      "statement": "/api/site-content 同时是键值文档存储与专用子资源：GET /api/site-content/:key 返回 { title, content }（content 是 JSON 字符串，前端 JSON.parse 后写 30 分钟 TTL 的 site_settings_cache），GET /api/site-content/ 返回全部文档列表，PUT /api/site-content/:key 提交 { title, content }，键名与 settings/about/pwa-manifest/email/test-email/upload 这些子路径共享同一命名空间。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminSiteContent.jsx#L72-L185",
+          "version": "repo-lines-v1:sha256:0fdf5206ccf8c108d1bcd8ea44fd54590d953b2ca97ad1a5ef90e72209364e8e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiNDk3OWU2YTk1YjY3YjE1ZjYyZTExNDE4MzZjM2NmOWMwOWRlZjIyMGU5ZTM0OThjZDE5ZGE0ZDM5NDRlYmUxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1M2ZiOTNlY2NmYWMxMTZmYzdkODhkNzk5NWRkZDkyYjk3YjJhMmQ0OWIzMWQzOTZlNmVhMmIxYWZhZThkODBkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkODg3NDhhNmIzYzRiYTIyZjQxYzI2MmVjMWVjNmU4MDM4NmY0NTAzYjdjOTE2MDYxNWFmMGEwYTk1YTA2OTJiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzY2NhMjBlZTYyZDAzY2NmMjc0ZTliN2Q3NDE2ZDM0ZWQxODZmODg5MzIwZDNjMTcyZTc4NzYxNjAxZGM4ODU4In0"
+        },
+        {
+          "resource": "repo://src/contexts/SiteSettingsContext.jsx#L28-L60",
+          "version": "repo-lines-v1:sha256:a63d66ca5777628de34dbceab9ef3868d13bdeec554a2b102d5dbd3bfcc87721:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1ZmQ4YjQzZTA3NDFhMzdlNTFlNzA4NzYxNWZiYjViYWEyOWYxODI5ZjdiMzllNzY1MDczZjVkOWFmOTZkZmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVlNDMxNTFhNWExNTA2MDA4NTc1ODNkZTlkOGY0YTI4OThmNTgxZGY3MWEyZmFhZmIyNzdhYzI1ZDlhMzg0N2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFlNGVmODk1YTIzNGU4ZDcyYWE5NWMxMTBhNzYyMjQ4ZjRiYTE2YmIxOGM4ZjJkYzA5Zjc4MzJjODIxNWZmNWMifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L88-L90",
+          "version": "repo-lines-v1:sha256:79f50cafd5530c2b7a01a23fb9b29a2ae8a3bb2d66331ab1989fc617589a7fab:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzUwNGU1M2RhMWQzMzRiM2MzZjAyNWNkYjk1MjRkZWE3MWRiY2VkN2FmYmUzZjlhNWVkYmYwOWY3ZDIwNzBmMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQ3MDIwMTk4NzcyZmZiYjgwMzNiMjA4ODZiODJmNGFiZDA4ZDNmZTEyYjY1MWNhNjhmODY0MjkyMmI3MDE2MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmFmNWQyMGViZjkzNTExNTc0NTAyODgwMGI1ZDhmNDkyYjVmZTc3MzZjMzE1MDkzNzE5MzViMWRhZmYzZGQ2NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWY2OTQxNTdiNmZkZWMyODJmMWI2YzU0MmZhZDEyMmYyNThmMzEyYzFiOWFlYThlNGMzOTYxMGE1YjIwZTBiYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_04f7610c772c478a88db73e5cd8d1af8",
+      "statement": "PWA manifest 存在构建期与运行时两份：vite-plugin-pwa 按 vite.config.js 的 manifest 配置在构建产物注入 <link rel=\"manifest\" href=\"/manifest.webmanifest\">，而 App 在站点设置就绪后把该 link 的 href 改为 /api/site-content/pwa-manifest（仅当尚未指向该端点），并同步 apple-touch-icon、application-name、theme-color、msapplication-TileColor，因此用户可见的名称与图标由后端 site-content 决定。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L450-L497",
+          "version": "repo-lines-v1:sha256:119c788766f2e9b9949ea4b3fbc39e5f8b590a5091f1ce424e9bebad55a54457:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxYTc3ZDhhZjY0ZWFlMDZhZTgxYjdjMTZkZjlkZTJlZDFlZjhiNTBmMmQ5YjI3OGY0OGRhMDU1MWZlNzg3NmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczNjYzNTAwMzY5NDY2NmNhOGU5YmQzNDg1OGRjYTg2ZWM5OTY2YTM2Y2YzZmFiMGZiNTFhZGIyMTYzMTY5ZGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2MmU2YmIzNzQ2NzcxMTc2OGFlNTY5ZjBjNWYzMTFmMDA5Yjg0OTM0NGI5YmFjYmVlYzVhYmVlNmZlZTFiODUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1YjU0MzI5YWU1NDMxODhjN2FmZjQzMTA3ODkwMzA5YmVkYzRjOGQzMjYwNDZmY2Q3NGYzN2FmMzBlNDlkMWUifQ"
+        },
+        {
+          "resource": "repo://vite.config.js#L26-L56",
+          "version": "repo-lines-v1:sha256:0219b3ae134a87477cdc151765219f798529de946a7e1c0f456876d789febfa3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiNGJiM2Y3ZDk4ZTRjMjFjMjg2MTczMGNkN2E2Y2JmMWVjOGY3MjE5NzcyMmY2MWUxZWVkMzdlZmNhMmNlZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkM2NmYjZhYmQzN2U0ZTg0NDg1NGRhY2Q2ZjRmODE5NGE5YTQzYTFmN2VmM2NmNzY2Zjk2ZDk4MGQ4YjE0OTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM0ZGM0MDQ4ZmE2NDM1MDgxODE0NzlmN2RmZmUyODAwODc0Nzc1NGI3MGM5YmIzOTQxZDI4YjAzNzE2MGE1Y2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZkYTcxZDg1NTdhZjM2NDdlMzgwY2M1ZTdlMDZkMzNlNDRlYTMxODM1ODg2Y2ZiNzk0ZWVlNzAwZjZiMDgxZGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cc4b5cf8ec2e4586ba0561a654cafda3",
+      "statement": "邮件相关端点被特意拆成只读配置与诊断两种语义：GET /api/site-content/email 返回 host/port/user/fromName/enabled（口令不回传），PUT /api/site-content/email 已在后端禁用（配置改由服务端 env/ini 提供），测试发信 POST /api/site-content/test-email 需前端手动提交 SMTP 参数加 to 并返回 { message }。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminEmailSettings.jsx#L6-L83",
+          "version": "repo-lines-v1:sha256:55e1f3534e822204db63b2dfb0b1a968f933927b33bdcc5ff3c34771d9121af1:eyJzZWxlY3RlZExpbmVDb3VudCI6NzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkNWJmNjkwODg5YWFmZGExMTA2NjNkZWYwYWQ2ZDAwNmM1M2I5MWI2MzQwZWJiMTVjMTNiZjc4ZmM2NTM0OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5M2E3NDg2MjhmM2IyN2FiMGU2NDk2ZTA2ZmNhY2UzNzk5OTlkMzFmYmZjMjkwYmEwMjQ3YzZhY2U5NzgxYzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU0ZmIyY2U3YWMzZTkxOTJkYjBkOTlmZWUwMGJkNTUwNTIyYWNlZDExMTBjZjI2MGJjNzlkODA5ZDdhMjk4MGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_db782d256cf34aea8dfb53881b59ae62",
+      "statement": "前端硬依赖的后端错误语义是：401 先尝试 POST /api/auth/refresh 并重试原请求（后端以 401/noToken 表示 access cookie 被浏览器丢弃），419 表示 access token 过期待刷新，刷新端点返回 409 视为并发刷新成功并直接重试，403 且响应体带 forceEmailChange 只打标不登出（弹强制改邮箱 Modal），>=500 派发全局 api-error 提示。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/ForceEmailChange.jsx#L16-L40",
+          "version": "repo-lines-v1:sha256:416abf14149e2d1b7e9280f1dd841f4c252a5dcf8b85eae3dfa757de5ae5efe1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZDQ1ZDg3NmMzNzJkZGUzMjA4MjRmMTJlNDRkM2Y1MDlkMGNlZDBjMDc5OWZmYTIwOTM3MmQ5ZTYxNGIxMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJiZTA3NmM3YmVmMjNkNzZhYzQ0ZGI4MTJmZGYwM2RmYjdlYzRkMjNjMmMyNDA4MmRhMzZmYzc4YjY0ZTcxNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA0MmNjZDAzZTBmZDRhM2Y5NGZlNWJhMzg1ZTE1ODU5ZGNkZDM2N2IwYjNlOGNmZDQyMzUwZDMzNmNkZmQzODUifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L174-L268",
+          "version": "repo-lines-v1:sha256:46ac7678e4e2dedc0b237f22f7dbda0997673dc9320591135c424162a39288eb:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5M2FmNWExNDE4N2YyYzkyNjBiNTc2NmFkNDAzMDIxZjQ1NTg4YzQ2Y2VkMmZhOWIwODVkMTQ1OGZjZjFhMzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NmYwNWE0NTRmZTQyMzQ1MzJmNGUxODRiMzNkM2Q3YjMxMjcxZjA3MGYyOWUyODI4MTU5YzRjM2Q3Y2YyNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU3MTdkNjg1NmQ2YjBlNjEzMzliNGFjOWYwNjE3NjFmMDJiNTU1Yzk0MmYxMGM0YjcyMjBkMWEzZTJiYzI4NWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzMjBkNTlkZjg4MTMwOWIzOTYzNTlmNTkzMDc3MGZiMDA0YTU5ZjRkNjg2MTI2MDUyYjJjZTIwZGVkOTYxZjQifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L44-L125",
+          "version": "repo-lines-v1:sha256:38a213299067afa61499d2ad67871011fc4a6dc00b554444521e1cd8a214c9f4:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZmQ0N2EwNmZlNGRiZjRkMGFkZTZkODcxZTgxZGNiN2ZjZWFlOTRmNjE3OTU0NjU4YWUyNjAyOTE1Yjk2OTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NmYwNWE0NTRmZTQyMzQ1MzJmNGUxODRiMzNkM2Q3YjMxMjcxZjA3MGYyOWUyODI4MTU5YzRjM2Q3Y2YyNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjZTg3MjUyZTA0NTRlZWY4OGEyY2M2OWYwMGNjOTU2OTRkNWU5ZmFmNGI2YWU2ZGYxNDZkMjQwNTc4OGY1ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxY2QxODFiMDIyNWQwYWE4N2FmZTU2ZDc0NDM0Yzg2ZGE5NjUyODJkZDEyNDk0ZTI2ZTY4OWI2MjkxNDZkNDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d6b7dea3f70245e19f8e929ea20f1c7d",
+      "statement": "登录端点用响应体标志位驱动 UI 分支：2xx 带 need2FA（可带 email、twoFactorChallenge）转二步验证并提交 POST /api/auth/login-2fa，4xx 带 needVerification / needDeviceVerify / accountNotFound 分别转邮箱验证、设备验证与「去注册」引导，其余 4xx 只展示 message；请求体必须带 altcha 载荷与 getDeviceInfo() 生成的 deviceInfo。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/Login.jsx#L114-L160",
+          "version": "repo-lines-v1:sha256:92c67d3e4e9665096768cbc62e28b67f086b101ae218f163ce1d40b864e09736:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZDQ1ZDg3NmMzNzJkZGUzMjA4MjRmMTJlNDRkM2Y1MDlkMGNlZDBjMDc5OWZmYTIwOTM3MmQ5ZTYxNGIxMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjcwMjU3NTkzZGEwNmY2ODJhM2RkZGE1NGE5ZDI2MGQ0ZmM1MTRmNjQ1MjM3ZjVjYTc0YjA4ZjhkYTYxYTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1YmM2YTNkMjM1NGE4ZGMzZGQ1OTdmODFmZDJjZGRkNDE1MGQ1NTBlZWVjOTExMjg3MTkwYjU5OTg4Njc2ZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiZTRhMjkwZjUxODdhZjFhNDFkYjk3NGQ0ODVkOTBjMDY0MDVjZGQyMWI5MzcwMDY5YTgwZWVkMzdkYTVjNzYifQ"
+        },
+        {
+          "resource": "repo://src/main.jsx#L1-L8",
+          "version": "repo-lines-v1:sha256:fa28b21a9cc85d70bb7ac1224c5e9afc3c966b1688d8755b20b8ba22ceb45273:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGNhMTNiNmQ5NWMyODBmNjIyNjIxNWJjMmY4NDQ2NjRhZTVmNzNlOTA1NDlhNDZjYjgzYjViNDIzOWQ5ZDVlNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNzAyNTc1OTNkYTA2ZjY4MmEzZGRkYTU0YTlkMjYwZDRmYzUxNGY2NDUyMzdmNWNhNzRiMDhmOGRhNjFhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWJmNDYxOTc2YjdhNGUzYzBlNjgzYzY5NDczMzU0ZjVlNWNjOTU5ZjgwODM2MjY0ZDNiMTkzYmJjZmExYjhhYyJ9"
+        },
+        {
+          "resource": "repo://src/utils/deviceInfo.js#L56-L66",
+          "version": "repo-lines-v1:sha256:bd93006385740cb458242f72ddb4adbda6e74f2c26e17f78e3fae4aaeb322eba:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ5YzRkNDM2MjQ2N2JmM2Y2ZTMxMzUyOTk2YmVhZDc3MzhkM2ZmYTQ0YWY1MTM0N2U4MTAzNzkzYWU0ODZhMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmNTBhZDNiNmZkMTMyY2Y3ODRjNzk0YWY5ZDQyMDJhZDNkMDY2MGM0OTYzNjRjOWY5MWQ4MDFiNDFmMDg4YWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a63a562a282a4c089bcd62c63d1c51a9",
+      "statement": "请求侧的契约由 axiosConfig 统一施加：withCredentials 与 15s 超时是全局默认，每个请求补 X-Requested-With: XMLHttpRequest，非 GET 请求等待首次 GET /api/csrf-token 完成后附加 X-XSRF-TOKEN，且任何响应体里出现 csrfToken 都会替换内存值（无需专门续期端点）。",
+      "evidence": [
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L1-L42",
+          "version": "repo-lines-v1:sha256:d1d509c755f75518840f9b5f2cafce174d8ed7da5cb4a32ac19dd31be38b9f5f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNTI2OThlZmEyN2RkNTIwMGVmN2M1NDk1M2YwMjE2M2M5MGM1ODJlNThkYzFmMDA1NGE1OGI5M2I1NmM0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjZDlkYjBkNzJhNjRhZjEwNmY1MTY2YmRhMGJkNjYzOWQ0YjI4NTFlY2JiOWFkMWEzNTYwYzUwNmU2Njc3NDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkZDE2YjVmZmE5MGY2Y2Y3NGJhMmM0OTNiZDhkNzliMTBhYThiMjgwNmUxOGUzZmJlZGJiMGU1MTI2NTExMWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b846a0025c8241479c0d6aa2e279934c",
+      "statement": "后端表面有三种接入拓扑：开发期由 vite.config.js 的 server.proxy 把 /api 与 /uploads 转到 http://localhost:5000（changeOrigin，dev header no-store，PWA devOptions 关闭）；生产推荐同域 nginx 直接 proxy_pass /api/ 与 /uploads/ 并用 try_files 做 SPA 回退；跨域需 VITE_API_BASE_URL，但当前源码没有任何 axios.defaults.baseURL 赋值，README 要求手工补该行，故跨域今天必须改代码。",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L123-L143",
+          "version": "repo-lines-v1:sha256:6ae353df73a153996bfe19d16b5dce3ba2c098231c5aaf31355b960c67cf9846:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4NzdkMzAxMTlmZmE2ZjE5OGEyMDg3MGFmYzcyOWEwODIwMmU5YzZlN2U3NmMzZTRiMzdkZjlmNmI4ZjhhYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYzU2OGVhZGRjYzQ4NDAyNmYxZTMyYWYyMmM3NWYzODUzNjJjZjJjNWMxZGQ5NjhjMDU5MmY1NzE5NTgzMzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEwNDZlMTIyYWQxNmYxODFlY2ZkZGU5YmIzZjE1NTJlNjI1NzBhNjY2YWJhMWZmY2U0ZGRhMTI4MDcxODJmMTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4YWUwOWUxMDZkZDFlZTljOWQ3NzQ1YzBjN2U3M2UyMGQ3NjVkZjdmNzU0MGI4NjNjZDNhYjI0Yjk0MzZlY2QifQ"
+        },
+        {
+          "resource": "repo://README.md#L145-L198",
+          "version": "repo-lines-v1:sha256:c56d5a405297eb9f90a9716a4ecd52fd33d9a44ca1efa2954ae9b72b231846fc:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmYzE2MWQzZDcwYmI2MWNjMTFmNjU2ODc1OTFmN2NiMDg2YzZlZTY3Yzg1OWQ3OTQ5YTVhYWI1MzdlYjUzNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjcwMjU3NTkzZGEwNmY2ODJhM2RkZGE1NGE5ZDI2MGQ0ZmM1MTRmNjQ1MjM3ZjVjYTc0YjA4ZjhkYTYxYTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdlMTFkOGM5MDY2MGY1YzI1N2ZkNmFiNjI5ZmU2NGYzNzRjOTlhNzc1M2M0ZWM3YWZiYTU4MTE5NzdhNThmNGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhOTdhNjI0NDFjZDFhMmU0MTk5ZTUzMWNlYTlhN2IzZWZjODczNTA0ODc5OTU4NzE4YjIwMTIxZjI5M2JjMzIifQ"
+        },
+        {
+          "resource": "repo://vite.config.js#L98-L115",
+          "version": "repo-lines-v1:sha256:b9ba86a5ae09fc6fb34b5a34081a57e269c93d9c7f8dbbd2649bc4c159f460b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlOWJkMTlhMzI3MDMxZDA5YjMwYjY1NGQ0ZTY1ZTk4ODIyOWZkYjk3M2IwOTc2N2UwYmY0OGU0NGNiZDYwMTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmZWI0MmVjN2JlMDY2ZTJjOWRkMjE5NTk5MjRlYTZiZjg1MjY4ZTI1NTczNWI0MTg0ZGRmZTUzZGYzNzJjOGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMDRkNTJjZTA2NjYwZWFhYmJlMDlmZTZmMjQ1YTRkNjJmYTkzMWFiOWMwM2E0MGQ1NjUwZDQ4Njg0NTA1M2MifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a39221456ed8473cbd520007d75ee5f5",
+      "statement": "Service Worker 的运行时缓存以 URL 前缀白名单耦合 API 设计：^https?://.*/api/(episodes|series|categories|banners|friend-links|site-content) 走 NetworkFirst（10s 网络超时、最多 100 条、1 小时），^https?://.*/uploads/ 走 CacheFirst（最多 200 条、30 天），因此新增可离线读取的资源前缀必须同步该正则，把鉴权接口挪进这些前缀则会让响应进入共享缓存。",
+      "evidence": [
+        {
+          "resource": "repo://vite.config.js#L57-L79",
+          "version": "repo-lines-v1:sha256:e338686bff3479ee607993fb1089ad47530b857c5c03b83a9c1b1be42ddf0387:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4MTQ3ZDdmNjExMjMxMDk4MTI4Y2Q2YzkwMTBkMmI1ZjcyMjI0Y2JkNWRmNTYzY2M5MTRkNTVlODllZDlhYWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2YTdiN2M0NDYzMjkxMzUzZDZmNTU0N2IzMDUzZDg5MjU0NWU0ODA4YzYxMGFiN2QxNGNlOGZmYmIwMzM3NTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2MWE5MzYyOThiZTMwNzExODZjODYzY2EwNzljY2NjOTMwMGIxY2MwMjI5ZjQ2M2Y2ZGRlNTg1ZTBiYmI5MDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2ZGE5NmFhN2YzOTY0ZmE2YWY1YWNmMTkwODkyNGU5MzFiMjdkMjA5MzI3MDczYzI4NTAxMDVlZGZmYjE0MDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d04c91ee53c74fc88a481c9c2e9a8518",
+      "statement": "注册表与代码存在多处漂移：ADMIN.BACKUP_EXPORT/IMPORT 写 /api/admin/backup/* 而 AdminBackup 实际请求 /api/backup/*（哪侧正确待后端核对）；NOTIFICATIONS.LIST 需再拼 '/list'；AdminThemes 用 API.THEMES.LIST.replace('/list', '') 生成 POST /api/themes；首页用魔法值 API.STATS.RECOMMENDATIONS('personalized')；AUTH.CSRF_TOKEN 登记但拦截器硬编码 '/api/csrf-token'。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminBackup.jsx#L21-L56",
+          "version": "repo-lines-v1:sha256:f11f9c6b124532facbd1f3404572716325bcfd0594381dde04072daaa03c52a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMGZlZDIwMDNhZWYxY2U3M2IyMTI3YWRmYmFkYjIzM2FiNTc3NDM4MjI5NWRjMDJlMDA1NWQ0NWRmODdhOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4ZmNhZmJkMDFhY2U1YTQwMzQ5MWYxMzJmMDliOWU5N2ZmMDE4MmY4OTU4YTA3ZTY2MmI3ZmQ5ZmM5ZWM1ODgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NGEzYTUzNGQzYzQzMTcwNTM5NWUwNjE5M2RkMTAwZTczMDVjNzE2ZmIyZTBjN2YwMGY1YWE1NWE5YWE3ZmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminThemes.jsx#L64-L82",
+          "version": "repo-lines-v1:sha256:a17779ede9d6225b31fffc6b72236ad9a225f47d79082702cf45308d1a6ab2bb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1YWZlMjIxZDQxZDMyMmZjNTFlNzAzMzBjMTc4MTdjZDAxYTNiNmQxZDc4ZGRkMzUwNjU2ZjJlZmVlODc5ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjYTdhMGYzNmEzY2Q3NGNkNzJlZjA0YTNhZmY1NmUzMmJiMWQwYzcyNjliMDc3ZmU0Nzg2ODI4YzA4NjM1YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0OTA1ZjgxNTExZjczNDEwNDYzZjg3MDM1NWMwMWNlZTE2YmEwYThiOGY2MTljNGNhZWQ3ODRjNzc4NGRkYWIifQ"
+        },
+        {
+          "resource": "repo://src/components/Home.jsx#L105-L121",
+          "version": "repo-lines-v1:sha256:78438280405e500608d72fc4ae8e863235c5057489c5a0950a22cde1de22d9c5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhN2I4ZDM0YTA2MTU4MjczYTdlOTI1MDRjMzI0ZGZhOGUwZGIzMGRmMjYzOGFkNWNhN2YxNDUxNmJmYjI0ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiZjlmMWEwMzYzOTZjYzAwY2Y4YTEwOWM5YzIxYzEyZDcxMDQ1MWZiMWE2ZGU3ZTMyZDE5MTBhMzA1N2Y3MzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2OTUzOGQ0ODcxMTJiODY5N2M1MzU5YjA1OGJjMDFjMTUzMzlmZTk2ZTg0NzA2YTAwNDQ1OGRmMzY1OTYyYTIifQ"
+        },
+        {
+          "resource": "repo://src/hooks/useNotifications.js#L106-L119",
+          "version": "repo-lines-v1:sha256:73846fd7f52e879491942dabfef6382e5313b315bf27c0b1653d59aa279395fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyNjVkMzVmNzNhYTZmYjE5ZjM5ODNjODU5M2RkNjUxOGQwMjA5YzQ1Y2Q3MjViMmNhNTgxNWFhY2Q0ZDkxMjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5YTlkNzhiZjVlMDNhM2RiZWU5YWQ4YjI4NTliYjc2YjNjOGEzYjNiNDU2ZTdmOWE2NTY1MjgxYjVmMTUyYTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3ZmMxNjAwMWRmMGI5MzM0ZTc0YWEyN2MxOTY1ZTcyZTc2MDQ2ZjljOWUzNjg5YTkyYjExYWNjMDQ3MDgxOTcifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L37-L100",
+          "version": "repo-lines-v1:sha256:ed843a72d0562f9899896376b50367557fda45965743c5743130c00363501ae3:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjMWEyNmNiMTgxZGU2NWNlM2MwM2IxMDA2NzRlMTk3OTZkNzBkOTE5ODJhYWJmZTUzMWNmYmQwNDg1ZWZmZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2NjEyMzdjNjExZDcxMmUzNmM0OGQwMmE2NzQwYTUyOGVlZWU1YjdjN2M1MTNjNjkyYmMzNmE0ODUzNWM2ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE0ODZhZmViNzdhYjNiZjhhNGU3YTRlOWY5MzYyNTM3OTQ1ZmRmMzFkY2QzYzE5MjY3Y2QyYTY3MTgxNzJlMWIifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L12-L22",
+          "version": "repo-lines-v1:sha256:f4fb6f6285f0fff220a03ab77a2bf6b377a58a90e316568b366eac6a968bbbbe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkNjIzNjRhODIwYzhmMThlMzk0YzBkY2NhNTU1N2M4OGM3ODc5MjViYzJjYTA1NDBiZjY1Zjg1ZmJhMzAzNjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhZWI5YTc5ZGM1MTUyZmI2MTI2ZGY3MGM4MWEzOTQ1OTMzOGE3ZjA4ZjdlYmQ2Y2NiNjQyMzMxYjc2MWYwNzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmNGYyNTA2ZWMyM2MwNWQ0MmIyODcxNzE3YmJjNjhhMTczM2M0ZGJkZTRjMGY3MzcxNWZkZGY5NGY3MzQ5MGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4Y2I5ZGFhODdlZmVkNGFkNDZmZjk1ZWI1ZWJhMzhkYTdjNjI4ZTVkMjllMWU0ODk0Mjk0ZDAyZjYyN2EwOTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_851fb0de89324761b67a5f04f0e9dd95",
+      "statement": "翻译有两个端点且只有一个在注册表：单条 POST /api/translate 用 { key, targetLang } 换 { translation }（未注册，前端限 6 并发、15s 超时），批量 POST /api/translate/batch 用 { texts, targetLang } 换 { translations }（顺序与入参对齐，调用方分别用 30s 与 120s 超时，后者另有 130s 竞速兜底）。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/TranslatableText.jsx#L198-L224",
+          "version": "repo-lines-v1:sha256:fe05df3ac6a72c66f85a70e7a22cdc1bd77c258da82e4f362477808755b4cb5f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiMmZkMWRiNjM1ZWE0NmFiODdjY2U5NzMwZDBkYjgwNDY3ODVjYjQzMDA2ODI1ZDNkZDNkZDRiNTExYWMxZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyNTFiZmFiY2ZiNmQ4OWZkOWY0ZTNiN2JjNGExNzRmZDkwYzk5ODE4NmU0ZmRlMmM4ZmEzNGU2ZDVjMjkzYWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFmOWVmYTUyYmZkNmE3NDkyMjM4ZTI0NGQ0OWVkNTVhMTM1YTRkZmEyYjU3MjI5ZTNmZmYyODVjMzliMmUxNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA1YTQ0ZDQ4MmQzNWRmM2U2ZDNkNmZiNjMxYzc5NWMzYTZhYzU2ZjUyNGRhNTdiZjExMTYwNDcyNzJjOWVmMmQifQ"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L1-L51",
+          "version": "repo-lines-v1:sha256:f82f225e94d48da3f5730d40a794e17ebbad23986e12637051f549748f630bb0:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmOTk5ZDI1ZjA2MTI4ZjBmZjhjZTc3NjFjZGY5MWE5Mzg0ZjY2OTMwZmE1Yjk2NDRkZTA2MGJlM2JkODMyMjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmMTA0Y2RkNGIyODY1ZGRiMDM2MDA1MjNmNjNkY2Q2MzY2NzI1YTgwYzQ0ZThhMTczNzc2Yjg0ZjNkMjllNDcifQ"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L171-L200",
+          "version": "repo-lines-v1:sha256:9873b278f882f3ebd1bbec81fb35e038dbdd8c6b49e1fc77f9fc4b049f614b4c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ5ODA3ZTk1YTQxN2YyMmZiMzBhZDRlZGQ2NTJkYjRjZWVjMjc5YjU2MDkyMTlkYWNmZGE2YzA1ZmU5MGYyMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxM2M5NDJjODVjYzdjMDBkNzM0Yjg3Y2JlMzRiODYzZmYyM2ZhOGQ4NjMxMjM3NGEwNzQ2ZGI1YzgwZDY1OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNkNGE0NTVjODcyNjM4MWE3YWYwYzBkZjgzNzRiYmQxOWFkZjFhNGVlYTAxMzliZTc4YTFkNjBkM2UwNDEyZjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyNWEwM2MzYjk4N2NhMTIxYTM4MTE3YmU3OGY0NDQxNzYwNWE3YTA5MTNjYzc2OTRlYzRlN2NjOGI5N2YwMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_560abfe04321475d97415166a6825d1b",
+      "statement": "RSS 与健康检查属于「前端几乎不消费」的表面：/api/rss 只由 index.html 的静态 <link rel=\"alternate\" type=\"application/rss+xml\"> 暴露（前端运行时不请求），其用量统计由后台读 GET /api/rss/api-usage?days=，而 /api/health 仅在注册表登记 HEALTH、全仓库无调用点。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L28-L34",
+          "version": "repo-lines-v1:sha256:02158fee1287b57181890f1df33c16de04f7c34d4f8ffe910e6f4f794f0fd642:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTY4ZjFmODYyZjQwNjg0ODE4MDBiOTEwNTc3ZWQzMTcxZjA4OGRlNGVmZjIyNDFlZmRiODdlNmJhNWM3MDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzkwYTE4N2M1MzFkMzVkZmZkYTNhZmQ3OGY0YjZiMzhjNzk5NDFmYjVkNDZhY2Q4NjU4MzY0YTI1NzgyOTlmNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjg1ZTIwNjhmZTU5ZmFjMzc5ZWUzYjU0Yjg0YzEwOWFjMTgzZDllMGZjZDJmZjllNmZiNGE5ZmY1YjE0ZmMxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWU1ZjYxOWI2NTBhYTYzMzYwZjcwODU2MmZkOGUzMzkzM2IwYmU5NzhiMWE3OTNjZjJmNjU1ZGE5ZmYxNWEyMCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminApiUsage.jsx#L14-L22",
+          "version": "repo-lines-v1:sha256:a640a599fe71ebd647dc9c19815c06a11b6c1d9f245cc2ce5281accc7e259f47:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjlhMmJkOWZiMTU3ZDI1YTVkOWRlNzU4ZmY2MDRkN2M3ZWY5YTE1NmVkNDAwNjA4YjRkYTEyNTE0N2ExYjFmOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNzAyNTc1OTNkYTA2ZjY4MmEzZGRkYTU0YTlkMjYwZDRmYzUxNGY2NDUyMzdmNWNhNzRiMDhmOGRhNjFhNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjRhOTA4ZDY5NWI5ZmM1MjhjMzkxZThmZGU5MmE5MmM0MjE3MThmMDg3NmJkN2JhZDU5NGViMjEwNzkzNDUyNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTc1NzczNDk2YTVmODk2ZTI2MGJkM2UwMDkxMzU3ZTQwMDVkMThkZTQ4NmE1Y2Q5OGE5NDhjMGNiNWM5NmRlNCJ9"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L125-L127",
+          "version": "repo-lines-v1:sha256:4206530ee5df0cbb72460d57c60f11c256cc190718428cfdb797ccbb8b15f725:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjBjOTQ5ODU1MjZjMWM1N2VmMDBjMDBkM2Y0ZGM5MDYxNTY3N2EwYTM2YThiNzk1ZGZmOWFmZmQ1MGZlOWY1OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWIzMDM4NGY1NGRlNjU2NzMxNDQ2YTI1MzY0ODdlNzE5NjVlNTllZTQzZWY3Nzk5MGE1YWRkOTg1YTdlNGY0NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjY5Njg0ZDZlZmU4ZGUwZGY2MmNkMTliY2Q0YTBjYzhhNDNlYTE5NTBhNDAxOGYzN2QwNzA4ZDQzZDVkMmZlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGZhOTgwOTA0ZTkyYjZlNWQ1ZDg0ZTQ3MjBlNzdmNDIwYjBiNmQ4NWM4ZmJiNzMzNmU5NTI3MjJlOTk2NDM2MCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_979d1597dbcf4bc0addb9e0f08b659ec",
+      "statement": "有些 URL 与 URL 格式校验以字面量形式长期存活在代码之外：offline_queue 存 { method, url, data }、index.html 静态写死 /api/rss、ThemeEditorModal 用 /^(\\/uploads\\/|https?:\\/\\/)/ 校验壁纸地址（只接受 /uploads/ 前缀或绝对 http(s) 地址），因此重命名上传目录或返回无前缀相对路径会让壁纸与离线动作静默失效。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L28-L34",
+          "version": "repo-lines-v1:sha256:02158fee1287b57181890f1df33c16de04f7c34d4f8ffe910e6f4f794f0fd642:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTY4ZjFmODYyZjQwNjg0ODE4MDBiOTEwNTc3ZWQzMTcxZjA4OGRlNGVmZjIyNDFlZmRiODdlNmJhNWM3MDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzkwYTE4N2M1MzFkMzVkZmZkYTNhZmQ3OGY0YjZiMzhjNzk5NDFmYjVkNDZhY2Q4NjU4MzY0YTI1NzgyOTlmNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjg1ZTIwNjhmZTU5ZmFjMzc5ZWUzYjU0Yjg0YzEwOWFjMTgzZDllMGZjZDJmZjllNmZiNGE5ZmY1YjE0ZmMxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWU1ZjYxOWI2NTBhYTYzMzYwZjcwODU2MmZkOGUzMzkzM2IwYmU5NzhiMWE3OTNjZjJmNjU1ZGE5ZmYxNWEyMCJ9"
+        },
+        {
+          "resource": "repo://src/components/ThemeEditorModal.jsx#L130-L160",
+          "version": "repo-lines-v1:sha256:68027fc7bcae98f6c11eedf55b2d6a94e4a622258bab2457f5fefe3087737541:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwNDZlYTBmNmMzOTMzZjY4OWNmODczMzBmZGI5ZDEzMjViMzAwN2UzNGRlOGMyODFkNWViNGYzOWU3OTE4OTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiYzNkOTk4YjE5OTFmOThmZDA3ZTA2NDZkZDJkN2IxZmQ3Yzc0YTVmNWZiMTc4MTYwMGI5YTlkY2I0YzllNjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM0NWZmNDNiM2ZhYzgwYzlkZmU5NWM3MmY4YThkZWZmNGZkNjQ4OWY2ZjRiMjgwZmVkNDZiNmYwZDI5MDFjYjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg0YTU2N2UwMzk3OGM5ZTUyNmQ5MTUyNWNkZGM1MzAxYmY2NGVjNTljYjRiNzE2ZWI2M2U4NzBhMTNiZTE4OTEifQ"
+        },
+        {
+          "resource": "repo://src/components/ThemeEditorModal.jsx#L30-L45",
+          "version": "repo-lines-v1:sha256:e912b4eb7dc93febdea496cc51969087ca994bb39fefaa5b1a087bdbde73b93f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4ZDgyMjc0MzE5YTMyNGE3NjUwMjZkOGU4ODdjNzkxMjU1YTBjOGFhNGM2MDRkNmUxYTA5NzM2NDUyODQwOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZjODAyZDc0NWJlNWI5NTkwZWI1MTM4ZWMyYmRmNTM2YTM2N2UxMDFiYWZhNjk4YjUzNmNkOWZmNzM4MDdlNDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzgxMTNlOWQ4N2M2YjZmNGQwY2UzNmI2M2E0ZjgwZDI3YzE3NTFkNDA3YmI0MTNjNmYzMDMzOTA2NGU1MWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3YzI0NTQzYmZlNjFkODkzMjI1YzQ0ZGQ1ZWYyZGUyYmExMmNmMzE5MzFlMDgyMDg2YjQ0NjA0NjhkMDc5MTQifQ"
+        },
+        {
+          "resource": "repo://src/utils/offlineQueue.js#L1-L19",
+          "version": "repo-lines-v1:sha256:7a15341dcb7943c04b8ea40b57150009a2d02d8f843ce1370578fc6b80f3b4db:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2ZTE2MjQ4NDM0NmQ3N2MyYzhkYTg5NDBmOTYwMGNkYWRhODk1ZjNmNGVkMTgzNTI0ZDQ3OTE3YjBkODY1MjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhMWE5YzUxOTk3YWJhNmZmZDQ5Mjc3ZDZhMDE2NzU2ODQ3MWMwNWJjNGEyMjkwZDI3MWEwZTVkZGQwNDVlOTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d1a308cdfb054bbc92c3f57291559448",
+      "statement": "待审核/未通过剧集的详情响应带 X-Robots-Tag 响应头，前端同时在 EpisodeDetail 动态插入 <meta name=\"robots\" content=\"noindex, nofollow\"> 作为 SPA 端兜底，二者构成同一 noindex 契约的两侧。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/EpisodeDetail.jsx#L116-L131",
+          "version": "repo-lines-v1:sha256:af11a025ef7f954b451e6bad6b486ae1e15dcea6d97e0d29226408036666c392:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjYWY1NjkwNmM3MThiMDIxZTU0NTEwOGJiMmIwMDUwYTM0NWQ5OTJmMzRkMTVhZWQ0NTQyMDE4ZTcxM2IyOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1Yjc0MDFlYzg5ZWJkZmFjNjQ5N2RmYWIwMjcwNzUxM2Y1MDg1NjNjNTUwMTRjM2M3MTFiNzMxN2IxZDNiZTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg5YjU5ZTljN2JlZTBmZTIwN2EzNWFjOTFmNjA1YjY2N2VlMmVjNDgyYWRmNmMyNTk0ZGJjZDcxY2NjMzRkOTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyZDI5MTE1ZGQwNzExMTViNzBmYTk3ZDgzMTMxZTA4YmJhZmZiMTJlNTI3M2MyODc3MTI1YjY4Y2E0ODdjODAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-10-29T12:47:15.545Z"
+  }
+}

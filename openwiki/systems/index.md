@@ -1,0 +1,11 @@
+# 文件
+
+- [管理后台：布局、角色可见性与待办](admin-console.md) - 归纳 /admin/* 管理后台的外壳与校验链（AdminLayout 二次 verify、心跳、登出、useOutletContext 传 admin）、仪表盘按 creator/admin/superadmin 分层的入口与 pending-counts 红色徽章、各管理页按职责域的边界，以及 adminApi + 表格 + Modal 的共用模式与新增后台页的同步清单。
+- [认证与账号体系](auth-and-account.md) - 前端用户账号全流程：altcha 人机校验下的注册与登录多分支状态机（needVerification / needDeviceVerify / need2FA / accountNotFound）、跨浏览器设备验证登录码、2FA 启停、密码找回与重置、邮箱验证与变更、强制改邮箱拦截、AuthContext 初始化与心跳、设备会话管理、数据导出与账号注销。
+- [内容发现、剧集详情与用户内容库](content-catalog.md) - 用户侧内容消费链路的实现说明：Home 以 URL 查询参数作为筛选/排序状态的复原依据并叠加无限滚动与 sessionStorage 滚动恢复，EpisodeDetail 用三个独立 AbortController 请求装配详情、推荐与登录态并串联 view 计数、历史记录与通知已读；另含更新日历、时间线、创作者页、搜索/标签云，以及 Profile 的收藏夹、分享文件夹、关注与历史管理。
+- [界面国际化与运行时内容翻译](i18n-and-translation.md) - 前端的两条互不替代的翻译路径：locales 静态 UI 文案与 t() 的插值/回退语义、切换语言整页 reload 的原因，以及后端多语言字段缺失时经 requestTranslation 队列调用 /api/translate 的按需机器翻译、跨实体去重缓存与失败标记；另含 CSP 翻译域名与改动检查清单。
+- [图片上传与裁剪管线](media-upload.md) - 前端共享媒体管线的实现说明：ImageUploader 的 URL/本地文件双模式与归一化坐标裁剪框、aspectRatio 与 canvas 输出尺寸如何决定上传内容、各调用点实际使用的 uploadEndpoint 与 FormData 字段名、useImageUpload 的 5MB 与图片类型白名单校验，以及上传结果 URL 在剧集封面、头像、站点素材、主题壁纸与图标、系统壁纸库等处的消费位置。
+- [通知投递：SSE、轮询与 Web Push](notifications.md) - 前端通知系统的完整链路：先用 axios 换一次性 ticket 再建 EventSource、notification 事件直接采用后端 unreadCount、断线按指数退避重连并以 60 秒轮询兜底、未读数写入 PWA 角标、Web Push 的 VAPID 订阅与退订，以及 NavBar 面板里通知类型到文案的映射与扩展规则。
+- [PWA、离线缓存与浏览器兼容](pwa-offline-and-compat.md) - 兽剧前端的 PWA 与离线行为：vite-plugin-pwa autoUpdate 与 virtual:pwa-register 注册、workbox 预缓存与 api-data、uploads 运行时缓存白名单、运行时 manifest 指向后端动态端点与安装性、beforeinstallprompt 事件桥与安装入口、offlineQueue 的去重与 24 小时过期与 3 次重试及上线重放、OfflineIndicator 的离线/恢复/会话过期三态，以及 index.html 与 BrowserCompat 的双层兼容检测和绕过记录。
+- [运行时站点配置、公告与静态页](site-settings-and-announcements.md) - 站点配置链路：SiteSettingsContext 如何拉取 /api/site-content/settings 的 JSON 字符串、30 分钟 localStorage 缓存与 refreshSettings 生效路径，App 如何据此写 document.title、favicon、apple-touch-icon、运行时 manifest 与 theme-color，公告 banner 与 popup 的双通道与本地已读记录，以及隐私/条款/关于/许可/友链页的内容来源与后台写入侧（AdminSiteContent 与只读的 AdminEmailSettings）。
+- [主题、外观与图标引擎](theming-and-icons.md) - 前端三层外观机制的实现说明：ThemeContext 的 dark/light 全量 CSS 变量表与 accent 派生（generateColorShades 覆写 --primary 家族及 23 个派生变量）；App 运行时壁纸注入与优先级（用户壁纸 enabled、壁纸槽为空回落站点默认主题、data-custom-bg 属性）；IconContext 的 sanitizeSvg 清洗、全局映射与主题图标覆盖、受保护键 misc.logo；以及主题工坊/编辑器、三档外观设置与后台主题管理 + 主题审核的两槽模型。

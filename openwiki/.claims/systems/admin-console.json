@@ -1,0 +1,464 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c956f34b4d2c8ac16fb239bace387c76deef549aaf8ff87d8913fdba53a17ea7",
+  "claims": [
+    {
+      "id": "claim_72cef75d9f7c47a6a71abf3565c57cec",
+      "statement": "`/admin/*` 在 `App.jsx` 中是独立于前台的一棵 Routes 树：`isAdminRoute`（路径以 `/admin` 开头）成立时只渲染后台路由，不渲染 `NavBar`/`AnnouncementBanner`，仅在末尾保留 `FooterBeian`；`/admin` 自身挂跳板组件 `Admin`（verify 后跳到 dashboard），其余 23 个子路由挂在 `AdminLayout` 布局路由下并各自包一层 `AdminGuard`。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L141-L162",
+          "version": "repo-lines-v1:sha256:72d8fe0e820c8b7da294d9ab9f90be60876413baa22522bb30d08e9de4655e6f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3YTZlOTc1NDZhY2NmZTRhMjVlNjkwNGYzN2MzODA1NDE2OTBmNmQyN2I2MzQyZTQyNzJlMzFjZTYzODlkZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVlYjJjMWEzYWI0YmExMzFiNTk1OGI1MThjNTY5MjJkZjg1M2EwY2U5ODU0NmZjNjYzNmU5MmE5NGFiMDQzYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1YWNiNzMxNTVlMDJkOTk3ODMxYjU4ZDkyZGI2MGU3NGVkNzFiZjIxODFjZjdmZjY2NDhiMjM5MTQyZGQ1MjYifQ"
+        },
+        {
+          "resource": "repo://src/App.jsx#L372-L372",
+          "version": "repo-lines-v1:sha256:ba51a3421a1c40daea8bbc7e18d7a811301e7733d1c28340049acaeb444112a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmE1MWEzNDIxYTFjNDBkYWVhOGJiYzdlMThkN2E4MTEzMDFlNzczM2QxYzI4MzQwMDQ5YWNhZWI0NDQxMTJhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmE1MWEzNDIxYTFjNDBkYWVhOGJiYzdlMThkN2E4MTEzMDFlNzczM2QxYzI4MzQwMDQ5YWNhZWI0NDQxMTJhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODhkYzliNWUxZDAyYmM5ZTZmMDc4YmQ2ZjEwMGJkZDQ1MGY1MDA3N2NiYzNlZmVkMjhmNDA3MTIyZWFkZDJkNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWU1YzQ5MWZmYjc0OWYyZDBkOTMwZTg4ZmJjOWUyZGFlMjBjYmU2OWFlNjIyMzY0YjhhNDFhNDYxYTc2MzFlMiJ9"
+        },
+        {
+          "resource": "repo://src/App.jsx#L507-L543",
+          "version": "repo-lines-v1:sha256:7fee016d7eacbd0bfbb432982a38dcb185d9481041aadd39a5e7821f367d5f57:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0NzgzZDRjNmNmYTVhMTQ1MzE2YWJlMGJhN2Y2MzgyOTNkZGU3ZjBiZGY5NTdjMTgxMmU2YWQ5NGIyMGFjYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMzQ1MTgwMTA1YjBjNjZhNzdkYWQ1MWJiMzc5MDFhMzczMmM5NjU0YmE0ZGUzOTgxZjgxZTE4MTc1MjQ4YmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzNGI0NDQ0ODYxOWFlOTUwY2RlYzBkNjRhMmExYmQ1NWY4M2M0MmYxNTE5OThlYTM0YTE1Y2U4Mjg1NmM0ODEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMwYTkxOTZkZjI0MmJhM2Y2ZmI2Zjg4ZGQ1ZDA5NThiZDA3N2M1ZjllZjRmZmZkZmMxYjYzODU1ZmYzMjMyZmQifQ"
+        },
+        {
+          "resource": "repo://src/components/Admin.jsx#L5-L21",
+          "version": "repo-lines-v1:sha256:696405a99682787095ec3b1dd59093100c07c90c851684f17ea61c86a99e5d96:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwNmI3NGVlNTk1M2YwNTA5YjY4MWMzYmMwNGQxY2Q5YTZjODA1Y2YwYzZjYzY3OWM5YjllYjk5YWI0NmMxNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE0ZjM5ZWE4NGI2N2RlMGMzZGYwYzFjMjU1ZTk1YWZjNjYxYTA4N2YzYjM0YzkxYjYyOTZiZmEzY2E3ODk3NjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMyOTZlZmU0NTFiYTFiOTAxMmQwOWNmM2EyMDU0Y2JlYWZkYmM2ZWYwZmVmODAwMWRhNTA0MmY2NDZhOTA5MjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14e330071c7c4c5e82b247544215feae",
+      "statement": "`AdminLayout` 负责后台的身份与生命周期：挂载即 `GET /api/admin/verify`，成功把 `res.data.admin || res.data` 存入 state 并通过 `<Outlet context={{ admin }} />` 下发给所有子页，失败则 `navigate('/login', { replace: true })`；`loading` 与 `!admin` 两种状态都 `return null`，因此校验期间后台是白屏而非骨架屏。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L100-L102",
+          "version": "repo-lines-v1:sha256:50ea0fa515097152f872f1e1c836da4584b1ef6b1775454cc093baf9485065f6:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFlMDA1MDE5NjAwZDNkZjM5MjI5ODI5NWYyMDExOTQ5NDRmN2I0NDFjYjc4MzViNGJhNGQ3ZTliZTU2YjFkYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTAzNGNjYjQzMDcxZjkwZTE3MmZmNjcyZTU2NzY5ODQwNjI4MTE0ZjZlMjJkODQ4MDBkYTQyYzE1MWRhNDRlNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWFlNGViMmQ4MDJmZjJkODA2ZTk3MTZiNjQxYTY1ZGY1MThjNjY5ZjAyNWFlZWU2OThlNDU1YTIzOWZkODcxOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDk1OWUzNjlkMzAwMDdhNGFhNjU2ZGIwYTVmMjk4MWI1MGI3YmU4NGEzNGM2MTJlZjQ1YTNiYzg3MjM0MjY5YiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L12-L40",
+          "version": "repo-lines-v1:sha256:f621e2ab9d4803c0acb3db1d7128f1c7f9b1623e0d304d4c5dc42da9ed176cd5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NGExZWM5NzVkMzEyYjViYzRlNjZjOTRjYmZiNmM1ODM1MWEzOGQwOGIxNTIzMjVhZjFhNDZhNWZiYWQxYjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3ODg3MmZmYjljMGQ4N2U1MGViNDAyNjRhNzZlZDI3YjhjNTUwMGZmOTdmNDM3MDI4ZWMxMWU0ZTA2NWJiOTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYzZjU1ZjU5MjA4M2M4YWJiOWM4ZmRhNDZkYzc5MDQ4OGM3MTUyMmRjNDIyZDIzNmFjNzU1MmY4YjNhY2U5NzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4044e6124ecf441092aabc862567440d",
+      "statement": "`AdminLayout` 还持有两个后台专属副作用：每 5 分钟 `POST /api/user-sessions/heartbeat` 维持设备会话（失败静默），以及登出时 `POST /api/admin/logout` 后无条件清空本地 admin state 并 `replace` 到 `/login`。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L25-L37",
+          "version": "repo-lines-v1:sha256:05137f685c980307d96f5fb2dfa13862be0e65e815026fa811d8a5aa5e0bb9d6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhY2NlZmFlMzBkYjUzMWY5YThiMjFiNTRhMTIzZmU1MzJjYTg0MWM2MDRhYTJiMzA3ODdlYmNhMTVlOTI3OTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2ODJjOGQ0MDlkODM2NTcwNTE5NWIzMDEyNTYwOGI4ZjAwY2E3ZjllYTkwZDQ2NTNkMDQ5MmM4MmM4OTc2MjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlhNjI2NWU3NjMzNWY5YmI2YjQ1Nzk5MjhlMTI5MThhNDA0NjYxMGY1MjZhNDgxYmE1YjdkYjI3ZmRmOWIzNTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3fb988be03a141fb8c9400c7910305c4",
+      "statement": "后台外壳没有侧边导航，`AdminLayout` 顶栏只有四个固定动作：`navigate('/admin/dashboard')` 回控制台首页、`navigate(-1)` 返回上一页、原生 `<a href=\"/\">` 整页跳出后台、以及登出；因此后台页面的可发现性完全依赖仪表盘卡片。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminLayout.jsx#L42-L99",
+          "version": "repo-lines-v1:sha256:41c1b592c1f24ee1b29f05abab0f29f981db32fdd629bf6d3fe6e877225322ca:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiODkxZjAxYjg2OTcyNzdhZTAxMzRjNWQ3MzJjZmFhNzQ2MjdhN2JhMTUxNTQ1OGE5MzIyOWM3MTA5NjE2ZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwMzRjY2I0MzA3MWY5MGUxNzJmZjY3MmU1Njc2OTg0MDYyODExNGY2ZTIyZDg0ODAwZGE0MmMxNTFkYTQ0ZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkZWZiYTBkZGQ1MTI3OWNhNDNlNmUyYjQ0YWRkZjM2NTFlZmI2ZmY3NmU3NGI4ZGQ0ZDYzYmU1MzkyY2Y0ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwZWEwZmE1MTUwOTcxNTJmODcyZjFlMWM4MzZkYTQ1ODRiMWVmNmIxNzc1NDU0Y2MwOTNiYWY5NDg1MDY1ZjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_021ecfaf1dae485b8c35d8e5ea4296aa",
+      "statement": "`AdminDashboard` 按 `admin.role` 分层渲染入口卡片：creator 只看到剧集管理（描述改为“创建和管理我的剧集”）与创作者主页；admin 额外看到分类、轮播图、审核管理、剧集回收站、举报、用户反馈、数据分析；superadmin 再获得用户管理、创作者主页管理、公告通知、网站内容、邮件服务、操作日志、数据备份、友链、设备、API 用量、主题、主题审批。三档并非严格包含关系——创作者主页卡片仅 creator 可见，admin/superadmin 反而没有。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L61-L233",
+          "version": "repo-lines-v1:sha256:3f8abf65a2851aec7a5a40558f4c9f104ab2051fd8df4d4d2ec817b8225081d8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTczLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1MjRlMDg3ZjcxYjdjNGM1YTI1YWY5MDMwYmUyNzIwMjJlYjQwYTIwZGQ2YzJiZDRiNzRjNjc0NDM1MGIxM2ZlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3ZWI3MDI1NzU5M2RhMDZmNjgyYTNkZGRhNTRhOWQyNjBkNGZjNTE0ZjY0NTIzN2Y1Y2E3NGIwOGY4ZGE2MWE2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0NzQ2MTJmOWZlNzVkNGU0ZjVjNDJjZjE4Zjc5NzczZDI3N2ZjOTBkZDczZmFhOThhMjAyNWQzNTQ0NDAzZWM4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1MTdjNGVmZjRlZDQyMGQxYzQ3MzkwNGJmMDRmODc3OGIwYmY2ZjY4NTI5ZDNiZjQzYTI2YjlmMzc1NjM1YzMzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_214b90a3e19948af9c5dc97b0f80a083",
+      "statement": "待办徽章的数据来自 `GET /api/admin/pending-counts`，实际消费 5 个字段：`episodes` 同时挂在“剧集管理”和“审核管理”两张卡片上，`reports`→举报、`feedbacks`→用户反馈、`friendLinks`→友链、`themes`→主题审批；`Badge` 在计数为假值（0/undefined）时返回 `null`，且仪表盘没有轮询，只在挂载时拉取一次。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L190-L232",
+          "version": "repo-lines-v1:sha256:fed5019517f4629d0c50cb759e06d45cb08ff2fb70f76a3771866ff046be857c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzMzkyZmJlNTljMzcxYzJlZTQ5NWJiZjllODRkNGY0NDYzMjNiMTQxNjM5MzEzNzQwMTU2ZjVmOGUwYzEwYTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzOTllOThlN2RiMDJlNTRhYWVkZGY2ZTIyYWNmMTMwMzk5Yzg3MGU4NDg3ZDIzZjc3ZjJiZGRhNzIwYjAzNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3MTAyYzg5ZTMxYTk0YmViMmQ4MGExMzcwMjJiNWVhODA2MmVkYWVkZTI5Zjk4MTcxOWQ3OGRiNTY5NDFjNjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRmZjg5MTI1NDQ4YWRjMTBjNTM5M2RhNmU1MWIzOGVkZjM3NjlmYTBjYzIzNmJlZjM3ZjAxNTgwYjA1NzcxMTMifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L25-L25",
+          "version": "repo-lines-v1:sha256:0b756860132c9f9e579c2e9bddd80dcb3025399d928fb8bcc66253b42d2387e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI3NTY4NjAxMzJjOWY5ZTU3OWMyZTliZGRkODBkY2IzMDI1Mzk5ZDkyOGZiOGJjYzY2MjUzYjQyZDIzODdlNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI3NTY4NjAxMzJjOWY5ZTU3OWMyZTliZGRkODBkY2IzMDI1Mzk5ZDkyOGZiOGJjYzY2MjUzYjQyZDIzODdlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjg0ZWJkOWQ2ZDIzNGZjODUzOWIyODc1NGQ3YzkxMzJiZjBiMzVmNGE1ZGJlNmI0M2NmNzZlNDNiZjQ1ODE0YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmFmYzc1MjU5ZjcyZTg3MWUwNzUzZmFlMjRhYTdiN2MzMDE4MWUzZDE1ZWVjZDQzZWUyYzJmNWI3ZWU2Njc3MiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L43-L48",
+          "version": "repo-lines-v1:sha256:f42deb0fbfb696b6c03ea7b5232f2a5d68595b9450447a919481326b693adef5:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzM3MGIyNDEwZmUwZWZjNDY1YmI1OGVlZWQ4Zjk3YzRlMmVmNWMyYmE1MWE1MDBlYjAxZGNlMTZkMWYyYTc0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjY5M2ZmYzRlMjYyNjFhN2Q2NGIyNmIzNDVhMjVmMzhmZThhZDQ1ZjgyZTk5NGNhZmFlZWIxYjZkYzg3YjFkZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L6-L18",
+          "version": "repo-lines-v1:sha256:058c87fa658f1047e077cecc9659c717d7f18d35a82a59a2351c55fb7eb41b02:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3Y2JmZDEyODY2ZjJlODI1MGQxODdhOTZjYjI4NGMwYzdiNWU1ZTY4OGRkNDM1ODliNmQ0Y2U3YzE4Mzg4ZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1Mjk5NDg2NDg2MWEwNWZkNGM3N2FiZTFlODFmNTE1YzlhNmRjYTUwMGJjNzE3YjhlMDJkNWI2NWExMDNiMjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUwYWJlNjc5ZmViYzIzZTllYTE0ZGEwYzM4ZjdiZGM5ZGRlNjA5YmIxNDNlYjMxYTIxYzlmMDdjYjQ5N2FiNmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L79-L83",
+          "version": "repo-lines-v1:sha256:7ca21b30445c362121dab2a0ec32d9e066a6c99c60bc1b72ca3dd8659b224b72:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2VkZmZiYWI4NDBjMTNhMWEwNWQwYmQxYmJlNmMxYTRjNTEwYTg0NWEwNTY2YTQ2MDkzM2U0MmEzYmE2MTU0NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWM3Y2I0OWQ2MDkxZjliYjE5OGMyODI0YTA5YWYzYmZhYzI0YjA3ODYyNjAxMDA5NmViMTYxZjVmOGUzNjkzMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmE1M2JmYzFjN2VlNWFmOTA0ZWQwZWUwYjAxZjYwYjY2YTE5OGI4NDQwM2MyYTA4MDM3NDg1MzliYzYzOThmNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzA3ZGU2N2ZjNWI4YTE1OWU1NmY2ZjlkNjljY2M1YzIwMmJjMjI4NGNlZWRmYjI4NWFiNTEwNDhjNTU0MTc2NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e9ce69c0f668411eb2de49235f0011ca",
+      "statement": "仪表盘底部“⚙️ 自动状态流转”面板仅 superadmin 渲染，两个按钮分别调用 `POST /api/auto-status/auto-complete` 与 `POST /api/auto-status/check-premieres`，把响应 `message` 显示在面板下方并由 `clearStatusMsg` 在 3 秒后清除，失败统一显示 `adminDashboard.operationFailed`。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L236-L257",
+          "version": "repo-lines-v1:sha256:306221dd730f94946ed1ae071c76b7ba37b7c5866f166eee69d12752610190ba:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3ZTM4NGY2MmYyMzQ5ZTQ3ZTI4NzUzMzE0ZWY0NWJiNGRmNmExOTA3ZGY5Mjc5MmNkOGZmYjAyNTczNjUwN2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiMGQ0MGJiMDM2NTcyNzlhYzAwYjU0Y2I5ZGQwYmJiMDM4OGEwNTIzNzAyNjA4Y2M4NjMzMDViMmQwNWQyMjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmZjg5MTI1NDQ4YWRjMTBjNTM5M2RhNmU1MWIzOGVkZjM3NjlmYTBjYzIzNmJlZjM3ZjAxNTgwYjA1NzcxMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjA4YjhhNzBkYTY5MGU5ZTNmODkxY2JjNzhlN2UzMmEyOTUyNTEzNDMzMGE1NmVmY2UyYzU2ZjJiM2ViNWUifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L26-L41",
+          "version": "repo-lines-v1:sha256:90c5754176eac663fd2c1023ce030a0a906377ac7b96db58ed7f576468bd8f8a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyY2UzMzdmYzI0N2E4ZmNlYTFlYzVjOTJmMjkzZjRlZDI0MThkMWQ4MTk1N2Q5OWJlY2NkZmIxZDcwN2IzY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkMDgyYWEyYWI0OGQ1ODQxOWEyNWM0ZjBlZjI3MjdkY2Q4ODVmNDIyMmY2YjViOTA3NzRmM2M5YmZmNTk2YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiNDY3YjViNDEzOWQ1YmRmOGYyMTc2NDFjZDY2YzU1OWE5NmNhZjU4NTZlY2E4ZWQ5NWZkMDIwYTM3OTQ3ZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyNDNkYmY1ZmU1MzdjOTBkYWMxN2U5ZGE2ZWIxNmEyMzUwYmIxNWIwOTI1YWRlODNkMTdmODZhYjE1ZjYwZGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d1ccc6bcdf4a4408997cc53d4ccfb351",
+      "statement": "9 个超管专属页在 `useEffect` 中做组件内角色门：`AdminUsers`、`AdminSessions`、`AdminApiUsage`、`AdminAuditLogs`、`AdminBackup`、`AdminSiteContent`、`AdminEmailSettings`、`AdminCreatorProfiles`、`AdminThemeReview` 在 `admin.role !== 'superadmin'` 时 `navigate('/admin/dashboard', { replace: true })`；另有 `AdminReview` 要求 admin/superadmin、`AdminCreatorProfile` 允许 creator/admin/superadmin 两种条件放行。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminApiUsage.jsx#L13-L15",
+          "version": "repo-lines-v1:sha256:8a2edb0b96956ec37fd36c9f6b079cbec148d4590ee11633f2db9cfc6d45e850:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTY3ZDdmMWUyZTY2MGM5MjcyMmFhMmY4MjBmYTM0ZmI2YjFiYWMyMDkxMjU4MWRkNWM4YTYxOWE4OThiOWUxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWExYWU3OGUzZmExMmE5MzFkMzdhMDA4ZTRkNzdkYTg0ZjU4MjUyMTE4NWUxNjM0ZGZhZjc5NWMyM2Q0YWVhOCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminAuditLogs.jsx#L15-L17",
+          "version": "repo-lines-v1:sha256:8a2edb0b96956ec37fd36c9f6b079cbec148d4590ee11633f2db9cfc6d45e850:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWRjMzdmYWZhYzQ0MjdmZTgxZjYzODYzMGM3NjAxZWE3Mzc5NGM3MTVmNjRmYTc3NmVhZGQ4YjlmNzI0YTM4MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTI0M2RiZjVmZTUzN2M5MGRhYzE3ZTlkYTZlYjE2YTIzNTBiYjE1YjA5MjVhZGU4M2QxN2Y4NmFiMTVmNjBkZiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminBackup.jsx#L15-L17",
+          "version": "repo-lines-v1:sha256:8a2edb0b96956ec37fd36c9f6b079cbec148d4590ee11633f2db9cfc6d45e850:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjAyZTMwZTQ1MmM5NmNhZDc2ZDBiZWFjMzEzZTIwNzhjNjlkNjg4MDQ2ZDFjMTliOTQ4OGVmYTEyZTI3NmVlMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminCreatorProfile.jsx#L29-L35",
+          "version": "repo-lines-v1:sha256:7fdf88204b840bf16077ac37e1415883fbed6093ac06508cdc659ff1137cee01:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjAyZTMwZTQ1MmM5NmNhZDc2ZDBiZWFjMzEzZTIwNzhjNjlkNjg4MDQ2ZDFjMTliOTQ4OGVmYTEyZTI3NmVlMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjA2MGZkOTA0ZGI0MjQyZmM0ZTU4ZTRkZjhiOGRmOTBmNDFhMzI4NjYwNmY5ZjM4MzM4NTA0ZDIxMzgwZjRhYSJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminCreatorProfiles.jsx#L38-L44",
+          "version": "repo-lines-v1:sha256:a2a4db648f1c354e653c65129f7453def431f203a7e81c4ee4078b94d30fd0bf:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjAyZTMwZTQ1MmM5NmNhZDc2ZDBiZWFjMzEzZTIwNzhjNjlkNjg4MDQ2ZDFjMTliOTQ4OGVmYTEyZTI3NmVlMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWFlNjY0ZGI4ZWIyMzg1MWIxOTYwNjdjMWQyZTRlMjE1ZmMxY2JjNTlhYjVhOTA0YWUxZjRlZTBjYWY4YjQyZiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminEmailSettings.jsx#L49-L56",
+          "version": "repo-lines-v1:sha256:8f61ba4627b93bfe8a371b3b7ce2fc8d60b352c99bb11100730349a6c5c1b73c:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTk2NmZiZmE4ODk5OGRhNzQ2NTZjNTAxOTQ5NTZjMjVmMDg0OTQ1NzY2MGMwMDlmZTYzZDFlOWZhOWRjOTMxYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWY4NzA4YTA1Y2YxZTMxNTFlY2IyNGYzZTFhYTI2NzY5ZTY2YzI1MzA2OTg3ZDE4MGExMWM1OWM0ZjBjOTQ0ZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTdkODYzMmU1NGU5Mjk4YWJiOTU4NzI3ZTJkNTE0MDhhYmFmMTM2NjAzNTM3OTEwMTQwYWJmNjViMzBhYjYxMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTIzYjM1MzVhZTg1MTY2MDgxYTY0NmM3NGFiYjkzYzI5NjI4YWQxZmZmM2RhMDA1YWIwZTA5NGViNzU0ZjBkYiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminReview.jsx#L22-L30",
+          "version": "repo-lines-v1:sha256:12b4b903b0076f7c37586d16d9fb05d1710a3eb3086cd44b371c1945711167f3:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTRhN2FhYjllYjllZTUzNjdmY2ExYzVjYTVlNGVmMzU4NWE4YTRmOGIzOTRkNTMwZGFhOGEwMjdlM2ZjMGJjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTE1OGVlZDcyMjI1ODk1Y2Y1MmJjNjAxZDdjNTI1ZmQzNzFlOWU3MDdiNTliMjA2MjBjYTYwN2MzMmJkNGI2OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminSessions.jsx#L16-L22",
+          "version": "repo-lines-v1:sha256:b02109076d73d8131160386f6ee6f44050aceedbf19c172cf06e636a4e33d823:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGFmMjRlZGMxYTAxMTNkNTRjYzM3ZDMxZjQxNGVjMWQ1OWRjZDNiYTU3OTdkZGRlZjgyMzIzMzI4NmZhYTA2YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWFhMTA5Y2NmMTUxYjc4MjQ5YTcxMThlNzFhMDkzYjVmZDYwNWZmMmViYWZkMTMyNjI5MGVmN2RkYWEyMDNkNCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminSiteContent.jsx#L64-L70",
+          "version": "repo-lines-v1:sha256:ef7c62b663628da82201b1464a811e734b3086bf1231782f8473ac66cb25ac6a:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzE3OTIzODNjZWVhMDIwNTliZmMyYjEwYmU0MzhiYWNiOTE4ZjdlZjU1NWU0YTI4NmMxYmI2ZTQ5YTYxMjQzNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTQ5YjJhZTc1NzI0YmRmYjhjMzg3MmQ5MjZkNDdkZTk5N2Y1NTIyNzJmNzdjMGQwMzVjM2VlOGQyZmYzMjlkYiJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminThemeReview.jsx#L55-L62",
+          "version": "repo-lines-v1:sha256:8bf5b4159176d529d7a7cbbb350b6ed7e4022b5d3a4c641fddae678a3c4bfbf1:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmU4Mjk2YWZkNzlhMmQ1MWI0ZjBjYjliNTg2ZjI5OGU3ZTNlZGZhYTFjOTg3MzFiYTcyNjI0OGI0OWMyNzAwNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGEyOGFlYjI1OGM3MDZlYjUxNzIwZjJmMTdhNDRhYTY1MTM0OTQzMjM5NWNkZDU1ODkzYjJkYmFjYmJmYmI0NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminUsers.jsx#L57-L62",
+          "version": "repo-lines-v1:sha256:09511c5da059f20d96e06a48f26e7496408e3d4bb27a1b30b19a0d6f7e645375:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI4YzY5N2VlYTRmMzQ3YzJmMDI5Y2FjOWUyOTlhOGM5ZTBiYTY1M2RhODVkYTUyNGFkMjQzYmFmZTVhNWY4ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWNmOWI5MTY3MjFiNjIyZDMxMmI5ZjIwMzFiNjMyM2EwNTgxNTRlMzhjYzZmMDEwMWE3NDM4YjJjNTU2ZGQ2NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTQ2OTcwZTJjNzg1NTRmZTZiYTQ5OWYwMGExY2Q5ZjAyN2M3NjQ2ZDliOTNkODIyMWZkMDgwNjkzMDMzYTk0NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e59e5e6037d144939a9379bef6c23e16",
+      "statement": "分类、轮播图、公告、友链、举报、反馈、回收站、数据分析、数据统计、主题这些后台页没有组件内角色判断，只靠仪表盘卡片可见性与后端接口授权：非目标角色直接输入 URL 时页面仍会挂载并发请求（`AdminThemes` 仅用 `isSuper` 决定系统级开关），因此前端可见性只是视觉约定而非安全边界。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminAnalytics.jsx#L25-L29",
+          "version": "repo-lines-v1:sha256:7fda2f0240a5d9311ebfc1c51a5fe88a028a9adb3654c3b344858fcf8a126628:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODM1NTg1OTgyNzc4NDk4ZjRmYWZmODdhNWQwZmVhNDc1MjFiYzUxYzY1Y2I1MGNmMWRkNTExYTI3ZGU2ZmFiNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjY4OWQ3ZWM5MmI5YzFiMTM1NzMzMjY2MTRhMDlhMTIxODdjNGU5MWU3NzhhMTA4NTBmZGQ5ZjM4OTk5ZmUwZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzhlMTQ4YmE1NTA5ZDcwYjY1ZGRmZWU0YzhhNjVmZWM0NDU0MTM1Yzk5Y2ZhNzZmOTNlNTBlMTUyZDc1MDY3NyJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminAnnouncements.jsx#L27-L40",
+          "version": "repo-lines-v1:sha256:2a2fd7da8b698e029e07677718efc2117f045f4219ca286f9e78ae992cb1705c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjODhmYmRiZGYwYWFkYTkzZDIzMWVlMjQzNDRkZWE3MmFjYTdhNzQzNzA1MWI3NzhiYWIxZTdhZGYxN2U5OWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3ZWU3YTEzZmNkMmVmNTVhZWE4YzIwYThiNzFmODlhNTVmZTA5NWNhZTU2ZTRkMTBmMzUwMGM1MDFmNGJkN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4NTI1MTMwNDAxN2MxNDlmMWM3ZjFmNDliYmYxZWZkNDU4YjIyOTU3YmRhZDA1NWUzYmU4NjVkZDVmNzkyMDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhZTJhOGI5ZjcwZjY0MDg1OGEwNTQ1NGYxNTBkOWNjNDVkZGRkZmEwYWU4YWViMjIzMzExYjEyNzMxOWQ4MjQifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminBanners.jsx#L9-L40",
+          "version": "repo-lines-v1:sha256:77584d986ead88d6ea82feb779f2436a947bdc846af716a12dbb0feeaf2f2c4c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiN2IwNDM0NzJjOTA4YTgwMDk0ZTFlNWE4ZGZmNzk0MDA2MTQzZThkZjE4MzI5YzI2MDhiNjc5MTcyMTg4MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3NGNjMDI1NjFjODUyY2Q0MzAyNGRlZDEzMzU0OWNiZTYwYTMwYTRhZjc1MzYzZGEzNTYxMmM2MGJlNmZhNzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzYzZhNmFlYTZjYTg2OWY5ZDQ2MWEwMmI2ZDc5Yzk2NzY2MGE5YTk5YmIwNjFjYmU4OTdmNjI5NjVhZDI4ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhNGJhZmY5NmFkNzAyNWY4ZTViMThjNDYzYjc4MzExNTQ3NWE1NzIyY2U0NGMzYjNjNDhhOWM3YTk0YzAwNjQifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminCategories.jsx#L8-L40",
+          "version": "repo-lines-v1:sha256:ae2de2799eadbc9732aab921080081338d36748030b39a751860cf3d0d04d0d6:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiN2IwNDM0NzJjOTA4YTgwMDk0ZTFlNWE4ZGZmNzk0MDA2MTQzZThkZjE4MzI5YzI2MDhiNjc5MTcyMTg4MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlMWVkZGJiZGI1NTJhNTRkZmJjZDYxOGY1MGVjNzhiZmM1NjFmMzFmOWUzMDJkYzYxNTgwZTQ1YTFjNzJkN2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU5NjIzYmVmOTY2NTAzMWY0YzY3NWVhNDUxMWRjN2U3MzY4ZjUxNjkzODYyMWQxNDdkODY0MTIyYTRkYzc3NzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0NzRjYjIxOGFmZTY0NDg1NzJjZDZmODhiZGJjODFjNWNiMWY5MDI1NDNlMDQzMzg2YWUxYmU0NTlkZjYxYTUifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEpisodeTrash.jsx#L28-L44",
+          "version": "repo-lines-v1:sha256:ced3c6531e704004747b7055e3adb0467c78ff85a14d19ba046ec72d6eedd151:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMzZmNiYjVmZGE5YjMzNTM2NzM2MjVhYWQ5YWUyYjM1ZDk1N2I1YmE2ZjU2NTI3YTExMWQ5Mzk5MTVhNmE1OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1ZjFhNDMyOWVjYTEyNjUyZTA1MjQwMTA0MmY3MTQ1NWVmZjgyOTRlZjNlMDI5ZGNiZTVhMTkyZTEyZTJlZDIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminFeedback.jsx#L16-L23",
+          "version": "repo-lines-v1:sha256:44fa2a8f8a56ff10fbe0b7e57b8c7aaca3e3d33cf4b3d913dcd5c33082a5d608:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzFlMWEzMTE1NzQ3ZGYzODg1MTI5NDZmY2FjY2YyYWEzOTNhNDk1ZjVjMWJhYzhiYzJjNmYyOGZjOWJhY2RjOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjBhYmY4NTZjMzM5MzNhMmU0ZmExYzRhZjZlMmY2MzI5ZDJlY2M2MTc0ODIyOTA4MzhlOGMyOGQ5MzQ2MmMyYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminFriendLinks.jsx#L7-L45",
+          "version": "repo-lines-v1:sha256:e58f7b6723beb437c311353ad95b060524274d1b5d5a69b81866e20b2ea28447:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiN2IwNDM0NzJjOTA4YTgwMDk0ZTFlNWE4ZGZmNzk0MDA2MTQzZThkZjE4MzI5YzI2MDhiNjc5MTcyMTg4MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlMTIzNmYyYWVhMWNlNDJmYTJiMGNjYjI3ODMyYzc4ZjVkOGMxYzE5MjM4YTI0MDkyMjEwNjYzZDUzOWVkNjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NWI3MWQ3OTlmNjY0MTE4Mzg2ZTUzMzQ0Zjk4YTAzZTM2MTBiN2YyNGNkMDlmMjg3MTkwNzRkZTEzNjkyMjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4ZjcxMTc0YTAwNzUzYjVlZjdkNjc2YmZlOWJkNzYxYjcwNTNhZGZhM2JmYTFmOGYwMjRjNTk1ZmZkYzZmMDAifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminReports.jsx#L16-L33",
+          "version": "repo-lines-v1:sha256:8f90b9a154e81b7c83939072c36a5626ccfcd887c7b51250ae31f588d923a33e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4Yzc0NmM2ZDFiNDE4MmUzZTc5MzEzODcyZTdjMmJhMjJiNjA0Y2FlMDExMmMyNzE3MWM5MWI3MmQ2MWY4MWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzODE5Mjg3MTgxZDVjNmZmMGFkNTY4OGM1YmYwYmRmN2ExNDgzNzAyMGE5MTExMmJhNTc0ZTI3MDIwNWRlNTMifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminStats.jsx#L14-L19",
+          "version": "repo-lines-v1:sha256:704a57603f907a3c5c414869a9e8767c34f9301f3d6b23ac07c928b4c149d9f2:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjk3YWIxMWZmNzljYmQ3YzY1NjAwZDE2ODI5NDFiMDUzNjZkNGQwNjY3Y2E4YWExZWJmN2MwMjdjOTVlNGYxYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDc0YTFlYzk3NWQzMTJiNWJjNGU2NmM5NGNiZmI2YzU4MzUxYTM4ZDA4YjE1MjMyNWFmMWE0NmE1ZmJhZDFiMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JjZjZhN2E4YzVjZjU3YTg2YjBkMzUxZWZhMjZjY2Q5MjE2N2NmZjgzZDVhOGE4ZmQxN2QyZmU0ZDM4Y2NkZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2YxNjM3ZGQ4ODE2ZmI0MTQ1ZTE1ZWI0ZTFiNzQ0M2ExNTEwNThiOTQ0MjYwYTIzNDA0MmI2YzI1MDg3YTJkOCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminThemes.jsx#L57-L58",
+          "version": "repo-lines-v1:sha256:f523fcaaacff21023bdfd8b3c3b35d120a42178268d2ca570bd1d2893f1d8895:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDc0YTFlYzk3NWQzMTJiNWJjNGU2NmM5NGNiZmI2YzU4MzUxYTM4ZDA4YjE1MjMyNWFmMWE0NmE1ZmJhZDFiMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmJlMzk2OWUwMTE1MDUzMGYwODU0NjdkN2JmNWRjOTU4ZGNkZmU1ODgzZGFmNTYzOWFmN2E2MjA5YmZiNGQ3ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM5YTIwMGFiNWI5Y2NkMWE1YjIxNzg4N2EyMzAxMjIxNGExNmI0NTYzZDQ5MWE4MTI3YTA5OTNjYzJmY2U0NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDRkNTE4Y2QxODk5ODI4NTNjZGY5NzViZDMxNTEwZmUyYWZmYTU0NjY4NWQ4OTk3Y2NmYzljYzNjNjFiYjAxYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5bcdcea017374b39887ee5e8f66ea913",
+      "statement": "`AdminEpisodes` 是唯一按角色分裂数据源与列的页面：creator 取 `GET /api/creator/my-episodes?limit=100` 只看自己的剧集，其他角色取 `GET /api/episodes?limit=100`；creator 视图增加“审核状态”列、去掉“创建者/授权编辑”列且不渲染删除按钮，仅当 `reviewStatus === 'rejected'` 时出现“重新提交”按钮调用 `POST /api/episodes/:id/resubmit`。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminEpisodes.jsx#L1032-L1097",
+          "version": "repo-lines-v1:sha256:0caf4319d07b75c09706539504c6c5265e932658250f3573914de59f06f2c359:eyJzZWxlY3RlZExpbmVDb3VudCI6NjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhiNDE2ZjlhN2MwN2RlOTFiNDA3YmY2NzNjY2FlM2RhN2I3ZDFhNzZjMTQxNzE5YTExNzJlNjI5MTAxNTcwOWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5OTAwODJkYTBhZWQ5MTFiZWE4MDY0ZjMwZjI4NzU0YjYyMzhkN2RiYTI0ZjU4ZTVlZTBjODZjNTJjYzlkYTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFkMjczMDgyNTk4ZjNiYTNjZDdlNzUwMTExMzUxMTQxNzkzYzM0MTc2NmFmMWFlMTk2MzU5NzVmNWM2ZjJmZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhOWQxNDNmNmFjM2IwYzlkOGZlZmFjYzI3MzA3YmIxZTY5Njk5ZDVhYjIyZTk2NTJmMWIzOWRlYmZkYzg5YjIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEpisodes.jsx#L285-L294",
+          "version": "repo-lines-v1:sha256:d390d4e8aca6f7f68541c0f3d62072a795b7dbc629c5d3915d5defce9e16479a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MDllZWI1NjVlNGE3NWM0NjJkYjhjZGM3MzAyOGIzYmE2Y2M2NDg3NWVlYWE1YWFhZjMxZmE3NGFmNjc2ODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxNDU4ZWEwYjZkNzFhZWI1YWYxZTc2YWUzZjMwYmQ1MGE5M2MyYjc5ZmFhZTg0NTRmOTg5Y2U5ZmE4ZDI5YmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVhZjIwZjc5ZDI2MDM2NzEyMWRhMmJjMjdiOGM1MTdiMjE4ZTk0MTViY2U4OTFmZDYyMTdmMzk3MTgyZjA1NzgifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEpisodes.jsx#L69-L83",
+          "version": "repo-lines-v1:sha256:f95183bf95c3cbf27bc28fa142222056f554b40f41e805c9fbd128a97d45f5d0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAzNDA4YzQ1Nzc3ODNkZWE0MTI3ZTEzODcyYTNlMjM4ZmZmMmQ5MTlkYzE4NzI5OThkZDRkOTJiN2Y4MWRhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1NGE0OGZmMWZmNjc0ZjhlZmQwZTNhY2RjOWNmMTZiMzZmMzRkNTgxNTk4MjY4YWJkZWRkNTFhMWViNDQzYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1NmY2ODA3Nzg0Yjc2NDdhYTgwM2YyNzk3MjUxMGEyOTU2M2I4YmE5NGE4MDYxZTkxMDU4YzIxZTljZjgxMTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_44a3dd14c93a49c989b1fa9a4f7b0fb4",
+      "statement": "`AdminReview` 是剧集审核台：从 `/api/review/pending` 取待审队列、`/api/review/all` 取全量，通过 `PUT /api/review/approve/:id` 与 `PUT /api/review/reject/:id` 审批（驳回必须填写 `note`，否则前端直接报 `adminReview.rejectReasonRequired`），并用 `PUT /api/review/assign-editor/:id`、`PUT /api/review/remove-editor/:id` 维护授权编辑人。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminReview.jsx#L22-L108",
+          "version": "repo-lines-v1:sha256:12f7d2a0e0ae6363ce010b15a8404e4cb839ef80ccae3315c4a90bfe46df758f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0YTdhYWI5ZWI5ZWU1MzY3ZmNhMWM1Y2E1ZTRlZjM1ODVhOGE0ZjhiMzk0ZDUzMGRhYThhMDI3ZTNmYzBiYzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0ODg0NTdiYzJlOTJlMGJjZmFhOGExZjhmNDQ2ZjQ2NTlkOWNkNTUyZDZjOWNlOTEyN2FmZWQyYmVmNDgwMzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_04f0d121b8044d15ae8d28cc371c0e98",
+      "statement": "`AdminEpisodeTrash` 承接软删除与审核拒绝的剧集：`GET /api/episode-trash?page=&limit=20` 分页列出，条目带 `rejected`/`deleted` 进入原因，`GET /api/episode-trash/:id/versions` 查看版本快照，`PUT /api/episode-trash/:id/restore` 恢复回正式集合，`DELETE /api/episode-trash/:id` 彻底删除，破坏性操作走 `ConfirmModal` 二次确认。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminEpisodeTrash.jsx#L34-L83",
+          "version": "repo-lines-v1:sha256:9b67108e8124405a8f44c05225ed9bc8ece8c11d2a121c8cdd14f1c16b72579a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzNTQ5YzUzM2JmMTc0OTA4MzcyYzNhNTI5ZTY5ODlhYmY0M2M3MmNjOGYxYWJiMjNiZjY4MDQ1NWZiYWRlOTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0NThmNzA0YWUxZjk2NTAxMzdlZTMyMzVkM2Y1ZmVhODE1YWFkNDQ5MTFhMDEzOTA2Y2QxYThiMGJhMGU5MGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4ZmNhZmJkMDFhY2U1YTQwMzQ5MWYxMzJmMDliOWU5N2ZmMDE4MmY4OTU4YTA3ZTY2MmI3ZmQ5ZmM5ZWM1ODgifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEpisodeTrash.jsx#L8-L23",
+          "version": "repo-lines-v1:sha256:651fc2c332475c983c216e39d180f2399afac12b5cb2f69e4e525fd5500e1ca3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhYWJkMWM1YjM2MDRhMTcwZDcyYzkzZjMyN2M0YjlkMGMzOTEwNzkyOTc5NzUxMGZlY2ExMzFlNGRiYTdlYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhMTkzODllOWIzYzQxOTQyNGIyMzNmOTQwYWMzYWE2MWZiOTIxYjhmMTU3NGIzMmFlNWE4Y2NiODI4ZDJmZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiMTZkNGFiNWYzOTZlYjU1ZmJmMmZiMzJjMTQ4YzIxODEyMjcwNzgxNGFhNzMzMzEzZjI2ZmM3ZTViMzE0OWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNkMGIyYWU1NTZkNmVjYjc1N2JlZTI1YjlkYzRkODAzMjQ1ZDI5MzM1NTJhZTQxMDFjODYxZjc4ZDg4NmRhMzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1965484c97874d5d8517751c3a8b29b8",
+      "statement": "`AdminUsers` 是后台唯一的角色写入口，且按目标角色分流接口：涉及 `superadmin`/`creator` 的升降级走 `PUT /api/admin/role/:id`，普通用户与管理员的互转走 `PUT /api/admin/user-admin-access/:id`（`adminAccess: true/false`）；当前登录账号那一行不渲染角色选择器与删除按钮，`handleDeleteUser` 也会拦截删除自己；新建账号调用 `POST /api/admin/register` 且角色只提供 `admin`/`creator`，新增超管无法通过界面完成。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminUsers.jsx#L100-L128",
+          "version": "repo-lines-v1:sha256:3fba926de194f8dd26e41115512a88735bd57ca20ac92e4a736f9e37cd2a0e6d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3ZDJmM2FjMDYyMzVlNzQ0MTM0YjY3OGUzOGJiNmQwMDI4NzRmOWNiZmRiZTFhNmZiMGYwMTg2YmRjNjFjYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzZWFjMjVkMjQyYzhjZDA2OGQ3OWZhNjUxOTJlODExNTZkYTkxOTU3ZDRiMWFkOGMxMDZkNTNjOGI0NDFjM2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4ZmNhZmJkMDFhY2U1YTQwMzQ5MWYxMzJmMDliOWU5N2ZmMDE4MmY4OTU4YTA3ZTY2MmI3ZmQ5ZmM5ZWM1ODgifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminUsers.jsx#L297-L341",
+          "version": "repo-lines-v1:sha256:fbea561c6f8ea00926659d35ae842957ee5ec8ccb320a874898bc40f41f4a63b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmMTg5ZmExOGFiNGYzYzE4OGM3YmY0NDI1ZGE3NjNjMWUxZTU1MjU0OTgwMjc1YzMwNGRhODEzZWQ4NDEwNWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0OGNmYmFiYTc4OGZlMWIzZmRhNjc1YTQxYzFjYzdjOGVhN2Y5YzI0OWFlZTJiODdkMWY2ZGQ4YzRiZWYyZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI1Yjg3NDNlMzlmM2Q5ZGNlMjhhNzMwYmI4MjdhZjNmYjQ4YmMxNTVhNTNhYzdkNTY3NThlYTA0NWIwMTlkMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwMjQzNzZjMWE5YWEwMjg5OGMwNTI0ZWQ3YjcxYzNhMDBhMzk3ZGU4NzI5YTYzNDI5ZDI0MWEwYjc1NzYwZWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ecbeb1f22907448bb393b3df2cb4a393",
+      "statement": "主题功能拆成两页：`AdminThemes`（`/admin/themes`）管主题资产与上架状态，用 `isSuper` 决定新建主题是否直接 `isSystem`，并承载 `isDefault`/`enabled`/`isSystem` 开关；`AdminThemeReview`（`/admin/theme-review`）只做 `pending`/`approved`/`rejected` 三档审批，通过即上架为系统主题、驳回需附原因并通知作者。两页都经 `src/utils/apiEndpoints.js` 的 `API.THEMES.*` 常量取路径，而非手写字符串。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminThemeReview.jsx#L10-L74",
+          "version": "repo-lines-v1:sha256:805c545c267ca3e41c4c4d6291bc9de0efd28f73c296b66e5581d2a1054e2214:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1ZDVhYmFjYTIyNjgwYWU5NTMzNjcwMGRmNzY2MzYxOTdhN2NiNmMwMDRmNGNkNzlhYzFiMWZkMmYwYWM0YTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkOGRkMzJmYTlhMTQzYTE4MjI1ZGJhOWM3ZWQzYjczMmQzYzRjMWE5NThkNjI2NDVmYTRmNDc4NWI5Zjg4ZTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlhYWVjYjViYjM3NDQxYWIzMTVmOGNiZGE1OTBlNGY0YmI3MDFlYTdiYTc1OGQ0YWU5ZjlkN2VlMGViNzU5MWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4MGFlYjA5MjRmNmQzZDFjYmNkZjYyZGQzYmMxNTg1MWY1MTE0YzNmMjgxNzRkYzVhODFlZWQ4ZDZhZWZlYmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminThemes.jsx#L57-L128",
+          "version": "repo-lines-v1:sha256:cb102db9a0ed6c7c8b64da4477272870826cf31e78fb460c996609e6740ab276:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NGExZWM5NzVkMzEyYjViYzRlNjZjOTRjYmZiNmM1ODM1MWEzOGQwOGIxNTIzMjVhZjFhNDZhNWZiYWQxYjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjOWEyMDBhYjViOWNjZDFhNWIyMTc4ODdhMjMwMTIyMTRhMTZiNDU2M2Q0OTFhODEyN2EwOTkzY2MyZmNlNDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFlYjZjZDUyZTVmODNiODNiNjFkZjMyOWE5MmI4YzY0MzNjOGUzZWRhZjYzZDEzNzA0NDY3YWM0MjI5YzNkODQifQ"
+        },
+        {
+          "resource": "repo://src/utils/apiEndpoints.js#L37-L53",
+          "version": "repo-lines-v1:sha256:8ad4d062db201fe3f8f6b3eba874271e737e690297faea42451baddb9a72a447:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjMWEyNmNiMTgxZGU2NWNlM2MwM2IxMDA2NzRlMTk3OTZkNzBkOTE5ODJhYWJmZTUzMWNmYmQwNDg1ZWZmZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2NjEyMzdjNjExZDcxMmUzNmM0OGQwMmE2NzQwYTUyOGVlZWU1YjdjN2M1MTNjNjkyYmMzNmE0ODUzNWM2ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNjA1ZjAzM2MxODA5ZDIyNGNmNWExNTA1NGY5MDE5OTY2NTU0MzdhODc0ZTdjY2ExODMzYjFjMWEyOWI2YjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1ebe6999ce0e4e4c90e05c8d98238bd2",
+      "statement": "`AdminSiteContent` 以 key 为单位编辑站点内容：读 `GET /api/site-content/` 全量，保存时按 `about`、`settings` 或普通页面拼成 JSON 后 `PUT /api/site-content/:key`；当 `editingKey === 'settings'` 时额外调用 `SiteSettingsContext` 的 `refreshSettings()`，使站点名、欢迎语、PWA 图标等即时在全站生效。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminSiteContent.jsx#L160-L185",
+          "version": "repo-lines-v1:sha256:b8a8c01b931d2cc324855afc104fe2ff914054451c4ab14e9bf5c7f18262e86a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNiYjliNmQzMTg5ZDMwOTBmZDM4ZDYyZGU4NWIwNWNlNTIzZDQ5MGMxZDI5YTNkNmVlZTBhNzBkODhlMmUzMzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxNDU4ZWEwYjZkNzFhZWI1YWYxZTc2YWUzZjMwYmQ1MGE5M2MyYjc5ZmFhZTg0NTRmOTg5Y2U5ZmE4ZDI5YmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNjY2EyMGVlNjJkMDNjY2YyNzRlOWI3ZDc0MTZkMzRlZDE4NmY4ODkzMjBkM2MxNzJlNzg3NjE2MDFkYzg4NTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d70c4ce85faa41cdac18b81d494ad624",
+      "statement": "运营处置类页面是“列表 + 单接口写操作”的形态：`AdminReports` 用 `/api/reports/list` 与 `PUT /api/reports/resolve/:id` 处置 `pending`/`resolved`/`dismissed`；`AdminFeedback` 用 `/api/feedback` 的 GET/PUT 把反馈置为 `replied` 并写回复；`AdminFriendLinks` 用 `/api/friend-links/all` 与 `PUT /api/friend-links/:id` 维护友链及 `approved`/`rejected` 审批；`AdminAnalytics` 组合 `/api/stats/realtime`（30 秒轮询）、`/api/stats/overview?period=`、`/api/stats/activity-heatmap`、`/api/stats/episode-lifecycle`；`AdminStats` 单读 `/api/stats/overview` 输出聚合指标。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminAnalytics.jsx#L19-L48",
+          "version": "repo-lines-v1:sha256:2a73f79524cc1dd877b68e3f9de2232ef25c1d14f352a8c165c4dde0c56157ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhZWUwNmNkY2I5YTdjMjc5ZGUxNDJjOGRmMTZhOTA2NTkwODVhYjljYmFlYmNlMDY5MTdlMzc2MDI0ZmY2NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMjBkNGQ4MDMyNmIzZDQxZDQ4OTA3ZmM1ODc3ZmJiOGUzMzgxYzQ4NjRiN2Y4ZjcwOWRkYjZlNTBjNWEwNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhYmE1ZGVlMWRjODUyZmM4NDVmZjIyMGYwNWM5OTcyYWRiYmYzNDhjMDZkZTc4NWYyMTg3OTAyMjE3OGE1OTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRhNDQwNGY5MTJhMzEzMjIwZWExYTA2ZTNjYTZkZGY3NzE4ZWEyMGFhY2JmOGQ2Y2E2M2RkNTdiMDFmZDRlYmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminFeedback.jsx#L16-L36",
+          "version": "repo-lines-v1:sha256:571ed809eea67d9a65ca03731fd6e30a96da4e15ed6aaa1d5e94fc119a0c7778:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYwYWJmODU2YzMzOTMzYTJlNGZhMWM0YWY2ZTJmNjMyOWQyZWNjNjE3NDgyMjkwODM4ZThjMjhkOTM0NjJjMmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxYWJmMWQwZWFhMGQxNTQwNWM3OTI1M2Q3MzMwZjFiMDA3NjgwNTI5YzI5MzQzODYxZjEzMmRiOGJlYzA1NmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminFriendLinks.jsx#L28-L96",
+          "version": "repo-lines-v1:sha256:792a5778066e156424a46b32c3c4193f7d10f4012434ae1d6e3e7e01041e0306:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZWYxZjczZTlhMTIyNzNhZjY3OTUwNDIwNTdmYmZlNmUwMmZkNGIxOTM2NzI5MjFkNTE1OTFjNDNkNzE4MDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0ZTJkY2ZmOTU5ZTdhMjhiMjA2ZjkzZTUxMGNiM2RlYWMzOTMyMWY5NWE4YjkwNjE1MDc4ZjE4ZWJmZTZlNmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjljYmQ0YTUyZTkwM2FiNTk2NjdlZjhkODMzMDI0MGM5NmNkNDI2NjNhMzM0ZmY5MTZjNmYxN2ZhODkzMGRlNjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhMzIzZGViNTBkNTNjZGY0NmM3OGQwNjJlYTNkZWFkMGEwNWRmMTQ2MmI3NDY0ZjFiMjMzOWY2ZmEyZWQxYzMifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminReports.jsx#L16-L45",
+          "version": "repo-lines-v1:sha256:9927a622c2151daa6212ab92d7e52585e60f0a70b40053364eece4afa68fd18f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4Yzc0NmM2ZDFiNDE4MmUzZTc5MzEzODcyZTdjMmJhMjJiNjA0Y2FlMDExMmMyNzE3MWM5MWI3MmQ2MWY4MWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwNzYxOGE2YzdiZjZiMmJlNzQ4YTNhOTc2MDk2OWRhZTcxZTNhYzQ0YTBjMzI3MWY1MzFjMzYyNWZmYmY3MjMifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminStats.jsx#L14-L33",
+          "version": "repo-lines-v1:sha256:f91616aea9778a123fddcb2460afb758353e8f6044611885cd5ba0f6f75daada:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5N2FiMTFmZjc5Y2JkN2M2NTYwMGQxNjgyOTQxYjA1MzY2ZDRkMDY2N2NhOGFhMWViZjdjMDI3Yzk1ZTRmMWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwNzU0ZmFjMzYyZTkyZWFkYTc0NGZmYzU1ZThkYmYzY2E1NzRjYjNjMTIwZWEwMzNkODNlNDc1MDU0MWNiMDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiY2Y2YTdhOGM1Y2Y1N2E4NmIwZDM1MWVmYTI2Y2NkOTIxNjdjZmY4M2Q1YThhOGZkMTdkMmZlNGQzOGNjZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyOTk0MzI2MDBhYjk2YTllZTkyZTUzZDdhZDZiZTc5NDY3YmNmNDBlN2YwNTRkMjAxYmE4YmI3NzMzZWRiNDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_913e63263a744651bc587d91368a5dc8",
+      "statement": "账号与平台运维类页面各自包住一组运维接口：`AdminSessions` 用 `/api/user-sessions/all` 列设备并 `DELETE /api/user-sessions/admin/:id` 或 `/api/user-sessions/admin/user/:userId/all` 踢下线；`AdminAuditLogs` 读 `/api/audit-logs`（30 条分页、按动作/管理员过滤）；`AdminBackup` 用 `/api/backup/export` 下载 JSON 并 `/api/backup/import` 回灌（可选 `overwrite`）；`AdminEmailSettings` 读写 `/api/site-content/email` 并用 `/api/site-content/test-email` 测试发信；`AdminApiUsage` 读 `/api/rss/api-usage?days=` 输出按天调用量与热点端点。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminApiUsage.jsx#L17-L21",
+          "version": "repo-lines-v1:sha256:2527dd52b14d9911f61da850174677fab40a5eed71721ee725f6c6027055ff90:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTZmMjZkNTRlMzIwZjk3NTM3NjM1ZDk2Y2Q0N2I4OGE4MDQyNzk0ODhjOTkwZTNhZGFhNGE4ZTM4YTc3N2E4YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmE3OGFlOWI5MjI1NjRkZmQyOWVlZWY1ODRlYzU5ZGQ2OTlhMDU4OWI0YmEwN2RlMzBjYmVhYzY5YTEwYzNiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminAuditLogs.jsx#L19-L27",
+          "version": "repo-lines-v1:sha256:33879797cd773b33bcaf367e62f181fd2eb58f283a8c49ec1fa8992c10f8e7a2:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4M2Q4ZDM1ZmIwMGJkZGRkMTUzZWVhNDM4MDZmZTFiMzk1NmYzNzg1MGUzMDM0MWFlY2IwZDQwNzQxMDUzZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmE3YWY4MTk5MGEyMDY0NDRmMmQ4MzllYWIxZTAzZTk5YzhlMTY0YzkwZTJjOTQwYmY5MjBkYTBmNzRkNWJhMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmE3OGFlOWI5MjI1NjRkZmQyOWVlZWY1ODRlYzU5ZGQ2OTlhMDU4OWI0YmEwN2RlMzBjYmVhYzY5YTEwYzNiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhmY2FmYmQwMWFjZTVhNDAzNDkxZjEzMmYwOWI5ZTk3ZmYwMTgyZjg5NThhMDdlNjYyYjdmZDlmYzllYzU4OCJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminBackup.jsx#L21-L56",
+          "version": "repo-lines-v1:sha256:f11f9c6b124532facbd1f3404572716325bcfd0594381dde04072daaa03c52a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMGZlZDIwMDNhZWYxY2U3M2IyMTI3YWRmYmFkYjIzM2FiNTc3NDM4MjI5NWRjMDJlMDA1NWQ0NWRmODdhOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4ZmNhZmJkMDFhY2U1YTQwMzQ5MWYxMzJmMDliOWU5N2ZmMDE4MmY4OTU4YTA3ZTY2MmI3ZmQ5ZmM5ZWM1ODgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NGEzYTUzNGQzYzQzMTcwNTM5NWUwNjE5M2RkMTAwZTczMDVjNzE2ZmIyZTBjN2YwMGY1YWE1NWE5YWE3ZmIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminEmailSettings.jsx#L25-L77",
+          "version": "repo-lines-v1:sha256:60a5b16352cc8fb1023294485289003698b63463689ef826cbcfbf834750d1d6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2OTk4MzE4MmZiOGQwMmQ3NDViODY5YWIzODlkMDA1ODY3OGExMjI1MGJlMTM2MjFmMjJmMDhjYTk1NjhkMmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxN2FmMTEwMWM5N2I3YzJmNTI1NDA3ODJlNjM0Y2M0NDQwZjBlOTcwMzQxZTUyZjk3NTIzMTFkNzhiN2Q3ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjZjMzZGFkMDBiMTRhNDM3YzRmOTU4Zjc3Yzc3MDVjYmU0NjM0NzZhOGEwYjU1YjFkMmNkZTIwZjU4ODhiODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlkZDg0NjMwNDcyODVkNGM4NzBjYzdjMmY3YjgzMzFhNmZmNDRlZGQwNWE2YTY2YjkwOTRkOWI4NTY5MmE2OTMifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminSessions.jsx#L24-L57",
+          "version": "repo-lines-v1:sha256:beba7b1a895c4ba05be65a5f62f3a54d9fae6212f9865012a9aaf26ce1851c9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjOTk3MGNlMWJjNzU4MmIwOGEyODQ2NGRhOTM2ODFkNjRkZTE2NDg4Y2E5OWY4MzZhNzA1MTg1NGVkNTExNDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZmI5M2VjY2ZhYzExNmZjN2Q4OGQ3OTk1ZGRkOTJiOTdiMmEyZDQ5YjMxZDM5NmU2ZWEyYjFhZmFlOGQ4MGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxZDkyMWJmODY1ZWE0YmU4MjY5MTljYWUxMDZkMTQ3ZWI4Yjk2ZDIwZDJmODc3ZDdhZjA4NGMxYmJjMmNmZTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkZjAyZDFhZDMzMmMwNjU5MGFlZWMxM2MzOWZmNDQ2NDYzZWRmM2VhYzBhYTBlNDliMTcyZjc1ODZkZjcyZTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7223ad1dcd6f48468ef208d34b325061",
+      "statement": "`AdminAnnouncements` 除公告 CRUD（`/api/announcements`）外，还承载横幅、弹窗、站内通知、邮件四类推送开关（`showBanner`/`showPopup`/`sendNotification`/`sendEmail`）以及事后手动推送接口 `POST /api/announcements/:id/send-email` 与 `/send-notification`。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminAnnouncements.jsx#L100-L121",
+          "version": "repo-lines-v1:sha256:f57bc9b4b4cd0039a95397d1011b20a04454ce8b2b09d830e5fa0345971a65f2:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwM2RiYWJlYjljNmQyYmQ0YjgxM2NkZTU0NGRmMjUzYzY3MWM1ODUxMDNjMWUzMzhmNGEzZGU5ZTg4ZTRjYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MTMyNDQzOTU3OGI4ZmI4YzcyNDE1ODM2YzYwZjUxN2VhZmM4ZDc5M2UyZTNmMWZkNjZmN2IzZWYyMmNjNTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMxMjVmY2VjYTNiNDBiMjlmOGY2MjIwZmE1MjVlYzc3MGJmOTNhNGUzMGY5MTYzZTRhYzk5MTUzM2E5M2U2ZjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1MDNhMjA4ZmU2NjA2NDY0Y2Y1Y2Y2NGU1NmE5ZmIzZDA4MzZkOGQ5ZDY5YzdkMmU3ZDRiNDY4YzFiYzAzNzkifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminAnnouncements.jsx#L5-L11",
+          "version": "repo-lines-v1:sha256:01e403b001a7284524ce6d17921f85cce67e1f1f60a4d2bec8e08aaafecf40b2:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODg1N2Y5OWRmZTA0NTJjYjU4ZDViM2FjZGI4NDhhOTUxOWE1NTRhY2E3MTRmNjM2MGU3NzMwOGQ2ZmVjODY3OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZlMTFhNzEyYjhjNzNjMDk3ZThhMWYwYWNiYTljNDIyNjE1YzNiOWVlNzdmN2E3MGIxNmFkZjExOTcxM2UwZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjUyOTk0ODY0ODYxYTA1ZmQ0Yzc3YWJlMWU4MWY1MTVjOWE2ZGNhNTAwYmM3MTdiOGUwMmQ1YjY1YTEwM2IyOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTBiNjI4N2M2ZDk4YzhkYzgxMzUzN2EzMGZmZGM3MjQ4OTUzOWU3Yjc4NWNlOWVjOWU0MmIxNGNkYzlhNzZiZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_bef30e3a2e5345d2aa11620daf549fd6",
+      "statement": "`src/utils/adminApi.js` 只是 axios 五个方法（get/post/put/delete/patch）的别名，刻意不设置 `Authorization` 头，认证完全依赖 httpOnly cookie；因此所有后台请求都经由 `src/utils/axiosConfig.js` 的全局拦截器：写请求补 `X-XSRF-TOKEN`，401 先尝试 `/api/auth/refresh` 重试、最终失败时因路径以 `/admin` 开头整页跳转 `/login`，419 走同一套刷新逻辑，403 携带 `forceEmailChange` 时触发强制改邮箱流程。",
+      "evidence": [
+        {
+          "resource": "repo://src/utils/adminApi.js#L1-L15",
+          "version": "repo-lines-v1:sha256:71ed084f37354be1b45adbf236f99b2a3704cbf30c3cb50c1d646ec3f052e8ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNTI2OThlZmEyN2RkNTIwMGVmN2M1NDk1M2YwMjE2M2M5MGM1ODJlNThkYzFmMDA1NGE1OGI5M2I1NmM0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwZTQzMTY3NTY1YmYyNGI4ODY0MTRlNDZkOWMwNGRmOTU1MmYyNjY1ZTI2YTU2OWQxNjU3MDk4ODBmMjU3OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L199-L268",
+          "version": "repo-lines-v1:sha256:4b0e3e74a534fdf2d1ab8cdcfd349c844cf433d9620d315ac2f9e2a5025a9fd2:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2YzljMjVlNjQyYjhkMjI0MDJjYWRkYzQzN2I4ZGQ4MGM0Y2YwMmNkYTMxZDI0NDBmYzdlZjU1NTNhMDNhMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NmYwNWE0NTRmZTQyMzQ1MzJmNGUxODRiMzNkM2Q3YjMxMjcxZjA3MGYyOWUyODI4MTU5YzRjM2Q3Y2YyNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4NTI1MTMwNDAxN2MxNDlmMWM3ZjFmNDliYmYxZWZkNDU4YjIyOTU3YmRhZDA1NWUzYmU4NjVkZDVmNzkyMDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzMjBkNTlkZjg4MTMwOWIzOTYzNTlmNTkzMDc3MGZiMDA0YTU5ZjRkNjg2MTI2MDUyYjJjZTIwZGVkOTYxZjQifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L24-L35",
+          "version": "repo-lines-v1:sha256:495f4b28ebab4a0bdbd32a791499b8f40287c9c4dfaef6aabc7f7640903af3fd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk4ZjY5N2Q2MDNkMTZkYmVmOTE4ZWU0Yjg4MjM4ZmIwOThmOTk3YzNiODM3ZTFjOWVjOWEyN2IzZjM5MTM0NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzZGRlZjcyNDc4NmI0YWY0NWFiN2NhZDgxZDM3N2FlNTQzYmI3ODQxMjk2NTY4ZmI1MjI2OTk4YWVjMjE2MzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEzM2VhNGFjZTBkNWRiYmRhZWRiYTRjNGQ5ZTM0Mzg2Yzg1NGU4ZmJhMzRmYTVhOTQ3YWIxYjU3OTZkZDkwNjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1MDk3M2VjOGEzYjdhM2ZiNGI3OTdmZDEwNzdiZTI5MTYxODZjZGYzOGM1N2IwMDcwOGM3ZWNjYjhkYzVlODcifQ"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L44-L110",
+          "version": "repo-lines-v1:sha256:6199ba2cc419ba8f7a927a8f3cda4af050378eb3e4325a1803222e046ff73cc3:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZmQ0N2EwNmZlNGRiZjRkMGFkZTZkODcxZTgxZGNiN2ZjZWFlOTRmNjE3OTU0NjU4YWUyNjAyOTE1Yjk2OTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyMzc5MzUzYmZiMDgyODAxODliN2M2ZDEyMGQ2NWNiOGE5ZTA0NWQ3ZjIzZGJiNzdiNTRlNmZjZmM1NTkwODkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjZTg3MjUyZTA0NTRlZWY4OGEyY2M2OWYwMGNjOTU2OTRkNWU5ZmFmNGI2YWU2ZGYxNDZkMjQwNTc4OGY1ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNjNGVlNTc3ZjZhZjNkYTZkODVhNGZjOGU3M2FlOGYyMGZjMTZiZjE3MDUwNzI0MmIxYTI0MDE1ZTg0MDAzZjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_62aa7f45a9a3438aa0f07c994f7d7bf3",
+      "statement": "`src/components/AdminErrorBoundary.jsx` 实现了后台专用错误面板（⚠️ + 错误信息 + 刷新按钮，通过 `static contextType = I18nContext` 取文案），但 `App.jsx` 只在顶部 `import` 它、从未挂载；后台实际由 `App.jsx` 底部的通用 `ErrorBoundary` 包裹，任一后台页抛错会落到整棵 App 树的通用错误页。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L11-L11",
+          "version": "repo-lines-v1:sha256:742e94a998627f25751e970209faa4f98aaed59d7cf43cc6210b257a44a200bc:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQyZTk0YTk5ODYyN2YyNTc1MWU5NzAyMDlmYWE0Zjk4YWFlZDU5ZDdjZjQzY2M2MjEwYjI1N2E0NGEyMDBiYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzQyZTk0YTk5ODYyN2YyNTc1MWU5NzAyMDlmYWE0Zjk4YWFlZDU5ZDdjZjQzY2M2MjEwYjI1N2E0NGEyMDBiYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmVkNjcxNTFmMTRhNDAyNGNjNTM0YWRhYTVhM2Q2YWFiZjgyNGNlNjI0MTdjMDkzNzNjMDYxMjZiNGIyOWU2ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzI5Y2YzYTFhOTgzYWRlNzE5YzA5ZWJmMzZiYjI1ODNkNDNkZjIwNWQ3MzE4YjhjZjhhZmExZDEwMTZmY2I1MCJ9"
+        },
+        {
+          "resource": "repo://src/App.jsx#L616-L620",
+          "version": "repo-lines-v1:sha256:9239acc88c6c4a1d2d6aa72fca4e28e299c9ce39b7d0d1ac92084640fdd69d0b:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDExNGJkNjM5YjU5MWRiYmE0YTAxY2Q1MjAwZjdkMWI1ZjUyOWU2MzZlNTRlM2YxZWU4ZmIxMDMwODhkOWFjYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODFjN2M0YTg4OTA2NmU2ZGVkNzYwMDhiY2MxZTA5Mzg2ZTI2NjY5ZjBkNGQ5NDdlYzgxYzgzMTAzYWZiZjY3ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2FiNGJiNzVhZmZhOTJmOWJmZTdlZWUyYTMyODkwNjZjOTk1MDFhZTNhZDBjOTdjNGNiYTdlYTA4NGIwM2M3NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGExNTFiNWVlM2QwMTVjNjQxMmRiYWYzOGQ4N2E0Yjg4ZTVjYzIyODc1ZWUyZGY0OTUxYjAzYzJkMGU2ZmVkMSJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminErrorBoundary.jsx#L1-L51",
+          "version": "repo-lines-v1:sha256:99f7b5b4916ec67046bad9d17a3d5240cfc09e84ce294908fd5d7ee8c83abc88:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViNGZiMDI5MDNiYzA1N2Q5NDg4OGU4NTBiYWYwZWExNTY1NzIyOWVlZTVkY2UyZDZmMjg4NjkwNThlMjc5MDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkMmZhYjc3OTU2YmRlNGI4YWMzYzg4MjNjNTVjYjc0NmE3NTY4YjU0ZWQ2ZjZjMTJhYzE3M2JlZTg1ZWQwMjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7d8a58a25679480ba8ed301b48a3921a",
+      "statement": "新增一个后台页需要同步五处：`App.jsx` 的 `lazy` 声明与 `/admin` 下包 `AdminGuard` 的 `<Route>`、`getRoutePageTitleKey` 的 `pageTitle.adminXxx` 分支（用 `startsWith`，前缀重叠路径需把更长的写在前面）、`AdminDashboard` 的角色条件卡片（有待办再加 `<Badge>` 与 `position: relative`）、页面自身 `useEffect` 角色门，以及 `src/locales/zh.js` 与 `src/locales/en.js` 成对的 `adminDashboard.*`／`pageTitle.*`／页面命名空间文案。",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L39-L39",
+          "version": "repo-lines-v1:sha256:18844c5982b2ca4bafc12df7a9beb47cf1127c9a6540675152c1a1568d394d30:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGNiYjY3YzNkOWVmYmU4ZjdkNTBkOTU4M2UzZjFmMDY0OTYyYjUxM2VlYjJkYWE2ZGY1MTEzYzZhODU5YThjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWQ1MGUzZTIyZDEyYTA2YTE1MmVkZDA1MzFmODFjYjhiNzE2NGM1NTNhN2I3OWJiOWI4MDUwNDBjMjZkZTAwMiJ9"
+        },
+        {
+          "resource": "repo://src/App.jsx#L25-L98",
+          "version": "repo-lines-v1:sha256:9f5dfbb80d108c2ba16e8bd01dca53f17aff4ba1bbbd62102230a3fe6db78bee:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmOTk5OTQzMDBhYTYwZWZkNWMwNjk4ZmQyOWEwNzg5ZjdmNGYwZTc5ZTFmY2RlNjJjNTFmZGYwMzgyNmI5OWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ODhmYzJmMGNjM2JkMmUxNDViMTk1YzE4MWJhNGVkMzRlODA4NTAxNzdhOGFkMGNjYTNhY2RiNmRjOWI2OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllYTc0YTE5NDVjNmY2MTFjMWRiNDQ0NjJhNGZjYzRhN2M2NWY4OTZiZjFlOTMzM2RhNWYzY2Y3ZTVjM2M4ZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg2ZWM2M2NhMjQ0ZDA4NjhlNzI4ZWNjZTQ2ZWM1YWNjZGNiMjc2MDg2Y2M5OWU3MzYwOWM1MjYyMGNhYjRhNjAifQ"
+        },
+        {
+          "resource": "repo://src/App.jsx#L511-L537",
+          "version": "repo-lines-v1:sha256:6a9178b76edb19962a99f3f4ab41c139a98a231ca91ffb28df5264ada49fc7fb:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjNGM5Mzg5NzcyM2M3ZjI5ODEzZmVmYzMwMjYzYjlmMDYzMmE2MjY2NTRhODFjNzViMWE2ZjBlM2YwNWE4OGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhZmUwZTJlYTViMDFhMjJkYzVjYTcwM2Q4ZjZiZDE5NDUyMzBlNTA2ZmU3OGM0NTZlMTkxYzVkYzIwYmJiNmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI5Zjg2YjQwZTY0YTU3NjA1MzViMWY3N2VhNTdmMGI3YjU3ODk3Y2VhYjc0YzY4YWIyNTEzNGI3NWE5NTEzODgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgwN2E5MDdhZWQ2ZDkzYzI5YmVjMzE3MjZlNWNjZWQyYTM2NGZlZjA2ZmVjYmE3NDg2OWJkYTNlNWI1ZWMwNGIifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L61-L233",
+          "version": "repo-lines-v1:sha256:3f8abf65a2851aec7a5a40558f4c9f104ab2051fd8df4d4d2ec817b8225081d8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTczLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1MjRlMDg3ZjcxYjdjNGM1YTI1YWY5MDMwYmUyNzIwMjJlYjQwYTIwZGQ2YzJiZDRiNzRjNjc0NDM1MGIxM2ZlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3ZWI3MDI1NzU5M2RhMDZmNjgyYTNkZGRhNTRhOWQyNjBkNGZjNTE0ZjY0NTIzN2Y1Y2E3NGIwOGY4ZGE2MWE2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0NzQ2MTJmOWZlNzVkNGU0ZjVjNDJjZjE4Zjc5NzczZDI3N2ZjOTBkZDczZmFhOThhMjAyNWQzNTQ0NDAzZWM4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1MTdjNGVmZjRlZDQyMGQxYzQ3MzkwNGJmMDRmODc3OGIwYmY2ZjY4NTI5ZDNiZjQzYTI2YjlmMzc1NjM1YzMzIn0"
+        },
+        {
+          "resource": "repo://src/locales/zh.js#L1632-L1689",
+          "version": "repo-lines-v1:sha256:ad70e6f232c13fba367424e67b17306c3daf49b6b3e246e5af77c33d040009b5:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5ZTM4YzY2MzY0MWVmZmZmMGJkMTA0OTVkNjJhMDM2NzhlNGE5NmU4OTk4NDE0MDcwNTU2YTZhMDYzYTVhMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZjZGEwNzdlOTIyNzNlMzc0NjE2ZjgyODQxMTlhZDNjM2NmZDIzZTUxYWFhZjdmZGIzMTk0NjZmODkwNWRhM2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2ZjQ1MzIxM2RlNWQ1YjhiZDc4MWQxZDUyZjhkOTllOGQ0ZWQ1MjQ5NGYyODkxMGFhZDliODVjMDNjY2Y3YTkifQ"
+        },
+        {
+          "resource": "repo://src/locales/zh.js#L1772-L1823",
+          "version": "repo-lines-v1:sha256:b069faa83948e87e51b07c80020de32574370f42969ad454a5169bd03caff852:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwZjUwNmNiMDExZDcwZDRkOTI3ZjgzNzJmMGQzZTFkYmRjMWVlNjVlNGFkZWUzOTVjNmE0NzRjOWI2MjZmZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0NjgyODJkZjNlNWYxMTkxZjMyYzBiMTA0NTQ3YWM2OGRhZDVmZTlmN2VjY2EzOTQ2OWFkNGZhM2I3NWNiY2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJhY2FjZjY5ZDkzMTE5YTE0YjE5YjYxODM0YzRjZWE3YzQzNDkyYWFmNWEwYjBjZjcwZGIyNTQzMTgwZmEzM2QifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4b973b1f423340b9a7d139f320a88bfe",
+      "statement": "`/admin/stats`（`AdminStats`）是当前唯一的孤立后台页：路由、`AdminGuard` 包裹与 `pageTitle.adminStats` 都存在，但仪表盘没有对应卡片、其他组件也没有链接指向它，只能靠手输 URL 抵达，且页面内无角色门。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L522-L522",
+          "version": "repo-lines-v1:sha256:7188dcd829b512a0584d26eae063362db1deaaf410a353cc77c27e40f95109d8:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzE4OGRjZDgyOWI1MTJhMDU4NGQyNmVhZTA2MzM2MmRiMWRlYWFmNDEwYTM1M2NjNzdjMjdlNDBmOTUxMDlkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzE4OGRjZDgyOWI1MTJhMDU4NGQyNmVhZTA2MzM2MmRiMWRlYWFmNDEwYTM1M2NjNzdjMjdlNDBmOTUxMDlkOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDZmNmRiYjIzMmI4N2I5N2M4NzQ4NmFiOGIyZDFlMGJkODgxN2IwNTQyYzZmNzcxYTI1Zjc2YWFhZGM2NDc4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTFhYzNjZTU4YTE0Nzg2NDM0MGVlMjI3ODEwOTRhODUxODRmMGIzYjAwNzVmYThkMjc2MzQyODE3NTU0ZDZiYyJ9"
+        },
+        {
+          "resource": "repo://src/App.jsx#L85-L85",
+          "version": "repo-lines-v1:sha256:48612351c592eb274d3b529c5b98ea71ffe150970496f71a46ad6d42d4de522a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg2MTIzNTFjNTkyZWIyNzRkM2I1MjljNWI5OGVhNzFmZmUxNTA5NzA0OTZmNzFhNDZhZDZkNDJkNGRlNTIyYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg2MTIzNTFjNTkyZWIyNzRkM2I1MjljNWI5OGVhNzFmZmUxNTA5NzA0OTZmNzFhNDZhZDZkNDJkNGRlNTIyYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGIwNjg2YWU0YjczYTEwMmQ5MGZjYjBlMjY0ZWNjYmExOTQyNTcxMmMxZWRlZGQzNmMyZDM4NjM5OTBmMmQyMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDZmMmU5OTBiYWFjYWYxOWI4ZTAyODJjMjNkOWM5MGI0N2E2ZjFjYWM4ZTJmZjk1NWNkNWEyNDIwMjJhZTYxMyJ9"
+        },
+        {
+          "resource": "repo://src/components/AdminDashboard.jsx#L61-L233",
+          "version": "repo-lines-v1:sha256:3f8abf65a2851aec7a5a40558f4c9f104ab2051fd8df4d4d2ec817b8225081d8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTczLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1MjRlMDg3ZjcxYjdjNGM1YTI1YWY5MDMwYmUyNzIwMjJlYjQwYTIwZGQ2YzJiZDRiNzRjNjc0NDM1MGIxM2ZlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3ZWI3MDI1NzU5M2RhMDZmNjgyYTNkZGRhNTRhOWQyNjBkNGZjNTE0ZjY0NTIzN2Y1Y2E3NGIwOGY4ZGE2MWE2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0NzQ2MTJmOWZlNzVkNGU0ZjVjNDJjZjE4Zjc5NzczZDI3N2ZjOTBkZDczZmFhOThhMjAyNWQzNTQ0NDAzZWM4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1MTdjNGVmZjRlZDQyMGQxYzQ3MzkwNGJmMDRmODc3OGIwYmY2ZjY4NTI5ZDNiZjQzYTI2YjlmMzc1NjM1YzMzIn0"
+        },
+        {
+          "resource": "repo://src/components/AdminStats.jsx#L7-L19",
+          "version": "repo-lines-v1:sha256:b9384e84758eeb246956cac570e4b635e318bf85ad0becfda011394312674a49:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzMTMwZjNhODQzZDllYzY1YTc2OGEwZTdmMDFiZTJiNDE1ZjJhMzNiOWEyZDMxNWRiYjU4OTc5ZWQwMTMwMTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NGExZWM5NzVkMzEyYjViYzRlNjZjOTRjYmZiNmM1ODM1MWEzOGQwOGIxNTIzMjVhZjFhNDZhNWZiYWQxYjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1Mjk5NDg2NDg2MWEwNWZkNGM3N2FiZTFlODFmNTE1YzlhNmRjYTUwMGJjNzE3YjhlMDJkNWI2NWExMDNiMjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmMTYzN2RkODgxNmZiNDE0NWUxNWViNGUxYjc0NDNhMTUxMDU4Yjk0NDI2MGEyMzQwNDJiNmMyNTA4N2EyZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_063850a5f35f44ef9fabfa7dedd02f16",
+      "statement": "仓库没有配置测试运行器，后台改动的验证依赖 `npm run lint`（`--max-warnings 0`）、`npm run build` 与手工三角色走查；本地联调必须先启动后端（Vite 把 `/api` 与 `/uploads` 代理到 `localhost:5000`），否则所有 `adminApi` 请求失败并触发跳登录，无法判断界面行为。",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L5-L17",
+          "version": "repo-lines-v1:sha256:0f9902db9e80c6158b7e9295c434affed6ddaa3bc6c8067796c6f51d39a81f12:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZWNkYmVmNmRjYmFhOGJlNWVlYTBhZDFkOTE2ZjY2NzFjMTlkNDJhNzc0OTJjYjBhOTlkNWM3YTA4ZDM2YzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiYTQzOGQwYzY3ZTM3OTQ0NTg0YmQwMWMyNDNmMWE2YTMzZThmMTNjMGRjYTBjZWZmYTA1MzM5YmM4MzA1ODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZGRjYjZlZGU1YjhhMDk2M2U2NjRhZWNkZjA3YWFlNWFhZmYzMmJjNjQyYzUwMWZhNDY3YWFkZGI0OGVmMGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzOTc0NjkxYTUwYWVjNWQyNTFlMWM4MDA1M2RiY2JiZjdjMjk4MzEwMjZhZTA3YjU4NjQwZmI3NGUxMTVkNTMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-10-29T12:47:15.545Z"
+  }
+}

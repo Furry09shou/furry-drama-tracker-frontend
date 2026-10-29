@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c5eaa9b6abb359ed0e9ad81ff57f005a0cb097412fa9cb42f1be2e0ee0936cb5",
+  "claims": [
+    {
+      "id": "claim_48ba85de89be4e0db22c347239348265",
+      "statement": "前端有两条互不替代的翻译路径：界面文案走 src/locales/{zh,en}.js 静态字典与 useI18n().t()（永不发请求），后端内容字段走 useTranslation 的 field+En 后缀字段并在缺失时调用 /api/translate 机器翻译；界面文案不得改用机器翻译。",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L39-L39",
+          "version": "repo-lines-v1:sha256:18844c5982b2ca4bafc12df7a9beb47cf1127c9a6540675152c1a1568d394d30:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGNiYjY3YzNkOWVmYmU4ZjdkNTBkOTU4M2UzZjFmMDY0OTYyYjUxM2VlYjJkYWE2ZGY1MTEzYzZhODU5YThjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWQ1MGUzZTIyZDEyYTA2YTE1MmVkZDA1MzFmODFjYjhiNzE2NGM1NTNhN2I3OWJiOWI4MDUwNDBjMjZkZTAwMiJ9"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L1-L20",
+          "version": "repo-lines-v1:sha256:7fd81b4fcfb9773e2c0173956b14185048c2cc27397aa391ebde971cef0aab11:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YzEzYWRiY2ZiZTgxOTk5ZWQ2NGY2ZWZiMDVkMTJiNjdjNGZhZmY0Y2Y3ZmExMjI4OTJjMjVlNjk4YTA2OWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYjkwODJlZDJhMDAwOTI5ZTJkMDY4MmQyYzAzOTEwZDkwNTFkMDk1M2FkY2RmODI4MTQ4ODlmNDI2Y2Y1MDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU5MGVlZjI1ZDFlZTIxMjE5ODA3NjkxMzZmNTUyY2QzZmNiZWYxYjk0Y2Y5MjlhMTUyZTM1YzM2NDRkMjJiZTEifQ"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L79-L107",
+          "version": "repo-lines-v1:sha256:8662ebc3514b80c5ed89536839a3ca07a991b2c9b08e5416503f9c6a229adff6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlYTgyODQzZjIxNjZkMzc0ZDc2ZWJjZDg5YmNhMzNmZGFiMTNlOTUxNWRhYzBmNGM5ZGEyM2ExODA1ZWRiNTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDBkZWU3Y2IxZWIzN2ZiNDVmZjQ2NzE2ZDlhNjE2MjI5NGQ4MTU3ODY2YThlMDUxNWJkNzFiZjA2ZDFlOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhN2FjYjMyNTM3ODE2ZDI1ZDhjNjA2MzQ0MDVmZjk2ZjM0MDQzYzVmYTQ1YWYzN2U5MWQ3NmU2YjhlYjJiYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5ZDExMmVhOGU0NjMwM2QxZTc2ZGI3Yjc0ZmVhZTkzMDRlOTU5NjExZjNmY2M0NDAwY2YyNzI4MmQ2YmViMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_db9e21f119244fa1a710e43fb6a4ec01",
+      "statement": "t(key, params) 按点号拆分 key 逐层下钻字典；命中且传入 params 且值为字符串时用 /\\{(\\w+)\\}/g 替换占位符，参数缺失时保留 {name} 字面量；非字符串值原样返回。",
+      "evidence": [
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L66-L78",
+          "version": "repo-lines-v1:sha256:62b1bf4d3e4f33e25ba5b853eb15fee00d141d90eff92a259f7ff2030e23385c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmZDViNDliNWQ0ODkxNzI3OTMyZmQwYzczODM2ZTE0MmQ2NmE2ZTI2NTFlYmJiMGNjMzE5M2IyNjAyYTFjNjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0MTlhNmRjYzA0ZTIxM2EzYzdhNzdhNDU2YjAxZTc2ZDFlZjc4Y2QwMGJiZWMxZDhmODE0NThmZTkzZWRjNTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJkOTA5NGQ4NDgyYmFiZDJlNDlhZGJhMjI4NmI1MDJhMzBkMjMzN2NhZmRlNDg3NTdhMWViOWE3YmFkMTk4MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5YWZhNDcyMjZkZmU3NzM0ZTE2MWNhOTc0NTcxYWM3YmFlM2JhZjg3M2ZkMDVlNmQwZmYyNDhlZmM1MGM1MGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_de3733c8e56c44ffad4f177e4d3fbd3f",
+      "statement": "t() 的回退链是当前语言字典 → zh 字典 → key 字符串本身，因此英文漏配的表现是显示中文文案（静默），只有 zh 也缺时才在页面上出现裸 key，作为定位漏配的信号。",
+      "evidence": [
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L80-L92",
+          "version": "repo-lines-v1:sha256:95375c70799ff6df3eadc11ecacb8f3bee38604cbeb500207e50ea2c6db99ee4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3YjQ3NWUxNDU4MjdiZGQzY2YwM2M2YmVjYmUyZjZkNDQyY2ZjMzdlNWRhNTUzMDgxN2E3YzEyMWMxMmExYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxM2M5NDJjODVjYzdjMDBkNzM0Yjg3Y2JlMzRiODYzZmYyM2ZhOGQ4NjMxMjM3NGEwNzQ2ZGI1YzgwZDY1OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4NjE1ZWY5YmQyYTc2YjRiZDRjNzQ3MTA0YzM2Zjk1ZThhZTc2ZjA4MWI3M2FkMDU2Mjg0OGIxMGI2YWVjZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM2YjdhMTY2MDZjZDRlMzFiYWFiMWFiZTM5MDAxZmYxZTM2YzVhYzJjNGY1YjBlMzg2MDQ1MDNkZjNkNWMwMjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d97a6044798c4ce5b9eb8f6a11a13aab",
+      "statement": "新增 UI 文案必须同时写入 src/locales/zh.js 与 src/locales/en.js，这是仅靠约定的硬约束，没有构建期或测试期校验。",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L39-L39",
+          "version": "repo-lines-v1:sha256:18844c5982b2ca4bafc12df7a9beb47cf1127c9a6540675152c1a1568d394d30:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTg4NDRjNTk4MmIyY2E0YmFmYzEyZGY3YTliZWI0N2NmMTEyN2M5YTY1NDA2NzUxNTJjMWExNTY4ZDM5NGQzMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGNiYjY3YzNkOWVmYmU4ZjdkNTBkOTU4M2UzZjFmMDY0OTYyYjUxM2VlYjJkYWE2ZGY1MTEzYzZhODU5YThjMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWQ1MGUzZTIyZDEyYTA2YTE1MmVkZDA1MzFmODFjYjhiNzE2NGM1NTNhN2I3OWJiOWI4MDUwNDBjMjZkZTAwMiJ9"
+        },
+        {
+          "resource": "repo://src/locales/en.js#L1-L57",
+          "version": "repo-lines-v1:sha256:24eb9b2b9632778196314474f9ba96967c87044822d8bd6e2602eb8b0cb24ac6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiZjlkYTVhZDBkMmZmYjc1ODFhNDgzMWRhZDMwMDZmZjhhOTUzMGQyMzg4N2NlZDJhNjczY2U5YzM4ZTNlMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2YWE4NWRkY2E3MTU2YjYyNDRiNmZjMmEwMjI2NjFmYTljYjQ1N2E1YTY3YzRhMDNiZmMyOGZiNjc2NWJjM2QifQ"
+        },
+        {
+          "resource": "repo://src/locales/zh.js#L1-L57",
+          "version": "repo-lines-v1:sha256:dcdfedba752c3ebb3ff7acbd7eca6a225a7a1c72acdd749e6430c712cbf7004c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiZjlkYTVhZDBkMmZmYjc1ODFhNDgzMWRhZDMwMDZmZjhhOTUzMGQyMzg4N2NlZDJhNjczY2U5YzM4ZTNlMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYzk0OTg1NTI2YzFjNTdlZjAwYzAwZDNmNGRjOTA2MTU2NzdhMGEzNmE4Yjc5NWRmZjlhZmZkNTBmZTlmNTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3NzY0YmU1NDkzZjEwZTI4YWQxYmE3YzdiMDc1Yjc1NWRkYTc3NzdhNzNjODgyMDE4ODM5Mjc3ZTdhYmFmNTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3dc11b78c1de47afa0738e4bb9b77c0c",
+      "statement": "支持的语言固定为 zh 与 en：translations 映射、SUPPORTED_LANGUAGES 与 LOCALE_MAP 共同定义语言集合，Provider 暴露的 locale（zh-CN / en-US）被后台表格用于 toLocaleString 时间格式化。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/AdminAuditLogs.jsx#L7-L31",
+          "version": "repo-lines-v1:sha256:b6a68c5c5a43560b78db270063fddc80f95623173c8f07aa92ff31ea335da909:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MzVkZDRjMmZiZDYwOTRjYzc1MzkwMTkyODAyOTQ0ZDgyMDEyOGY4NDNhZGMxNWE0ZTJhYTNjMGZjZGQyZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhYjhlMTJhZmE4MTc2YzQ5ZGU1MmY2ZjI2M2E0NjMwY2QyNzgzOWQyYWNiN2JlOTNiMGE2NjhmOGJiNDg4YzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhhYWQ0ZjMwY2NhZmNkNTYwOGE5OGMzYjVkYjFhYWU4MWY0MGM5NjMxYTVlMTMxNmFlYWY4ZTc1ZWE3MzBjZjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NGEzYTUzNGQzYzQzMTcwNTM5NWUwNjE5M2RkMTAwZTczMDVjNzE2ZmIyZTBjN2YwMGY1YWE1NWE5YWE3ZmIifQ"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L1-L20",
+          "version": "repo-lines-v1:sha256:7fd81b4fcfb9773e2c0173956b14185048c2cc27397aa391ebde971cef0aab11:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YzEzYWRiY2ZiZTgxOTk5ZWQ2NGY2ZWZiMDVkMTJiNjdjNGZhZmY0Y2Y3ZmExMjI4OTJjMjVlNjk4YTA2OWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYjkwODJlZDJhMDAwOTI5ZTJkMDY4MmQyYzAzOTEwZDkwNTFkMDk1M2FkY2RmODI4MTQ4ODlmNDI2Y2Y1MDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU5MGVlZjI1ZDFlZTIxMjE5ODA3NjkxMzZmNTUyY2QzZmNiZWYxYjk0Y2Y5MjlhMTUyZTM1YzM2NDRkMjJiZTEifQ"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L106-L106",
+          "version": "repo-lines-v1:sha256:e57a34fa4fe047a905f586f6fddc2db4e3382e8dd96f7ac1b38673f4ea37a095:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTU3YTM0ZmE0ZmUwNDdhOTA1ZjU4NmY2ZmRkYzJkYjRlMzM4MmU4ZGQ5NmY3YWMxYjM4NjczZjRlYTM3YTA5NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTU3YTM0ZmE0ZmUwNDdhOTA1ZjU4NmY2ZmRkYzJkYjRlMzM4MmU4ZGQ5NmY3YWMxYjM4NjczZjRlYTM3YTA5NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWVlODBhNmQzNzI5ODI1NmFhNjFjZWE1NGZmMTExZGNkMDdjMDQ2OTBlYTI5OTk1YzNlMGFhNjYzZmVlOGUzZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjFiOTlhZTAwYzVjOWNhNGZkMzkxNDc1YWFiZmU4ZWIxZWUwYTU3MzEzMDAxZGFlMmI2NTVmZTdmY2ExZDFhOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c018a89a3f3a496f9008cf3c60f5e8ee",
+      "statement": "初始语言判定顺序为 localStorage.lang（需受支持）→ navigator.language 前两位命中 translations → 'zh'，同一套判定在 index.html 的 head 内联脚本里重写了一份，两份必须保持一致。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L32-L52",
+          "version": "repo-lines-v1:sha256:1aa6526be641a41a22bd97151dc11e16eea0c4d5b8b6400305d782a2d46c3bed:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjM2JlYmYzY2NlYzM5ZmUxYTNlYzdhMWE4OGEzOTVjYTYyYzc0ZWFhZDJjMzlkMzczMWU3N2QzYjNjZDFkZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2M2Y5ZGNlZWQ4ZDg1NGU0NGUzZTgwM2ViOGE4OGI4YTYyYTk0MmZmYTdlMjcwMDBjNDE1OWEyMzNkNmZkNTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZjODgyMGQzODQ1NzM3ZThmZWVmM2FlYjYyNDFhODIwMmZjNWUzZTI0M2MwYmM2ZGQyY2NlN2M0N2NkYjBjOGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmNTc0YjYxNGEwNTM4ZDhkNWMxOWYzZGFlOWYyOWViYzYzMjljMDQxMTk0YWZlN2E1MzhiZTMwOTdkYzJlNTgifQ"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L23-L29",
+          "version": "repo-lines-v1:sha256:550678012bbc9e9fdd9fd6cb0158d9ffd88b8e8b9438e8a2db8909a05282ac76:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWQ0NjhkYzZmMzAxNGJlNjdhZDVkMDJlZDM0MThhMjhjODhiYWVlZmJlYTVlYjhkZmY4YWFlNzhmMzBlOTUyMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjA4YjY5YjEyMzFlNzUwMzM1ZDlkZDFmNzlkNzg2ZWM4ZDMyMTNlNDYwNGYzNGEwYTEyZGNlNGMwMzRlMGVhMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzEwNWM5MzQ1Y2ZiZGU3MzVhZTdlMTM4NzM3OWRkMmYzNmJlMjlkMmRjMThmMzI0Yjc5ZGJjNmMyNzgwN2RkYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2UxMWJlMDIxMjIzOGExMDc2YTg3NWE0M2MzNWI0ODliN2Y5YjcyM2UyNWM4MWVjZjZlMTI1NmRjY2M3MjVjYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a851e1dd785d46f0a6c4a3e30034f4ee",
+      "statement": "switchLang 校验目标语言后先写 localStorage.lang 再 window.location.reload()，不做状态更新；原因是 index.html 的 head 内联脚本必须在文档解析期就设置 <html lang> 与 language meta，浏览器翻译、拼写检查与无障碍服务才会在初始加载时正确识别语言。",
+      "evidence": [
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L94-L103",
+          "version": "repo-lines-v1:sha256:cb5d0e215dacd31bc590b70dcf4cf2cec1a097ad87f6046e92c84749d814716a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhMzhjMGE5M2YwMWM5ODA5OWVlNzdiNTI2MWYxYTc5OTgyMWQ1NmQwNzIwMGZlNjUyNDAwYjFlMTI1MmNmODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxM2M5NDJjODVjYzdjMDBkNzM0Yjg3Y2JlMzRiODYzZmYyM2ZhOGQ4NjMxMjM3NGEwNzQ2ZGI1YzgwZDY1OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNiOTdhYzAyZmE4Y2IxYWI3NjI0ZTMxOWZjODhkYjUyNGM5ZjEwOTg3ZTk0ODExMmE5MzI1OTI2ZTI0NWUzZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxZmJjZDgxNDI1ODUwY2IzZTIwMjgxM2U3N2Y5OGYzNTY3NThlNjVjMWRhMGE5ZTY2NWU2NDQyOTJjZjljMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7a7cd3a6e0854f238dfd192234145498",
+      "statement": "语言 effect 会把 document.documentElement.lang 以及 og:locale、content-language、language 两个 meta（缺失时动态创建）统一写成完整 locale（zh-CN / en-US）。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L23-L25",
+          "version": "repo-lines-v1:sha256:bad6215b98dbdc698c282ef42c3d362b6727a8614cb56abe9c9923fe85dd84a6:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRjNzI1Yjc0MjVlZGIwN2E3NjI5MGFiMjFjNDQ1ODhmNjFlYzA1ZGZmNWRiZjg5ODkwNjhkOTllZGEzZmIyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGQ3NTBhNDI5ZDEyOWU3OGUwNjkyNjk1YzQ5Njc5M2E3NmNiNTJiYjQ0NzRlZTk2ODBkNjVkZTdlOGVkZWM4YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWEzMzAxNzNjZTM0ZjFhMDJmMWUxZmNiNGZiOWQ4ZDQ2M2ZhZGQ1YTc1MzU2ODI4OGZkYzU4MjFmZTFjOWIwZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTY4ZmRkM2JiNzZkZjQ5MDZkOWMwODA1Yjg4MThhOTU2YzFiYmY4YzQwMDcyNThiY2M5NWEzMTA1NzIyNzc2NCJ9"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L31-L64",
+          "version": "repo-lines-v1:sha256:7fc88f048cc8ba1062f20c0c3d0c4390a84f6561ee9b82b50c228038917ee95d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxM2M5NDJjODVjYzdjMDBkNzM0Yjg3Y2JlMzRiODYzZmYyM2ZhOGQ4NjMxMjM3NGEwNzQ2ZGI1YzgwZDY1OWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkMTc5OTAwYTFkNjczNjIyMTVjYWY2MDM1ODI2ZWI0N2YxZjlhZDc0OWNjYTA3MzBhMDcwMjMxY2Q3N2EzODAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImViZGU2ODEwOGQ3MTgxZTJiNGI5OGRiNTkzMzE2MTgyNWI3MzM5NDVmY2U4NTc2ZTY1MmVlMGI0ZTM3ZGFmMWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_98ab107fd3e94aadbd94c3c54f09e646",
+      "statement": "I18nContext 通过 import.meta.hot.data 复用同一个 context 对象并在 dispose 时存回，避免热更新导致旧 Provider 与新 Consumer 的 context 不匹配；该模块不使用 default export，并具名导出 context 供 App.jsx 的两个 ErrorBoundary 与 AdminErrorBoundary 以 static contextType 消费，useI18n 在 Provider 外调用会直接抛错。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L631-L654",
+          "version": "repo-lines-v1:sha256:898160112e2091e7a658781ad0ffdbbac10ee70d96ffcda4636148799f3a475a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4MmFiNjNhZDkwZWEwYzA5ZTU0NGQyZmUzN2EzNWE0NTQ2NWYyZGNjYWMwOTAxMDQ3M2JiN2JmNDJkODQyNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4MmFiNjNhZDkwZWEwYzA5ZTU0NGQyZmUzN2EzNWE0NTQ2NWYyZGNjYWMwOTAxMDQ3M2JiN2JmNDJkODQyNjIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiZWE1NGM3ZjEyNGI0NTExYjNjNGNjMmMwNWYwYjBjNmM5OTQwZGM3NGQ4MTIyYTM5NGY4MjFhZWM3MTc3M2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjMjdhYTU1YmJjMWY0MTIwYzNmMGY5ZjQ5ZjJmOTk3MzBmZTkwN2M3N2Y5NDY4ZDU3OTExYzRjOWQxMWRkZjcifQ"
+        },
+        {
+          "resource": "repo://src/components/AdminErrorBoundary.jsx#L49-L49",
+          "version": "repo-lines-v1:sha256:e786a28aabc8d23bd3c84d373f572136033ba7a0b95ecc6e7aa48d950d4d8adc:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc4NmEyOGFhYmM4ZDIzYmQzYzg0ZDM3M2Y1NzIxMzYwMzNiYTdhMGI5NWVjYzZlN2FhNDhkOTUwZDRkOGFkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc4NmEyOGFhYmM4ZDIzYmQzYzg0ZDM3M2Y1NzIxMzYwMzNiYTdhMGI5NWVjYzZlN2FhNDhkOTUwZDRkOGFkYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDQ3ZjIyMDNkZTNhY2E2NWE2NWE2MWZiNTcyZWY5NGQxMDljNDc5ZmI0NDMyNmQxOGFlYTM0ZTZiOGI1MzliNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjAwNzA2ZWQwZWNmZTBiODdjZTMxODcyNDVkMGViOTFjMjk2NjA0OTMzOTJiMzA1MGY3YThjZTQwN2FjMTY3OCJ9"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L112-L119",
+          "version": "repo-lines-v1:sha256:bd644a4d2fd51d7e585bfc0c4fd2d4abada86bcf9a129e507820b7f35689067f:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTY4NzE3OGEzNGEyNzMyMjFkZmY3ZjVjMGVlMDVlMDU0NWY5NDM1OTJhYTlkYmI0MjBmNjU2NzllODdlOGE4NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDQ2ZjgzMWRlZTBjZTQ2YTkzNDllN2JmY2IxYmE4OWY0NTVlZTc2ZDhlNWU5NDZhNWU0MTUwOGMzYmFjMjJjMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWViMmMxYTNhYjRiYTEzMWI1OTU4YjUxOGM1NjkyMmRmODUzYTBjZTk4NTQ2ZmM2NjM2ZTkyYTk0YWIwNDNhNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://src/contexts/I18nContext.jsx#L7-L13",
+          "version": "repo-lines-v1:sha256:5a7cef962c1d228c5cb86942ea5f8692d96a5b8a07d60d7004402ab305cf98bb:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWZiZGJmMzA1N2Q2MTYzOTg5NDc2NzcyNDI2MGYyNzNlZjFjNTAxYTBiY2FkNDhiYmJlNDEyNzc0OTViNTFmMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGFmNjMwYmRjMTMzNDMyODMyMjViZDBiNTRkMzY2MDgwZDdiYWUxNmNjMTJmNzA3M2VmYjAzZGVhNTdlYTQ3MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2NjYTI1ZjI1M2Q2ZjUxZjAwOTM5NzJlNDMwZjFjYjVjMjZiMmE5ZmI1MGMyYmYyNGQxOGU3OTJjZDJiMWQwMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTdkNmRiODBkZDEwOTYzN2Y0ZWY3MmE5ZTQwOTRjMzc0MWZlYTIyOGVjMmRmMjcyZGJjZjVjNDZmYTJlNjdkMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1218e01ff9a349e99a43d23de3097057",
+      "statement": "getLocalizedField 的优先级为：lang 为 zh 直接返回 base 字段；否则优先返回服务端预置的 field+En 字段；否则依次检查缓存命中、failedRef 与 pendingRef，全部落空才入队翻译，且本次仍返回中文原文，靠后续重渲染替换。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L79-L107",
+          "version": "repo-lines-v1:sha256:8662ebc3514b80c5ed89536839a3ca07a991b2c9b08e5416503f9c6a229adff6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlYTgyODQzZjIxNjZkMzc0ZDc2ZWJjZDg5YmNhMzNmZGFiMTNlOTUxNWRhYzBmNGM5ZGEyM2ExODA1ZWRiNTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDBkZWU3Y2IxZWIzN2ZiNDVmZjQ2NzE2ZDlhNjE2MjI5NGQ4MTU3ODY2YThlMDUxNWJkNzFiZjA2ZDFlOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhN2FjYjMyNTM3ODE2ZDI1ZDhjNjA2MzQ0MDVmZjk2ZjM0MDQzYzVmYTQ1YWYzN2U5MWQ3NmU2YjhlYjJiYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5ZDExMmVhOGU0NjMwM2QxZTc2ZGI3Yjc0ZmVhZTkzMDRlOTU5NjExZjNmY2M0NDAwY2YyNzI4MmQ2YmViMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d0b5becf53dd454e86e2a17fbd233672",
+      "statement": "多语言字段后缀由语言码首字母大写拼接（en → En），因此该约定只对单段语言码成立（zh-TW 会拼出 fieldZh-TW）；hook 对外提供 title/description/name/subtitle 的别名包装。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L109-L112",
+          "version": "repo-lines-v1:sha256:268627d0fbc29b6d64b3cb351bcdf1ae5c03c16d387809c81c4f1753f785b51e:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDg0NjhlZmZjNThiNzA2NTEyZDIxZWY5ZmUxOTQyZmRkOWQ2YzY1YWIzMDMxZWI3ZjUzM2RhNzc4ZmM0MzQ4MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2E2YjZkMmY2OWMzZjZlZTI4YTQ1NmQyMjFhMDg3YTQ2NDJkMWMzYzQ0Njk1Y2Y3MGUwNDAzNTQ1ZDc2NWY4MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTVhY2I5Y2I0ZWRjMDEzNjFhOGU0ZWQ2MDNkZDQ0Yjc3NWEyZWQ1MTg3NmRjMDUwMGVmZjc2N2E4M2NhZjc0NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjFlYzEzMzJiNjZjNDk5NjkwNDIzZWMyOWMzMDg3MzAyOTc3N2U1N2Y5NWIzYWRjMjBjMTQ5ZjExNzY0OWZlMSJ9"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L82-L83",
+          "version": "repo-lines-v1:sha256:7c62e913baec9d37752ae3c0ad09a3d03c3cba3f9c23f383e8a573268907985e:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY2YTJjODRjMjIwZWNhMzEwOGJkOWY0YWYwMzJlNzRjOWUxODc2NDA5ZGZhNGI4MzdlMWRmNGM2YTlmNDkxMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTJiOGU2Y2IxOTg0MTBkMzQzMWQyOWVhNDVlZTk1NGIwYTMzZjVhMDViNDJkZTA5MGJlYjZiMTAwOWVlMzk0MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODVlN2ZkNGM4NmVlNzdjNTYwYWE5ZjYwMmVmYmRlMzM0YTBjMWEzZTE3ZjA3ZWMwYjJlMmMwNGQ3OGY1YjZhNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWEyOWM5Nzc3YWViODIyY2M5ZTU1NzkyNDYyMDU5ZTk0ZWQ1YmY5NmRlZmZmZjBiOGNhYjkwODYwY2Q3MGUyZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_933ed41bcb294552a1861987a514009f",
+      "statement": "翻译请求管线位于模块作用域并被 useTranslation 与 TranslatableText 共享：MAX_CONCURRENT=6 的并发上限、FIFO requestQueue、15000ms 超时、POST /api/translate 体为 {key: 原文, targetLang}，成功时 setCache 并 resolve 译文，失败时 resolve null 且不写缓存。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L6-L51",
+          "version": "repo-lines-v1:sha256:925b0554b5cc765ead54f2e4e1e490c9dad9c73b584f3f173ddcefaea7db26db:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyOWQ0OGY4N2ZlMzNlZjRkZWVjYTYyNWUwMTA4ZTNiZWJiMzgwMjRlMjM3NWU3OTFlZWUzNzgzNTE3MjgxNTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM1ODgxN2I5ZDY3NTJhNjQyNWYyNmQxNTgxYzIzZWI2MGEzMGZmNmFjZWYwMGQyYjBjYWFjZjIyYjg3Yzg0NjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmMTA0Y2RkNGIyODY1ZGRiMDM2MDA1MjNmNjNkY2Q2MzY2NzI1YTgwYzQ0ZThhMTczNzc2Yjg0ZjNkMjllNDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2e36ec1230a14d21a84b3ed4584c1c26",
+      "statement": "去重缓存键是 `${lang}:${原文}` 而非字段名或实体 id，并有三层去重（持久缓存 → inFlightRequests → requestQueue.find），因此原文相同的不同实体只产生一次请求与一条缓存条目。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L36-L51",
+          "version": "repo-lines-v1:sha256:06c08e13d89dae7fdb1ae1106d9749b509c6d684edbc790f821ea516f0e55b4f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmZjlmNmMzNTNjMWE1NWNkYTUxNmE1MjAxMzIzNjA0NTJhNDAzMzY1ZDQyYTZmMDYwNDZlZTQ3YWUxMTQxMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4NTI1MTMwNDAxN2MxNDlmMWM3ZjFmNDliYmYxZWZkNDU4YjIyOTU3YmRhZDA1NWUzYmU4NjVkZDVmNzkyMDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmMTA0Y2RkNGIyODY1ZGRiMDM2MDA1MjNmNjNkY2Q2MzY2NzI1YTgwYzQ0ZThhMTczNzc2Yjg0ZjNkMjllNDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c5ee4e3adcee4478bf6f1a2abc41560f",
+      "statement": "失败记忆是实例级的：failedRef 按 cacheKey 登记失败后该组件实例对该字符串永久返回原文且不再请求，pendingRef 防止重复入队；没有跨实例的失败记忆，因此重新挂载或另一个组件渲染同一原文时仍会各自重试一次。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L65-L107",
+          "version": "repo-lines-v1:sha256:a71d2313acab4bf017593f49eabc8fac1cc033be5d4500688e7e087d3a63c0df:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDBkZWU3Y2IxZWIzN2ZiNDVmZjQ2NzE2ZDlhNjE2MjI5NGQ4MTU3ODY2YThlMDUxNWJkNzFiZjA2ZDFlOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3MTYyMmEzZmQ1YTE1NWY2YWU2YjUyN2Q3MjQ0NjBiNmY0Mjc1ZWY1ZTNiZDdkYWE0Y2IxYWEzODk4MWE3MTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5ZDExMmVhOGU0NjMwM2QxZTc2ZGI3Yjc0ZmVhZTkzMDRlOTU5NjExZjNmY2M0NDAwY2YyNzI4MmQ2YmViMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bbaa087213164a1d80892e8816f28347",
+      "statement": "译文到达后的重渲染只由 tick 状态驱动：scheduleTick 用 100ms setTimeout 防抖，mountedRef 守卫卸载后 setState，tick 被列入 getLocalized* 回调依赖以换掉函数身份触发消费方重渲染。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L71-L77",
+          "version": "repo-lines-v1:sha256:42b1244a25dcf21dee849cbad9cced2fbed528aec8122199d05ca6e6993fb5e6:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTNkN2U1ZmMzYzg2ZTA3ZWQzNDQyZjAwNWRmYmM5ZWIxODM3M2FkZmUyNmI3Njg2N2YxMDg4OWY2NDY3MjNjMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQwODJhYTJhYjQ4ZDU4NDE5YTI1YzRmMGVmMjcyN2RjZDg4NWY0MjIyZjZiNWI5MDc3NGYzYzliZmY1OTZiOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWJhMmU4NWY5ZDMxNTYyNDQyN2UxNzkyNGE0YWJmYzQwMGEwYzFjNDFlNzgyODcyYWNmOTJiMTdlMjk1ZDgzZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTQ2ZjU5MTVlZDQzODUwZGQyZmRlZTAwYmJjOWY2NWZmYTIyYWVmYWZkZmQwMmU2MDg5MGEzYTUwODRlMWIyZiJ9"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L95-L107",
+          "version": "repo-lines-v1:sha256:ee6e97c598898a7d4325df05ae14eca218e3651bd3286fed30ebaebd86ee9ac2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4YmE3YzI4YjRmODlmZDUzYWMyNjdmN2YwNzBjYzIxMWI3Mzc4ZjdjYTFjMTUzYzMyNWRlMjFhYjcyYThhY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDBkZWU3Y2IxZWIzN2ZiNDVmZjQ2NzE2ZDlhNjE2MjI5NGQ4MTU3ODY2YThlMDUxNWJkNzFiZjA2ZDFlOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZiMTFiMWRjY2U3OWNiOTg0OTEwZTQ0NTkwNTVkYzlmMDc3NTZiZTkwYTY1MmJhYzFlMDNiOTk2ZjUwMmYwYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5ZDExMmVhOGU0NjMwM2QxZTc2ZGI3Yjc0ZmVhZTkzMDRlOTU5NjExZjNmY2M0NDAwY2YyNzI4MmQ2YmViMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0500889e9d344275945cd2e578f3f5e2",
+      "statement": "getLocalizedContent 支持 {content: JSON字符串} 与已解析对象两种入参，解析失败或结果非普通对象（数组/null）时返回空串，成功后沿用同一套后缀 + 缓存 + 机器翻译流程。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L114-L155",
+          "version": "repo-lines-v1:sha256:2f2b158c6cbd2a5b3b23c8582197b3f7b37e01d278f8d5280e120b3b3fec4084:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyYjg3NGRjNWJhZGU2ZjEzNDhhOTI4NGY1OWI3NWZiNmUzYWRhYWZkODIyYzUwNTk0MWZhNjNlZTk1MmM4NmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNDBkZWU3Y2IxZWIzN2ZiNDVmZjQ2NzE2ZDlhNjE2MjI5NGQ4MTU3ODY2YThlMDUxNWJkNzFiZjA2ZDFlOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGE1ZTBmMWMwY2VhNTkyNWUzOTE5OTA3Mjg0NWRkMDU4ZmY2ZmMxZjcwZGE2YWRlMmQ1ZjZkYmRhODQwMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlZGU3ZmU2ODJmNzZlZjEwMjdmNTc4N2MwMDhlYzU0NmQ2YzdlYTZjN2IyNDc3Nzc4Zjk2YTc4NTkzNDAwMjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_acbc189a04694513892fc23ee6b3088a",
+      "statement": "hook 还导出 translateText 与 translateBatch，但当前没有任何组件调用它们；translateBatch 直接 POST /api/translate/batch（30s 超时）并写缓存，绕过模块级的 6 并发队列。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L157-L215",
+          "version": "repo-lines-v1:sha256:35de65056ae80f93b79e1c5228514ae95a6be9d52d173d5807ad23e4ea0ab591:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2MTFiYWNhYTcwZjNjY2U1NzJhYWMzMmZlYWZhOGQyODFiYTAxMjQyNDk0MTg0MDQyNjdjZTMxNGY3YTZjMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NzAwNTliY2IzOTQ4ZDgwN2MyMWNiZDQ0OGYwODUxMDk5NTE2ZmFhZGI3ZWYxZGM4ODRiMmI4OGE3YTI2YzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU3NWVkMzY4NjljNWNiZjdmNTE2NDFjMjE5YzBhMjg0NjFiN2FlNTNhY2VlMGJhMWM3N2Q1ZTUyMTYwZDhiMmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0NzFiMzhlZjZjMDNmZWMxMDM2MzkzMGVmNTZmYWM1ZjQ0MTAzMzZhNmYxYWU1MjRhNjM4MGRlMWU3ODZhM2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c9dfd56766347668dff4ebc4b1076b5",
+      "statement": "TranslatableText 处理短文本（zh 直接渲染，否则查缓存或入队），TranslatableBlock 处理长文：按空行分段后以 450 字符为上限按中文句号/逗号/英文句点/空格优先切块，按 10 条一批调用 /api/translate/batch（120s 超时 + 130s Promise.race 兜底），逐批刷新已译段落与进度，失败的块回落为原文；进度文案「Translating...」为硬编码英文未走 t()。",
+      "evidence": [
+        {
+          "resource": "repo://src/components/TranslatableText.jsx#L241-L278",
+          "version": "repo-lines-v1:sha256:79403e0fb5a630dfb701c09d50732e6af97ab5374175d8aa40e0a1834c448aab:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5YTRlMGQzMzNjZjY3MzE5YmY2N2QxZjJmZjJiMTEwNzdhOTBiNDhjOGJiNzExZDRjNWExNDE0YTJkZjVkNmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwYjU2NmQ3OGNmODdiNTg0ODdhN2U4NmU5ZWIxYzEyMGIzM2MxMmQ5YmJiNTFjNmZhY2Y5MGEyOTZmYTBmMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MWY2NDA2Mjk1YjgzNTJlMWUxMTFmZWQ1ZDEzOGZlNTQxNmFlMDBlYmQwZTZmYWFjMDM5Y2E4MTI5NWM5NTgifQ"
+        },
+        {
+          "resource": "repo://src/components/TranslatableText.jsx#L7-L51",
+          "version": "repo-lines-v1:sha256:982c1657dbf30df067e14c678f5830b06e897801f553f26da6cd24d2e66070d8:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZjhkNDBmOGZkNTBhYWYzNTE2YmVhZmQ4ZDY2YjE2NGE5MzU1MGQ0NmY2YTBmODVkMzI2Y2QwZjNlMjZlZDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3NzM2OGVjOGU5ZTg5YmUwYzZhYmRlN2IyNjBkZGYwOWYxYmZhZjg0ODk3YjlhYTY4YjVkZWI4OTVmZTY3OGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZlYzhmYTE3N2RiOTFkMTVlNzdlODVmMDBhOTYwNGRiNDk1OTllODRjNTM0MWIxNjY3NTU4NjBiODc3Y2RkNWQifQ"
+        },
+        {
+          "resource": "repo://src/components/TranslatableText.jsx#L87-L239",
+          "version": "repo-lines-v1:sha256:e8d86c2008d2f1b3b527752f4954aed28c5d4063dff5dff55c34395f099ef0fc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlMDlmNDBlNGRmMDMyNWE2ZjQ3OTMxZmMxNWIxY2JhOTRlNzBjZmE4MDljMWZhZmFjN2JlYjhhOTRkMGQ4ZTFhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiNTZmM2RiZDkxNzgxY2U4ZTZhNWVhMTU4NzM3Y2QwNTc5MmM3NTAwMTEyYmFlOWFjNzc0N2RjMzVhYWZhMWY4IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIyNjRhNmVmOGFkODZjNGI3MWU5Nzk3YWMyM2U4YzlhZmM0ZTYyYjgyOWE3NmU0NTFjNTY3YmM0Y2QwM2Y3MjlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIxYjQ5OWMxOTc5ODExZDQ1MGQ4YTNmZmVjMjU0ZDVjZTRhOTBlYTFlMzc1ZjdiMDBhYzc5ZTVkM2Y2MGQzNjFmIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_0283d16a93124433b45844ea7befd4b7",
+      "statement": "translationCache 是模块级内存字典 + localStorage 镜像：键为 translation_cache_v2 与 translation_cache_ttl_v2，setCache 同步改内存后 500ms 防抖落盘，24 小时 TTL 只在模块初始化时逐条过滤，容量上限 2000 条按对象键顺序淘汰最旧条目，初始化时删除旧版 translation_cache / translation_cache_ttl，全部读写包在 try/catch 中。",
+      "evidence": [
+        {
+          "resource": "repo://src/utils/translationCache.js#L1-L63",
+          "version": "repo-lines-v1:sha256:fbc1e677b85d014745b50c0b4cfee272949573465eda3eafedf5d0505a50bc52:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5YzY1NGEyZmJjMjYzODhlYTM0OGQ0ODBmMTA0MDVjZDJkZTJhYjFiMWNkODM3ZjgzMjQ1ZDQ1NGM1MjljYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlOTI0NDFkYWExYmNjZGU2ODJiOTZlYTA2NjMyYmVlNjU5ODUzY2JhMTRlMzE5NzdjMWI5MWVlNDljNjI5YWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8b263b1f164d40178da6af59538760dd",
+      "statement": "index.html 的 CSP connect-src 允许 api.mymemory.translated.net、translate.googleapis.com、api.cognitive.microsofttranslator.com 三个翻译域名，但 src/ 内没有代码直连它们，所有翻译请求都打到同源 /api/translate。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L8-L8",
+          "version": "repo-lines-v1:sha256:8aba7ca4b62ddd6bde94cebadfb5d1b2d37352e95d7c473b21c7d8d11bd36260:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGFiYTdjYTRiNjJkZGQ2YmRlOTRjZWJhZGZiNWQxYjJkMzczNTJlOTVkN2M0NzNiMjFjN2Q4ZDExYmQzNjI2MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGFiYTdjYTRiNjJkZGQ2YmRlOTRjZWJhZGZiNWQxYjJkMzczNTJlOTVkN2M0NzNiMjFjN2Q4ZDExYmQzNjI2MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjMwZjljMDdiYzI0MjI2Y2EwMWYzYmRjNjg4NzMzNjA0YzczYmFkYjA5OTIxZTc5MTQ1NGEwOGI3YWNkYWJiNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTM5OGRlMGJiOTgyMjM4NGI4ZTVlMDc3ZWUxZGU1NTZmOTA1MzRiMzA3OWJlM2E2MzJhODA0YTI1Zjk1YjBhOCJ9"
+        },
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L17-L17",
+          "version": "repo-lines-v1:sha256:2cea61d39b8501d04728c36d0556d2da1f7ffe95250115cd7f7acfe1246d4b3d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNlYTYxZDM5Yjg1MDFkMDQ3MjhjMzZkMDU1NmQyZGExZjdmZmU5NTI1MDExNWNkN2Y3YWNmZTEyNDZkNGIzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNlYTYxZDM5Yjg1MDFkMDQ3MjhjMzZkMDU1NmQyZGExZjdmZmU5NTI1MDExNWNkN2Y3YWNmZTEyNDZkNGIzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWI1MjBiOWZhOWYzZjY1YmQ2Nzc5YTQ4Mjc1OWNhNzQxYzBlNmFlMDgxMTk1Y2EyZmE4NzE3N2Y5Mzg3MDk2YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDJmOGExNTA2ZTZhYTM3ODQyMGUwNGVhN2MwNGI2Mzk1YmNiZjc5ZWRmOGIwMWI0MWJiYjQ4ZjZkNGMwMzYzYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_50b8bb53cc4945e78b6527440cc91be8",
+      "statement": "翻译请求带 skipRedirect: true，使翻译接口返回 401 时不会把用户跳转到 /login，但 axiosConfig 的 401 分支其余动作仍会执行（清除 localStorage.user 并派发 auth:session-expired）。",
+      "evidence": [
+        {
+          "resource": "repo://src/hooks/useTranslation.js#L17-L17",
+          "version": "repo-lines-v1:sha256:2cea61d39b8501d04728c36d0556d2da1f7ffe95250115cd7f7acfe1246d4b3d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNlYTYxZDM5Yjg1MDFkMDQ3MjhjMzZkMDU1NmQyZGExZjdmZmU5NTI1MDExNWNkN2Y3YWNmZTEyNDZkNGIzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNlYTYxZDM5Yjg1MDFkMDQ3MjhjMzZkMDU1NmQyZGExZjdmZmU5NTI1MDExNWNkN2Y3YWNmZTEyNDZkNGIzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWI1MjBiOWZhOWYzZjY1YmQ2Nzc5YTQ4Mjc1OWNhNzQxYzBlNmFlMDgxMTk1Y2EyZmE4NzE3N2Y5Mzg3MDk2YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDJmOGExNTA2ZTZhYTM3ODQyMGUwNGVhN2MwNGI2Mzk1YmNiZjc5ZWRmOGIwMWI0MWJiYjQ4ZjZkNGMwMzYzYSJ9"
+        },
+        {
+          "resource": "repo://src/utils/axiosConfig.js#L92-L110",
+          "version": "repo-lines-v1:sha256:a5912680450ecf390fae12ca79fa9dba5ac7a8ebb058729c7998993aa82bea0c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkMTFiNzQxYzM5MTVlYTYyY2E3NWRmNDg1ODgzOTZmMzY2ZTkxOGI4MGY1ZGM5NDg4MjNkMDYxODBmMjU1ZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyMzc5MzUzYmZiMDgyODAxODliN2M2ZDEyMGQ2NWNiOGE5ZTA0NWQ3ZjIzZGJiNzdiNTRlNmZjZmM1NTkwODkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM2ZDA5MjJiNmUxYTEwNDFmMjBiNGViYjc3M2M1MzU0NjE0YjQ4ZTk3ZmUxYjYzOGZkMTdmNzY0ODYzYjU3MDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNjNGVlNTc3ZjZhZjNkYTZkODVhNGZjOGU3M2FlOGYyMGZjMTZiZjE3MDUwNzI0MmIxYTI0MDE1ZTg0MDAzZjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7d5225f880e41939eb0c573e170dfa9",
+      "statement": "locales 之外还有两套必须单独维护的硬编码双语字典：index.html 旧浏览器遮罩内置的 I18N.zh/I18N.en（需早于任何模块渲染）与 main.jsx 里按 document.documentElement.lang 前缀选词的原生表单校验文案 VALIDATION_MSG_MAP。",
+      "evidence": [
+        {
+          "resource": "repo://index.html#L83-L116",
+          "version": "repo-lines-v1:sha256:a8ea3fc87ab8469e5a061845f7cb9e87d3c48e63c4f71e4e130c72a92fccdb97:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZTU2OGM3NWM5MDVmODMxZTIxZmQ0NmE5Y2FmNWY1YzQ5YTgwZDk5ODMzMWU0MTJiMDJlMjJiZjk1OGQwMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5MDFhMTFmMmQ4MTcyMGMwMjU1ZDVlMTUyMjJiMTE4NTFmYTJmN2QxMjNjZjc0MzkyZGZkNWRmNmFlYTBmYWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdlOWIxMThjZTJmMjBhOThmNzQ1MWZkNWRmMTM0NTViNjAzOWExNjA3MzUyNWQ4YTg3Njc5MzYzYzRjY2YzMTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwYWZlYjI0OGEzODUwOTE5YzRlNjVkMDNlNDE5MGMxZWNjNzcxMjU2MmZhNGE0MDM4YTMwMTMyYjk3OGE2NmIifQ"
+        },
+        {
+          "resource": "repo://src/main.jsx#L31-L53",
+          "version": "repo-lines-v1:sha256:d18afb59fcb53fdf211623a6b56c858a337d656ded154dc034eb6f035b3c27a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExZTkwMjg1NzJhYjg0ZDMwN2NmYjQyMmMzOTM0N2RiMzMzZWM3YzEzYTdiZjU4OTEyODVjY2NiMzk3NGYxYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUyMmZhYTUzNWJkMmVhM2Q1MmU3NDFlZDQ1NDQzNWI3ZmU0OWU4MzU4NmU5NDNkOThkODJiYmZiMjRkMWY1YzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzM2Y4MDE4NDFmY2JjMmFkMjU3MzRhYTMyMGIwYTE0NmVmYzU1NTQ2NmQ2YWYyNmMxY2M4ODA5YmY5YmU3ZjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmNjVlM2JhNWFlYzk5ZWZmNzA5NjRlNTQzNzdjZDQ3Y2VhYzkwMDJkZGE1MGE4ODZmZGRjM2VlNmIzZDZkYmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0ea889d243064ddb8cff6e895195256e",
+      "statement": "组合式回退的真实用法是先取后端内容再回落 UI 文案，例如 Home 的 getLocalizedContent(siteSettingsData,'welcomeTitle') || t('home.welcomeTitle')、NavBar 的站点名与 FooterBeian 的版权行；顺序颠倒会使后台配置的文案永不生效。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L195-L196",
+          "version": "repo-lines-v1:sha256:5a5814adb00373a8280c35146ef523959921d236319ae3498fbae9797b6f4db4:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI5NjIwMWE0ODc0ZGNiZDZkZWE3NmJjNWU5Y2Y2NTFiNmRiNjA5MTY1ZjRlZTFkODBlM2M3YmZiNjFjMTkyMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjcyZGEzMjQ5ZjFjZWJjZWIyZTUyYzk4MDZkODk2NmFkNThhNjMyMjk0ZjU1YTdlN2MwMDBlZWJmMzM2MmY4YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmVhNjdkNmFjMTAyZTNlM2NkN2JkM2VhMWE2OWZjN2MwYTNiZmMzYjE4YzE0ZWZjMTJjYWI3ZDUwNGM3NjUzZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTZmYjI0MmYwYzM3ODIyZThhZDJkNjIwZTYxMDQwOGU4ZjM2ZDFmY2NkNjc0NDY5YjkyNjg4NjY0MjM5MjgwNCJ9"
+        },
+        {
+          "resource": "repo://src/components/Home.jsx#L70-L71",
+          "version": "repo-lines-v1:sha256:a8da3678b16b49b4c78616a5cb62f7e8561a6ed9f3d0f0c619916954bf1e0ec5:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmJiOTYzOTc2MjVjZWEzNWZkNTZlNmZjZjEwYmZiNmQ4OTc3YjgxZThjOWIwZjdlNTdlNDI5ZmU1MThkMDMzOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTA2NjE0NTU0ZTZhNjdkZjc2YmQyZTFmYmY1ZGMwNWFjNmU3YjY0NjBhYmYxMzI0ZjM1ZDAyYzQ3NmYwMTNhOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjBlNjIwMmViYWI1ZmQzOTllY2MyYTZjZWYwNWExYjAxMzQwOGEzMDI2NWJhODY1OTc1MTQzNjE2ZTZhZTRlNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmZhMzdmODk2ZmJkYzg0ZmU2ZTNhMTgzOWE2YzU1MTNhZmNkNWMyNDdmYmY4YmUxOGZmZWJiMmNhYmFhNmQzZSJ9"
+        },
+        {
+          "resource": "repo://src/components/NavBar.jsx#L246-L246",
+          "version": "repo-lines-v1:sha256:02b6bb048c56cb6a8cb52103eb51755117377098166008870e7a5aaa46394b18:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDJiNmJiMDQ4YzU2Y2I2YThjYjUyMTAzZWI1MTc1NTExNzM3NzA5ODE2NjAwODg3MGU3YTVhYWE0NjM5NGIxOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDJiNmJiMDQ4YzU2Y2I2YThjYjUyMTAzZWI1MTc1NTExNzM3NzA5ODE2NjAwODg3MGU3YTVhYWE0NjM5NGIxOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWZlM2M1YjYyNDI0OTUwNTJhYmM2NjI5MzA1ODczZWMxNDVkY2QwZWJjOWJhZDdhNGI5ZTYwZDIwMTIzNjhmMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjI1MDg0ZDhjOGI4MDZkODRkZWFjZWJlNmYxMjc0Zjk4M2U1YzU5MTM0YzIyOGQ5Njc4MjcyNDFhNzQ5YmM5ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ef97072e6f2e412cbd17ea6f2e476091",
+      "statement": "document.title 由 siteSettingsData 的 browserTitle+语言后缀（缺失则回退 browserTitle，缺失再回退 t('site.defaultName')）与 t('pageTitle.*') 拼成，站点名不走机器翻译；路由未登记 pageTitle 时标题只剩站点名。",
+      "evidence": [
+        {
+          "resource": "repo://src/App.jsx#L384-L400",
+          "version": "repo-lines-v1:sha256:022e3d40f4398f60f3785695b44afde32c8646b6f4a2f99228d9ce87318f4a43:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ODNkOGQzNWZiMDBiZGRkZDE1M2VlYTQzODA2ZmUxYjM5NTZmMzc4NTBlMzAzNDFhZWNiMGQ0MDc0MTA1M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxNDlhYjhjZTczNzBmNDczZTVjYTJkNDBkYjUzYjQ2OWE2OTZiM2Q4ODgyMmVlODgwNWRhM2I2ZTUzMTAwMzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQyMmVjZTFhODYyNjAwOWM1NWI1M2E4MDUyY2JjOTY1ZjZmYTM3YmZmOTU2NjcwODE1YWU0MzE4OTRmOWQzYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU1NWQzYjA4NDcyMTNiOWNmNzFlNmJmMGEzYTVmYTFhYWU3NWE4ODEyMDVlY2QxZjlhY2JhYzFhNjljZjE0MTMifQ"
+        },
+        {
+          "resource": "repo://src/App.jsx#L73-L127",
+          "version": "repo-lines-v1:sha256:c4425afb70a3931ac82d2a46b0e00cadd7ec2926f11a00a5c9992fee9751cb9a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2YjgzMTFhZWFhYWU0YTE4Zjk1ZDdiNTI1MWM4ZjI4ZDJlZWNiOTQwZmQzYTZiMGNjOTkyZmZhYTNiZDJlNzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZTExYTcxMmI4YzczYzA5N2U4YTFmMGFjYmE5YzQyMjYxNWMzYjllZTc3ZjdhNzBiMTZhZGYxMTk3MTNlMGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OWEzMmVkODk2MDc5ZmQ2YTgwMjcwN2E2MjQwNmY4NmRjYWRjYjZjNjA3NmMzNDViZjJiZDg1NGFkMDFhM2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3NDUyZjUyMzdlMjIyMDM1M2RlOTA4OTg5M2FmYzY5ZGMzNzY5YmM3N2IwMjA5MjVlZmRjMzcwMmIwYTEwZTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_128a00e3ab3a40379e086973f7ae0d9e",
+      "statement": "仓库未配置测试运行器，npm run lint 是唯一自动化检查，因此 i18n 与翻译链路改动只能靠人工验证（语言元数据、首次翻译路径、翻译接口失败时的原文回落与不重试）。",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L5-L13",
+          "version": "repo-lines-v1:sha256:869eb233e13270e369cfd5b89ffb088b394edd82f7521bb609d05e1913fe7edd:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJlY2RiZWY2ZGNiYWE4YmU1ZWVhMGFkMWQ5MTZmNjY3MWMxOWQ0MmE3NzQ5MmNiMGE5OWQ1YzdhMDhkMzZjNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzRmYzU3N2I3ZTFmYTJlNGFmNmQzMjJmNGU2Nzk3MzIwODFiNDY1MzU2OTRjNDliNjY1ODU1M2EzNWI4NmVkYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTBkZGNiNmVkZTViOGEwOTYzZTY2NGFlY2RmMDdhYWU1YWFmZjMyYmM2NDJjNTAxZmE0NjdhYWRkYjQ4ZWYwYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGM1MzI0Y2E1NGM3OWUxZWY2ZDNkODhiY2QwZTZlMjZiNTNlZTVmNDBkMTY0N2VkOTkxZGM3MGM3MDZlNDdjYiJ9"
+        },
+        {
+          "resource": "repo://package.json#L7-L13",
+          "version": "repo-lines-v1:sha256:2d8b8f6b750cf043fb89899c638b755a233e15a0deb02fd71bce284a646b759b:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTg0MDY5ODRiZGVmY2EzNGRkNmJjOTAwMjdmMWQxMWFiY2IxNzAzNGM1MjVjOWE1Y2VmYTFkODRmY2NkODFkMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjBjOTQ5ODU1MjZjMWM1N2VmMDBjMDBkM2Y0ZGM5MDYxNTY3N2EwYTM2YThiNzk1ZGZmOWFmZmQ1MGZlOWY1OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGYyZmE1NzNkMjNhNDhmYzQzN2EzYzhiMGZjOTk2YTM1NWUxMDJhODcxMzFmNGMwZWY2OGY1YThhOGNhZmU2YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2JmNmY3ZTRjNTI5ZGQwYTRjZDBmOWE5MTA0ZmVlMWZmOTkwNDEwMDFmZjk5NjMxMDJjNGU2MGE4MjdiYmU2YyJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-10-29T12:47:15.545Z"
+  }
+}
